@@ -33,20 +33,20 @@ public class CreateDatabase extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Person robert= new Person("Robert", "Hogan");
-		Person joe= new Person("Joe", "Shmuck");
-		Person jane= new Person("Jane", "Smith");
+		Person robert= new Person("Robert", "Joseph","Hogan");
+		Person joe= new Person("Joe","Jack", "Shmuck");
+		Person jane= new Person("Jane","Rose", "Smith");
 		
 		DbFunctions.insert(joe);
 		DbFunctions.insert(robert);
 		DbFunctions.insert(jane);
 		
 		
-		PhoneNumber joehome =new PhoneNumber(joe, "Home","5124473748");
-		PhoneNumber roberthome =new PhoneNumber(jane, "Home","5124473748");
-		PhoneNumber robertcell =new PhoneNumber(robert, "Cell","5124473748");
-		PhoneNumber robertcell1 =new PhoneNumber(robert, "Home","512412344");
-		PhoneNumber robertcell2 =new PhoneNumber(robert, "Work","512443248");
+		PhoneNumber joehome =new PhoneNumber(joe, false, "Home","5124473748");
+		PhoneNumber roberthome =new PhoneNumber(jane,false , "Home","5124473748");
+		PhoneNumber robertcell =new PhoneNumber(robert,true , "Cell","5124473748");
+		PhoneNumber robertcell1 =new PhoneNumber(robert,false , "Home","512412344");
+		PhoneNumber robertcell2 =new PhoneNumber(robert,false , "Work","512443248");
 		
 		DbFunctions.insert(joehome);
 		DbFunctions.insert(roberthome);
@@ -55,17 +55,17 @@ public class CreateDatabase extends HttpServlet {
 		DbFunctions.insert(robertcell2);
 		
 		
-		EmailAddress joeHome= new EmailAddress(joe, "home", "joe@aol.com");
-		EmailAddress joeWork= new EmailAddress(joe, "work", "joe@aol.com");
-		EmailAddress joeOther= new EmailAddress(joe, "other", "joe@aol.com");
+		EmailAddress joeHome= new EmailAddress(joe,false, "home", "joe@aol.com");
+		EmailAddress joeWork= new EmailAddress(joe,true, "work", "joe@aol.com");
+		EmailAddress joeOther= new EmailAddress(joe,false, "other", "joe@aol.com");
 		
 
 		DbFunctions.insert(joeHome);
 		DbFunctions.insert(joeWork);
 		DbFunctions.insert(joeOther);
 		
-		Address joehomeAddress = new Address(joe,"home", "123 Main St", "","Austin", "Texas", "78704");
-		Address joeworkAddress = new Address(joe,"work", "123 Main St", "","Austin", "Texas", "78704");
+		Address joehomeAddress = new Address(joe,false,"home", "123 Main St", "","Austin", "Texas", "78704");
+		Address joeworkAddress = new Address(joe,true,"work", "123 Main St", "","Austin", "Texas", "78704");
 		joeworkAddress.setPrimaryAddress(true);
 
 		DbFunctions.insert(joehomeAddress);

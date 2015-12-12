@@ -64,11 +64,12 @@ public class EmailAddress implements Serializable{
 	public EmailAddress(){
 		
 	}
-	public EmailAddress(Person person, String emailAddressTypye, String emailAddress){
+	public EmailAddress(Person person, boolean primaryEmail, String emailAddressType, String emailAddress){
 		this();
+		this.primaryEmail = primaryEmail;
 		this.person= person;
 		this.emailAddress= emailAddress;
-		this.emailAddressType= emailAddressTypye;
+		this.emailAddressType= emailAddressType;
 		
 	}
 }

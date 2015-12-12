@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Add Person</title>
+</head>
+<body>
+
+<form action="CreatePerson" method="post">
+<p>First Name:<input type="text" name="firstName" ><br />
+Middle Name:<input type="text" name="middleName" ><br />
+Last name:<input type="text" name="lastName"></p>
+
+
+<p>Primary:<input type="radio" name="emailAddressPrimary" value="ture" > Email Address Type:
+<select name="emailAddressType">
+  	<option value="Work">Work</option>
+  	<option value="Home">Home</option>
+  	<option value="Other">Other</option>
+</select>
+Email Address :<input type="text" name="emailAddress"> </p>
+
+
+<p>Primary:<input type="radio" name="addressPrimary" value="ture" > Address Type:<select name="addressType">
+  	<option value="Work">Work</option>
+  	<option value="Home">Home</option>
+  	<option value="Other">Other</option>
+</select><br />
+Address1 :<input type="text" name="address1"> <br />
+Address2 :<input type="text" name="address2"> <br />
+City:<input type="text" name="city">, State:<input type="text" name="state">  Zip:<input type="text" name="zip"/> </p>
+
+
+
+
+
+<p>Primary:<input type="radio" name="phonePrimary" value="ture" > Phone Type:<select name="phoneType">
+  	<option value="Cell">Cell</option>
+  	<option value="Work">Work</option>
+  	<option value="Home">Home</option>
+  	<option value="Fax">Fax</option>
+  	<option value="Other">Other</option>
+</select> Phone Number:<input type="text" name="phoneNumber"> </p>
+
+<p><input type="submit" value="submit"></p>
+
+</form>
+</body>
+</html>

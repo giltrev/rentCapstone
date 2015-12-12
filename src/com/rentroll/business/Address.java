@@ -90,8 +90,9 @@ public class Address implements Serializable{
 	public Address(){
 		
 	}
-	public Address(Person person, String addressType, String address1, String address2, String city, String state, String zip){
+	public Address(Person person, boolean primaryAddress, String addressType, String address1, String address2, String city, String state, String zip){
 		this();
+		this.primaryAddress = primaryAddress;
 		this.person = person;
 		this.addressType = addressType;
 		this.address1 = address1;

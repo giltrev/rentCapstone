@@ -61,9 +61,10 @@ public class PhoneNumber implements Serializable{
 	public PhoneNumber(){
 		
 	}
-	public PhoneNumber(Person person, String phoneType, String phoneNumber){
+	public PhoneNumber(Person person, boolean primaryNumber, String phoneType, String phoneNumber){
 		this();
 		this.person=person;
+		this.primaryNumber = primaryNumber;
 		this.phoneType=phoneType;
 		this.phoneNumber=phoneNumber;
 	}
