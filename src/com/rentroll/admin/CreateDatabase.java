@@ -65,8 +65,11 @@ public class CreateDatabase extends HttpServlet {
 		DbFunctions.insert(joeOther);
 		
 		Address joehomeAddress = new Address(joe,"home", "123 Main St", "","Austin", "Texas", "78704");
-		
+		Address joeworkAddress = new Address(joe,"work", "123 Main St", "","Austin", "Texas", "78704");
+		joeworkAddress.setPrimaryAddress(true);
+
 		DbFunctions.insert(joehomeAddress);
+		DbFunctions.insert(joeworkAddress);
 		
 	}
 
