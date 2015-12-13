@@ -34,7 +34,7 @@ public class CreatePerson extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String firstName = request.getParameter("firstName");
 		String middleName = request.getParameter("middleName");
-		String lastName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
 		
 		
 		String emailPrimarytxt= request.getParameter("emailPrimary");
