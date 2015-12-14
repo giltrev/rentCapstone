@@ -101,4 +101,19 @@ public class DbFunctions {
         
         return results;
     }  
+    public static List<Person> selectAllPerons() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i from Person i " ;
+        TypedQuery<Person> q = em.createQuery(qString, Person.class);
+        List<Person> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    }  
 }

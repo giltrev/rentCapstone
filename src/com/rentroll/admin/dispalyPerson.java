@@ -40,7 +40,15 @@ public class dispalyPerson extends HttpServlet {
 		List<Person> persons = DbFunctions.selectActivePerons();
 		System.out.println("Persons's Size is " + persons.size());
 		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		List<Person> allPersons = DbFunctions.selectAllPerons();
+		System.out.println("Total Persons is " + allPersons.size());
+		
+		
+		request.setAttribute("allPersons", allPersons);
+		
+		getServletContext().getRequestDispatcher("/dispplayPersons.jsp")
+		.forward(request, response);
 	}
 
 	/**
