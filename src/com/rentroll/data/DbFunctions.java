@@ -3,9 +3,14 @@ package com.rentroll.data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+
+import com.rentroll.business.Person;
 
 
 
@@ -65,5 +70,35 @@ public class DbFunctions {
 		}
 		return date;
 	}
-	
+    public static Person selectPerson(int personId) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Person u " +
+                "WHERE u.personId = :personId";
+        TypedQuery<Person> q = em.createQuery(qString, Person.class);
+        q.setParameter("personId", personId);
+        try {
+            Person person = q.getSingleResult();
+            return person;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    public static List<Person> selectActivePerons() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i from Person i " +
+                "WHERE i.isActive = true";
+        TypedQuery<Person> q = em.createQuery(qString, Person.class);
+        List<Person> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    }  
 }

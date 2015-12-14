@@ -30,6 +30,7 @@ public class Person implements Serializable {
 	private String firstName;
 	private String lastName;
 	private String middleName;	
+	private boolean isActive;
 	
 	@OneToMany(targetEntity = EmailAddress.class, mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<EmailAddress> emailAddresses = new ArrayList<>();
@@ -65,6 +66,12 @@ public class Person implements Serializable {
 	}
 	public void setMiddleName(String middleName) {
 		this.middleName = middleName;
+	}
+	public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 	public List<EmailAddress> getEmailAddresses() {
 		return emailAddresses;

@@ -35,6 +35,13 @@ public class CreatePerson extends HttpServlet {
 		String firstName = request.getParameter("firstName");
 		String middleName = request.getParameter("middleName");
 		String lastName = request.getParameter("lastName");
+		String isActiveTxt = request.getParameter("isActive");
+		boolean isActive;
+		if (isActiveTxt=="true"){
+			isActive=true;
+		} else{
+			isActive=false;
+		}
 		
 		
 		String emailPrimarytxt= request.getParameter("emailPrimary");
@@ -72,6 +79,7 @@ public class CreatePerson extends HttpServlet {
 			phonePrimary=false;
 		}
 		Person person = new Person(firstName, middleName, lastName);
+		person.setActive(isActive);
 		EmailAddress emailaddress1 = new EmailAddress(person, emailPrimary, emailAddressType, emailAddress);
 		PhoneNumber phone = new PhoneNumber(person, phonePrimary, phoneType, phoneNumber);
 		Address address = new Address(person, addressPrimary, addressType, address1, address2, city, state, zip);
