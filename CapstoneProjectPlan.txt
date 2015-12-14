@@ -1,0 +1,56 @@
+Gilbert Trevino
+Java Capstone
+
+GitHub Address:
+https://github.com/giltrev/rentCapstone
+
+
+Property Management Software
+
+Task 1
+Create Initial project. 
+
+Task 2 
+Create the home page and site structure
+
+Task 3
+Display the following information
+List Property Owners and contact Info
+List Properties and pertaining information
+List individual Property units and pertaining information 
+List tenant information
+List vendor information
+
+Task 4
+Add/Update/Delete everything in above list
+
+Task 5
+Create log in page
+Depending on user type, this page will redirect to designated are of the application. 
+Owners will see owner related information
+Tenants will see only tenant information
+Property Managers will see most of application
+SystemAdministrators will see everything. 
+Vendors will see Vendor inforamtion. 
+
+Task 6
+Create Accounting system for collection rent
+
+Task 7
+print receipts for collecting rent
+
+Task 8
+Allow tenants to pay rent online
+
+Task 9
+Create tenant service call in function
+
+Task 10 
+Create Service Call Log
+
+Task 11 
+Create Owner Reports
+
+
+
+
