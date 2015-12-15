@@ -31,6 +31,8 @@ public class Person implements Serializable {
 	private String lastName;
 	private String middleName;	
 	private boolean isActive;
+	private String password;
+	private String userId;
 	
 	@OneToMany(targetEntity = EmailAddress.class, mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<EmailAddress> emailAddresses = new ArrayList<>();
@@ -100,6 +102,18 @@ public class Person implements Serializable {
 		this.firstName= firstName;
 		this.middleName= middleName;
 		this.lastName= lastName;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 }
