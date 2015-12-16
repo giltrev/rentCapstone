@@ -1,0 +1,114 @@
+
+/* 	Main site style sheet 
+	
+*/
+
+body {
+	margin: 0;
+    padding: 0;
+	background: #960;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 1.5 em;
+	color: #630;
+	
+	
+}
+
+a:link {
+    text-decoration: none;
+	color: #342800;
+}
+a:visited {
+    text-decoration: none;
+	color: #342800;
+}
+a:hover {
+    text-decoration: none;
+	color: #786002;
+}
+
+img {
+    float:left;
+	vertical-align: text-top;
+	margin:10px;
+}
+
+
+div p {
+    clear: both;
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-bottom:10px;
+	
+}
+h1 {
+	font-size:3em;
+	color:#FFF;
+}
+
+h2 {
+	border-bottom: 2px solid black;
+	
+}
+
+.header {
+	
+	background: #333;
+	text-align: center;
+	font-weight:bold;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	padding-bottom: 10px;
+	padding-top:10px;
+
+	
+	
+}
+
+.nav {
+	vertical-align: top;
+	text-align: center;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 0px;
+	margin-top: 0px;
+	margin-top: 5px;
+	padding-bottom: 5px;
+	padding-top:5px;
+}
+.content{
+	border:none;
+	background-color: #FFC;
+
+	
+	
+
+	
+	padding-bottom: 10px;
+	padding-top:10px;
+	padding-left:20px;
+	padding-right: 20px;
+	font-size: 1.5 em;
+	
+	
+    
+    width: 80%;
+    margin: 0 auto;
+    min-height: 100%;
+   
+	
+}
+
+
+
+.name {
+	font-weight:bold;
+	text-decoration: underline;
+	font-size: 2em;
+}
+.info {
+	
+	font-size: 1em;
+	margin-top:0;
+}
