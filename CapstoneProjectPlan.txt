@@ -14,42 +14,107 @@ Task 2
 Create the home page and site structure
 
 Task 3
-Display the following information
-List Property Owners and contact Info
-List Properties and pertaining information
-List individual Property units and pertaining information 
-List tenant information
-List vendor information
+Set up page to display Property Owners and contact Info
 
 Task 4
-Add/Update/Delete everything in above list
+Set up page to display Properties and pertaining information
 
 Task 5
-Create log in page
-Depending on user type, this page will redirect to designated are of the application. 
-Owners will see owner related information
-Tenants will see only tenant information
-Property Managers will see most of application
-SystemAdministrators will see everything. 
-Vendors will see Vendor inforamtion. 
+Set up page to display individual Property units and pertaining information 
 
 Task 6
-Create Accounting system for collection rent
+Set up page to display tenant information
 
 Task 7
-print receipts for collecting rent
+Set up page to display vendor information
 
 Task 8
-Allow tenants to pay rent online
+Set up page to Add Property Owners and contact Info
 
 Task 9
+Set up page to Add Properties and pertaining information
+
+Task 410
+Set up page to Add individual Property units and pertaining information 
+
+Task 11
+Set up page to Add tenant information
+
+Task 12
+Set up page to Add vendor information
+
+Task 13
+Set up page to Update Property Owners and contact Info
+
+Task 14
+Set up page to Update Properties and pertaining information
+
+Task 15
+Set up page to Update individual Property units and pertaining information 
+
+Task 16
+Set up page to Update tenant information
+
+Task 17
+Set up page to Update vendor information
+
+Task 18
+Set up page to Delete Property Owners and contact Info
+
+Task 19
+Set up page to Delete Properties and pertaining information
+
+Task 20
+Set up page to Delete individual Property units and pertaining information 
+
+Task 21
+Set up page to Delete tenant information
+
+Task 22
+Set up page to Delete vendor information
+
+Task 23
+Create home page for Owners will see owner related information
+
+Task 24
+Create home page for Tenants will see only tenant information
+Task 25
+Create home page for Property Managers will see most of application
+Task 26
+Create home page for SystemAdministrators will see everything. 
+Task 27
+Create home page for Vendors will see Vendor information. 
+
+Task 28
+Create log in page
+Depending on user type, this page will redirect to designated are of the application.
+
+Task 29
 Create tenant service call in function
+Add Service call page  and associated java files.
+this function will track what calls are open and what service vendor is taking care of the call.
 
-Task 10 
-Create Service Call Log
+Task 30
+Create page to see Service calls.  Will include options to see only active and add several search fields. 
 
-Task 11 
-Create Owner Reports
+Task 31
+Add function to create rent charge to active tenants.
+Will look into ways of making this automatic, will make manual button initially.
+
+Task 32 
+Add function to calculate late fees
+
+Task 33 
+Add function to track collection of rent payments
+including Date Time received, payment method, check number if applicable
+
+Task 34
+add function to print receipts for collecting rent
+
+Task 35
+Allow tenants to pay rent online
+
+
 
 
 
