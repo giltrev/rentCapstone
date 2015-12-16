@@ -17,13 +17,13 @@ import com.rentroll.data.PersonDB;
  * Servlet implementation class dispalyPerson
  */
 @WebServlet("/dispalyPerson")
-public class dispalyPerson extends HttpServlet {
+public class DispalyPerson extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public dispalyPerson() {
+    public DispalyPerson() {
         super();
         // TODO Auto-generated constructor stub
     }

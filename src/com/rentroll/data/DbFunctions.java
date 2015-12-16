@@ -10,6 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import com.rentroll.business.Owner;
 import com.rentroll.business.Person;
 
 
@@ -116,4 +117,20 @@ public class DbFunctions {
         
         return results;
     }  
+    public static List<Owner> selectAllOwners() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i from Ownwer i " ;
+        TypedQuery<Owner> q = em.createQuery(qString, Owner.class);
+        List<Owner> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    } 
+    
 }

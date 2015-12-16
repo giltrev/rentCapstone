@@ -28,7 +28,6 @@ public class Unit implements Serializable{
 	@OneToMany(targetEntity = Tenant.class, mappedBy="unit", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Tenant> tenants;
 	private String unitNumber;
-	private boolean isOccupied;
 	private int numberOfBedrooms;
 	private int numberOfBathrooms;
 	private double rentRate;
@@ -55,12 +54,6 @@ public class Unit implements Serializable{
 	}
 	public void setUnitNumber(String unitNumber) {
 		this.unitNumber = unitNumber;
-	}
-	public boolean isOccupied() {
-		return isOccupied;
-	}
-	public void setOccupied(boolean isOccupied) {
-		this.isOccupied = isOccupied;
 	}
 	public int getNumberOfBedrooms() {
 		return numberOfBedrooms;
