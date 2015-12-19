@@ -119,7 +119,7 @@ public class DbFunctions {
     }  
     public static List<Owner> selectAllOwners() {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        String qString = "SELECT i from Ownwer i " ;
+        String qString = "SELECT i from Owner i " ;
         TypedQuery<Owner> q = em.createQuery(qString, Owner.class);
         List<Owner> results = null;
         try {
@@ -132,5 +132,19 @@ public class DbFunctions {
         
         return results;
     } 
-    
+    public static Owner selectOwner(int personId) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Owner u " +
+                "WHERE u.personId = :personId";
+        TypedQuery<Owner> q = em.createQuery(qString, Owner.class);
+        q.setParameter("personId", personId);
+        try {
+            Owner owner = q.getSingleResult();
+            return owner;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
 }
