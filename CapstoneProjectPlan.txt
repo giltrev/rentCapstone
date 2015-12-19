@@ -6,12 +6,15 @@ https://github.com/giltrev/rentCapstone
 
 
 Property Management Software
+Overview This application will give the property manger the ability to track Owners, Properties, Units, Tennats and Service calls.
 
 Task 1
-Create Initial project. 
+Create Initial project.   
 
 Task 2 
 Create the home page and site structure
+Site Structure includes home page and all entity views with static data.
+Crate MySQL data to populate tables with sample data.
 
 Task 3
 Set up page to display Property Owners and contact Info
@@ -78,10 +81,13 @@ Create home page for Owners will see owner related information
 
 Task 24
 Create home page for Tenants will see only tenant information
+
 Task 25
 Create home page for Property Managers will see most of application
+
 Task 26
 Create home page for SystemAdministrators will see everything. 
+
 Task 27
 Create home page for Vendors will see Vendor information. 
 
