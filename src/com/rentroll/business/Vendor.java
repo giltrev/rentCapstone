@@ -1,14 +1,19 @@
 package com.rentroll.business;
 
+import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+
+@Entity
+@Table(name= "Vendor")
 public class Vendor extends Person{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private String companyName;
 	private String vendorType;
 	@ManyToOne
@@ -32,5 +37,6 @@ public class Vendor extends Person{
 	public void setServiceCall(ServiceCall serviceCall) {
 		this.serviceCall = serviceCall;
 	}
+
 
 }

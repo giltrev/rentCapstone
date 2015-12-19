@@ -11,8 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name= "Property")
 public class Property implements Serializable{
 
 	/**
@@ -26,6 +28,7 @@ public class Property implements Serializable{
 	
 	@ManyToOne
 	private Owner owner;
+	private String propName;
 	private String address1;
 	private String address2;
 	private String city;
@@ -132,6 +135,14 @@ public class Property implements Serializable{
 
 	public void setUnits(List<Unit> units) {
 		this.units = units;
+	}
+
+	public String getPropName() {
+		return propName;
+	}
+
+	public void setPropName(String propName) {
+		this.propName = propName;
 	}
 	
 	

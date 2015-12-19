@@ -5,14 +5,18 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name= "Tenant")
 public class Tenant extends Person implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+
 	@ManyToOne
 	private Unit unit;
 	private Date birthDate;
@@ -57,6 +61,7 @@ public class Tenant extends Person implements Serializable{
 	public void setDlNumberState(String dlNumberState) {
 		this.dlNumberState = dlNumberState;
 	}
+
 	
 	
 

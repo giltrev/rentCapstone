@@ -10,12 +10,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 
 
 
 @Entity
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public class Person implements Serializable {
 
 	
@@ -25,14 +28,15 @@ public class Person implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.TABLE)
+	
 	private int personId;
 	private String firstName;
 	private String lastName;
 	private String middleName;	
 	private boolean isActive;
 	private String password;
-	private String userId;
+	private String userName;
 	
 	@OneToMany(targetEntity = EmailAddress.class, mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<EmailAddress> emailAddresses = new ArrayList<>();
@@ -109,11 +113,11 @@ public class Person implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getUserId() {
-		return userId;
+	public String getuserName() {
+		return userName;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserId(String userName) {
+		this.userName = userName;
 	}
 	
 }
