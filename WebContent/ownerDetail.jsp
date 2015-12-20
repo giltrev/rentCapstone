@@ -5,9 +5,7 @@
 <html>
 <head>
 	<title><c:out value="${owner.firstName}" /> <c:out value="${owner.lastName}" /></title>
-  	<meta name="robots" content="noindex,nofollow">
-	<meta name="description" content="Class Assignemnt.">
-	<meta name="keywords" content="homework, assignments">
+
     <link href="main.css" rel="stylesheet" type="text/css" media="screen">
 </head>
 <body>
