@@ -11,16 +11,16 @@ import com.rentroll.business.Owner;
 import com.rentroll.data.DbFunctions;
 
 /**
- * Servlet implementation class OwnerDetails
+ * Servlet implementation class EditOwnerRedirect
  */
-@WebServlet("/OwnerDetails")
-public class OwnerDetails extends HttpServlet {
+@WebServlet("/EditOwnerRedirect")
+public class EditOwnerRedirect extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OwnerDetails() {
+    public EditOwnerRedirect() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,12 +30,11 @@ public class OwnerDetails extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int personId = Integer.parseInt(request.getParameter("personId"));
+		Owner DisplayOwner = DbFunctions.selectOwner(personId);
 		
-		Owner owner = DbFunctions.selectOwner(personId);
+		request.setAttribute("owner", DisplayOwner);
 		
-		request.setAttribute("owner", owner);
-		
-		getServletContext().getRequestDispatcher("/ownerDetail.jsp")
+		getServletContext().getRequestDispatcher("/editOwner.jsp")
 		.forward(request, response);
 	}
 

@@ -18,15 +18,12 @@
   </div>
   
   <div class="nav"> 
-      Home Screen | Owners | Properties | Units | Tennants | Service Calls | Vendors</a>
+      Home Screen | Owners | Properties | Units | Tenants | Service Calls | Vendors
   </div>
 
   <div class="content">
-<c:forEach var="item" items="${allPersons}">
-  <c:out value="${item.personId}" />  <c:out value="${item.firstName}" /> <c:out value="${item.middleName}" /> <c:out value="${item.lastName}" /><br />
-   <c:forEach var="email" items="${item.emailAddresses}">
-  <c:out value="${email.emailAddressType}" /> <c:out value="${email.emailAddress}" /><br />
-   </c:forEach>
+<c:forEach var="owner" items="${allOwners}">
+<a href="OwnerDetails?personId=<c:out value="${owner.personId}" />">  <c:out value="${owner.firstName}" /> <c:out value="${owner.middleName}" /> <c:out value="${owner.lastName}" /></a><br />
 </c:forEach>
   </div>
 

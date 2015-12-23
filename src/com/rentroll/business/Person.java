@@ -34,7 +34,7 @@ public class Person implements Serializable {
 	private String firstName;
 	private String lastName;
 	private String middleName;	
-	private boolean isActive;
+	private boolean activePerson;
 	private String password;
 	private String userName;
 	
@@ -73,12 +73,8 @@ public class Person implements Serializable {
 	public void setMiddleName(String middleName) {
 		this.middleName = middleName;
 	}
-	public boolean isActive() {
-		return isActive;
-	}
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
+	
+
 	public List<EmailAddress> getEmailAddresses() {
 		return emailAddresses;
 	}
@@ -117,6 +113,18 @@ public class Person implements Serializable {
 		return userName;
 	}
 	public void setUserId(String userName) {
+		this.userName = userName;
+	}
+	public boolean isActivePerson() {
+		return activePerson;
+	}
+	public void setActivePerson(boolean activePerson) {
+		this.activePerson = activePerson;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 	

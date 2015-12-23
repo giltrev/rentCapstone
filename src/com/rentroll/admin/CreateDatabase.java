@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.rentroll.business.Address;
 import com.rentroll.business.EmailAddress;
-import com.rentroll.business.Person;
+import com.rentroll.business.Owner;
 import com.rentroll.business.PhoneNumber;
+import com.rentroll.business.Property;
+import com.rentroll.business.Tenant;
+import com.rentroll.business.Unit;
 import com.rentroll.data.DbFunctions;
 
 /**
@@ -33,9 +36,9 @@ public class CreateDatabase extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Person robert= new Person("Robert", "Joseph","Hogan");
-		Person joe= new Person("Joe","Jack", "Shmuck");
-		Person jane= new Person("Jane","Rose", "Smith");
+		Owner robert= new Owner("Robert", "Joseph","Hogan");
+		Owner joe= new Owner("Joe","Jack", "Shmuck");
+		Owner jane= new Owner("Jane","Rose", "Smith");
 		
 		DbFunctions.insert(joe);
 		DbFunctions.insert(robert);
@@ -70,6 +73,90 @@ public class CreateDatabase extends HttpServlet {
 
 		DbFunctions.insert(joehomeAddress);
 		DbFunctions.insert(joeworkAddress);
+		
+		Owner joey = new Owner("Joey","Jack","Jackson");
+		Owner jack = new Owner("Jack","Richard","Cranial");
+		DbFunctions.insert(jack);
+		DbFunctions.insert(joey);
+		
+		
+		Property joeProp = new Property();
+		joeProp.setPropAddress1("6649 N Blue Gum St");
+		joeProp.setPropCity("Austin");
+		joeProp.setOwner(joey);
+		joeProp.setPropertyType("Duplex");
+		joeProp.setNumberOfUnits(2);
+		joeProp.setPropZip("78704");
+		
+		Property joeProp2 = new Property();
+		joeProp2.setPropAddress1("74874 Atlantic Ave");
+		joeProp2.setPropCity("Austin");
+		joeProp2.setOwner(joey);
+		joeProp2.setPropertyType("Apratment");
+		joeProp2.setNumberOfUnits(102);
+		joeProp2.setPropZip("78774");
+		
+		
+		
+		DbFunctions.insert(joeProp);
+		DbFunctions.insert(joeProp2);
+		
+		
+		
+		
+		
+		Unit joePropUnit1 = new Unit();
+		joePropUnit1.setProperty(joeProp2);
+		joePropUnit1.setNumberOfBathrooms(2);
+		
+		DbFunctions.insert(joePropUnit1);
+		
+		
+		Tenant roger = new Tenant();
+		roger.setFirstName("Willard");
+		roger.setMiddleName("Roger");
+		roger.setLastName("Kolmetz");
+		roger.setUnit(joePropUnit1);
+		
+		DbFunctions.insert(roger);
+		
+		Property jackProp2 = new Property();
+		jackProp2.setPropAddress1("7 W Jackson Blvd");
+		jackProp2.setPropCity("Austin");
+		jackProp2.setOwner(joe);
+		jackProp2.setPropertyType("Apratment");
+		jackProp2.setNumberOfUnits(102);
+		jackProp2.setPropZip("78774");
+		
+		DbFunctions.insert(jackProp2);
+		
+
+		
+		EmailAddress joeEmail = new EmailAddress(joey, true, "Home", "joe@aol.com");
+		EmailAddress joeEmail2 = new EmailAddress(joey, false, "Work", "joe@business.com");
+		EmailAddress jackEmail = new EmailAddress(jack, false, "Home", "joe@aol.com");
+		EmailAddress jackEmail2 = new EmailAddress(jack, true, "Work", "joe@business.com");
+		
+		PhoneNumber joePhone = new PhoneNumber(joey, true , "Home", "512-463-4756");
+		PhoneNumber joePhone2 = new PhoneNumber(joey, false , "work", "512-463-4756");
+		PhoneNumber jackPhone = new PhoneNumber(jack, true , "Home", "512-463-4756");
+		PhoneNumber jackPhone2 = new PhoneNumber(jack, false , "work", "512-463-4756");
+		
+		DbFunctions.insert(joePhone);
+		DbFunctions.insert(joePhone2);
+		DbFunctions.insert(jackPhone);
+		DbFunctions.insert(jackPhone2);
+		
+		
+		DbFunctions.insert(joeEmail);
+		DbFunctions.insert(joeEmail2);
+		DbFunctions.insert(jackEmail);
+		DbFunctions.insert(jackEmail2);
+		
+		
+		
+		getServletContext().getRequestDispatcher("/index.html")
+		.forward(request, response);
 		
 	}
 

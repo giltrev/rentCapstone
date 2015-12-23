@@ -11,16 +11,16 @@ import com.rentroll.business.Owner;
 import com.rentroll.data.DbFunctions;
 
 /**
- * Servlet implementation class CreateOneTest
+ * Servlet implementation class AddOwnerRedirect
  */
-@WebServlet("/CreateOneTest")
-public class CreateOneTest extends HttpServlet {
+@WebServlet("/DisplayOwnerRedirect")
+public class DisplayOwnerRedirect extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreateOneTest() {
+    public DisplayOwnerRedirect() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,16 +29,21 @@ public class CreateOneTest extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Owner owner = new Owner();
-		owner.setFirstName("Gilbert");
-		owner.setLastName("Trevino");
-		
-		DbFunctions.insert(owner);
-		
-
 		
 		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		if (request.getSession().getAttribute("id")==null){
+			getServletContext().getRequestDispatcher("/index.html")
+			.forward(request, response);
+		}
+		
+		Object id = (Object)request.getSession().getAttribute("id");
+		int ownerId1 = Integer.parseInt(id.toString());
+		Owner DisplayOwner = DbFunctions.selectOwner(ownerId1);
+		
+		request.setAttribute("owner", DisplayOwner);
+		
+		getServletContext().getRequestDispatcher("/ownerDetail.jsp")
+		.forward(request, response);
 	}
 
 	/**

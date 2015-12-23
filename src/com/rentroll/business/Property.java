@@ -29,11 +29,11 @@ public class Property implements Serializable{
 	@ManyToOne
 	private Owner owner;
 	private String propName;
-	private String address1;
-	private String address2;
-	private String city;
-	private String state;
-	private String zip;
+	private String propAddress1;
+	private String propAddress2;
+	private String propCity;
+	private String propState;
+	private String propZip;
 	private int numberOfUnits;
 	private String propertyType;
 	private double commission;
@@ -57,45 +57,7 @@ public class Property implements Serializable{
 		this.owner = owner;
 	}
 
-	public String getAddress1() {
-		return address1;
-	}
-
-	public void setAddress1(String address1) {
-		this.address1 = address1;
-	}
-
-	public String getAddress2() {
-		return address2;
-	}
-
-	public void setAddress2(String address2) {
-		this.address2 = address2;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getZip() {
-		return zip;
-	}
-
-	public void setZip(String zip) {
-		this.zip = zip;
-	}
+	
 
 	public int getNumberOfUnits() {
 		return numberOfUnits;
@@ -143,6 +105,46 @@ public class Property implements Serializable{
 
 	public void setPropName(String propName) {
 		this.propName = propName;
+	}
+
+	public String getPropAddress1() {
+		return propAddress1;
+	}
+
+	public void setPropAddress1(String propAddress1) {
+		this.propAddress1 = propAddress1;
+	}
+
+	public String getPropAddress2() {
+		return propAddress2;
+	}
+
+	public void setPropAddress2(String propAddress2) {
+		this.propAddress2 = propAddress2;
+	}
+
+	public String getPropCity() {
+		return propCity;
+	}
+
+	public void setPropCity(String propCity) {
+		this.propCity = propCity;
+	}
+
+	public String getPropState() {
+		return propState;
+	}
+
+	public void setPropState(String propState) {
+		this.propState = propState;
+	}
+
+	public String getPropZip() {
+		return propZip;
+	}
+
+	public void setPropZip(String propZip) {
+		this.propZip = propZip;
 	}
 	
 	
