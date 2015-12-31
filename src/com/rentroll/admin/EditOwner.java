@@ -12,7 +12,6 @@ import com.rentroll.business.Address;
 import com.rentroll.business.EmailAddress;
 import com.rentroll.business.Owner;
 import com.rentroll.business.PhoneNumber;
-import com.rentroll.business.Property;
 import com.rentroll.data.DbFunctions;
 
 /**
@@ -67,7 +66,9 @@ public class EditOwner extends HttpServlet {
 		String[] emailAddressType=request.getParameterValues("emailAddressType");
 		String[] emailAddress=request.getParameterValues("emailAddress");
 
-		if (request.getParameter("emailAddressId")!=null){
+		
+		
+		if (request.getParameter("emailAddressId")=="0"){
 			for (int i = 0; i < emailAddress.length; i++) {
 				EmailAddress updateEmailAddress = DbFunctions.selectEmailAddress(Integer.parseInt(emailAddressId[i]));
 				
@@ -79,8 +80,12 @@ public class EditOwner extends HttpServlet {
 				} else {
 					updateEmailAddress.setPrimaryEmail(false);
 				}
+				if (emailAddressId[i]==null){
+					DbFunctions.insert(updateEmailAddress);
+				}else {
+					DbFunctions.update(updateEmailAddress);
+				}
 				
-				DbFunctions.update(updateEmailAddress);
 			}
 		}
 		

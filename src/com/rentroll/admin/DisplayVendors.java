@@ -9,21 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.rentroll.business.Owner;
+import com.rentroll.business.Vendor;
 import com.rentroll.data.DbFunctions;
 
-
 /**
- * Servlet implementation class DisplayOwners
+ * Servlet implementation class DisplayVendors
  */
-@WebServlet("/DisplayOwners")
-public class DisplayOwners extends HttpServlet {
+@WebServlet("/DisplayVendors")
+public class DisplayVendors extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DisplayOwners() {
+    public DisplayVendors() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,17 +31,14 @@ public class DisplayOwners extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
+		List<Vendor> allVendors = DbFunctions.selectAllVendors();
+		System.out.println("Total Persons is " + allVendors.size());
 		
 		
+		request.setAttribute("allVendors", allVendors);
 		
-		List<Owner> allOwners = DbFunctions.selectAllOwners();
-		System.out.println("Total Persons is " + allOwners.size());
-		
-		
-		request.setAttribute("allOwners", allOwners);
-		
-		getServletContext().getRequestDispatcher("/displayOwners.jsp")
+		getServletContext().getRequestDispatcher("/displayVendors.jsp")
 		.forward(request, response);
 	}
 

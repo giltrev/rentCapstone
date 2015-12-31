@@ -1,7 +1,6 @@
 package com.rentroll.admin;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,21 +8,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.rentroll.business.Owner;
+import com.rentroll.business.Vendor;
 import com.rentroll.data.DbFunctions;
 
-
 /**
- * Servlet implementation class DisplayOwners
+ * Servlet implementation class VendorDetail
  */
-@WebServlet("/DisplayOwners")
-public class DisplayOwners extends HttpServlet {
+@WebServlet("/VendorDetail")
+public class VendorDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DisplayOwners() {
+    public VendorDetail() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,17 +30,13 @@ public class DisplayOwners extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		int personId = Integer.parseInt(request.getParameter("personId"));
 		
+		Vendor vendor = DbFunctions.selectVendor(personId);
 		
+		request.setAttribute("vendor", vendor);
 		
-		List<Owner> allOwners = DbFunctions.selectAllOwners();
-		System.out.println("Total Persons is " + allOwners.size());
-		
-		
-		request.setAttribute("allOwners", allOwners);
-		
-		getServletContext().getRequestDispatcher("/displayOwners.jsp")
+		getServletContext().getRequestDispatcher("/vendorDetail.jsp")
 		.forward(request, response);
 	}
 
@@ -50,8 +44,7 @@ public class DisplayOwners extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+
 	}
 
 }
