@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title>Display Owners</title>
+	<title>Display Vendors</title>
   	<meta name="robots" content="noindex,nofollow">
 	<meta name="description" content="Class Assignemnt.">
 	<meta name="keywords" content="homework, assignments">
@@ -18,10 +18,10 @@
 
 
   <div class="content">
-  <h2>Owners</h2>
+  <h2>Vendors</h2>
   <ul>
-<c:forEach var="owner" items="${allOwners}">
-<li><a href="OwnerDetails?personId=<c:out value="${owner.personId}" />">  <c:out value="${owner.firstName}" /> <c:out value="${owner.middleName}" /> <c:out value="${owner.lastName}" /></a></li>
+<c:forEach var="vendor" items="${allVendors}">
+<li><a href="VendorDetail?personId=<c:out value="${vendor.personId}" />">  <c:out value="${vendor.firstName}" /> <c:out value="${vendor.middleName}" /> <c:out value="${vendor.lastName}" /></a></li>
 </c:forEach>
   </ul>
 <!-- end .content --></div>

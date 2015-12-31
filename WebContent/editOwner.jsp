@@ -68,15 +68,11 @@
 </head>
 <body>
 
-<div class="header">
-  
-      <h1>Property management</h1>
-  
-  </div>
-  
-  <div class="nav"> 
-      Home Screen | Owners | Properties | Units | Tenants | Service Calls | Vendors
-  </div>
+<div class="container">
+
+<jsp:include page="maininsert.jsp" />
+
+
 
   <div class="content">
 <h2>Edit Owner</h2>
@@ -108,9 +104,15 @@ Inactive<input type="radio" name="activePerson" value="false" <c:if test="${owne
     <th width="385" align="left" scope="col">email Address</th>
   </tr>
 </table>  
-<table width="600" border="0" cellspacing="1" cellpadding="1">  
+<table id="emailTable" width="600" border="0" cellspacing="1" cellpadding="1">  
  <c:forEach var="email" varStatus="status" items="${owner.emailAddresses}">
- <input type="hidden" name ="emailAddressId"  value='<c:out value="${email.emailAddressId}"/>' />
+ 	<c:if test="${email.emailAddressId != null}">
+   		<input type="hidden" name ="emailAddressId"  value='<c:out value="${email.emailAddressId}"/>' />
+ 	</c:if>
+ 	 <c:if test="${email.emailAddressId == null}">
+   		<input type="hidden" name ="emailAddressId"  value= "0" />
+ 	</c:if>
+
 
 
 
@@ -169,6 +171,7 @@ Inactive<input type="radio" name="activePerson" value="false" <c:if test="${owne
 </c:forEach>
     
 </table>
+
 <h2>Addresses</h2>
 <input type="button" value="Add Row" onclick="addRow('addressTable')" />
 <input type="button" value="Delete Row" onclick="deleteRow('addressTable')" />
@@ -221,6 +224,10 @@ Zip:
 
 </form>
 
-  </div>
+    <!-- end .content --></div>
+  <div class="footer">
+    <p>This .footer contains the declaration position:relative; to give Internet Explorer 6 hasLayout for the .footer and cause it to clear correctly. If you're not required to support IE6, you may remove it.</p>
+    <!-- end .footer --></div>
+<!-- end .container --></div>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title><c:out value="${owner.firstName}" /> <c:out value="${owner.lastName}" /></title>
+	<title><c:out value="${vendor.companyName}" /> </title>
 
     <link href="main.css" rel="stylesheet" type="text/css" media="screen">
 </head>
@@ -16,14 +16,16 @@
 
 
   <div class="content">
-<p><a href='EditOwnerRedirect?personId=<c:out value="${owner.personId}" />'>editOwner</a>
+<p><a href='EditOwnerRedirect?personId=<c:out value="${vendor.personId}" />'>editOwner</a>
 
 
-  <h2><c:out value="${owner.firstName}" /> <c:out value="${owner.middleName}" /> <c:out value="${owner.lastName}" /></h2>
+  <h2><c:out value="${vendor.firstName}" /> <c:out value="${vendor.middleName}" /> <c:out value="${vendor.lastName}" /></h2>
+ <c:out value="${vendor.companyName}" /> <br />
+ <c:out value="${vendor.vendorType}" /> 
  
  <h2>Addresses</h2>  
  
-<c:forEach var="address" items="${owner.addresses}">
+<c:forEach var="address" items="${vendor.addresses}">
 	 	<p><c:if test="${address.primaryAddress==true}">
    			Primary Address<br />
 		</c:if>
@@ -36,19 +38,16 @@
 </c:forEach>
  
   <h2>Email Addresses</h2>
- <c:forEach var="email" items="${owner.emailAddresses}">
+ <c:forEach var="email" items="${vendor.emailAddresses}">
   <c:out value="${email.emailAddressType}" /> <c:out value="${email.emailAddress}" /><br />
    </c:forEach>
      <h2>Phone Numbers</h2>
- <c:forEach var="pNumber" items="${owner.phoneNumbers}">
+ <c:forEach var="pNumber" items="${vendor.phoneNumbers}">
   <c:out value="${pNumber.phoneType}" /> <c:out value="${pNumber.phoneNumber}" /><br />
    </c:forEach>
    
  
-  <h2>Properties</h2>
-<c:forEach var="property" items="${owner.properties}">
-  <c:out value="${property.propertyType}" /> at <c:out value="${property.propAddress1}" /> <br />
-   </c:forEach>
+
 
     <!-- end .content --></div>
   <div class="footer">
