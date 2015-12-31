@@ -41,8 +41,9 @@ public class Owner extends Person {
 	public Owner(){
 		
 	}
-public Owner(String firstName, String middleName, String lastName){
+public Owner(String firstName, String middleName, String lastName, String paymentMethod){
 	this();
+	this.paymentMethod= paymentMethod;
 	super.setFirstName(firstName);
 	super.setMiddleName(middleName);
 	super.setLastName(lastName);

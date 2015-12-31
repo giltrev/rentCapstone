@@ -37,6 +37,17 @@ public class Vendor extends Person{
 	public void setServiceCall(ServiceCall serviceCall) {
 		this.serviceCall = serviceCall;
 	}
-
+	public Vendor(){}
+	
+	public Vendor(String firstName,String middleName,String lastName,String companyName,
+			String vendorType, Boolean active){
+		this();
+		super.setFirstName(firstName);
+		super.setMiddleName(middleName);
+		super.setLastName(lastName);
+		this.companyName = companyName;
+		this.vendorType = vendorType;
+		super.setActivePerson(active);
+	}
 
 }

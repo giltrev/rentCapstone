@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,10 +26,10 @@ public class Unit implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int unitId;
 	@ManyToOne
+	@JoinColumn(name="property_Id")
 	private Property property;
 	
-	@OneToMany(targetEntity = Tenant.class, mappedBy="unit", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<Tenant> tenants;
+
 	private String unitNumber;
 	private int numberOfBedrooms;
 	private int numberOfBathrooms;
@@ -111,13 +112,21 @@ public class Unit implements Serializable{
 	public void setUnitId(int unitId) {
 		this.unitId = unitId;
 	}
-	public List<Tenant> getTenants() {
-		return tenants;
-	}
-	public void setTenants(List<Tenant> tenants) {
-		this.tenants = tenants;
-	}
+
+	public Unit(){}
 	
-	
+	public Unit(Property property, String unitNumber, int numberOfBedrooms, int numberOfBathrooms, double rentRate, double squareFootage, String floorplan, String status){
+		this();
+		this.property= property;
+		this.unitNumber= unitNumber;
+		this.numberOfBedrooms = numberOfBedrooms;
+		this.numberOfBathrooms = numberOfBathrooms;
+		this.rentRate= rentRate;
+		this.squareFootage = squareFootage;
+		this.floorplan = floorplan;
+		this.status = status;
+		
+	}
+
 
 }
