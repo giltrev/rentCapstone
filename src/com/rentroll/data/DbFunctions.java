@@ -16,6 +16,8 @@ import com.rentroll.business.Owner;
 import com.rentroll.business.Person;
 import com.rentroll.business.PhoneNumber;
 import com.rentroll.business.Property;
+import com.rentroll.business.Tenant;
+import com.rentroll.business.Vendor;
 
 
 
@@ -238,8 +240,7 @@ public class DbFunctions {
     
     public static Property selectProperty(int propId) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        String qString = "SELECT u FROM Property u " +
-                "WHERE u.propId = :propId";
+        String qString = "SELECT u FROM Property u WHERE u.propId = :propId";
         TypedQuery<Property> q = em.createQuery(qString, Property.class);
         q.setParameter("propId", propId);
         try {
@@ -251,6 +252,65 @@ public class DbFunctions {
             em.close();
         }
     }
-    
+    public static List<Tenant> selectAllTenants() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i FROM Tenant i ORDER BY i.lastName, i.firstName" ;
+        TypedQuery<Tenant> q = em.createQuery(qString, Tenant.class);
+        List<Tenant> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    } 
+    public static Tenant selectTenant(int personId) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Tenant u " +
+                "WHERE u.personId = :personId";
+        TypedQuery<Tenant> q = em.createQuery(qString, Tenant.class);
+        q.setParameter("personId", personId);
+        try {
+        	Tenant tenant = q.getSingleResult();
+            return tenant;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    public static List<Vendor> selectAllVendors() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i FROM Vendor i ORDER BY i.lastName, i.firstName" ;
+        TypedQuery<Vendor> q = em.createQuery(qString, Vendor.class);
+        List<Vendor> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    } 
+    public static Vendor selectVendor(int personId) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Vendor u " +
+                "WHERE u.personId = :personId";
+        TypedQuery<Vendor> q = em.createQuery(qString, Vendor.class);
+        q.setParameter("personId", personId);
+        try {
+        	Vendor vendor = q.getSingleResult();
+            return vendor;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
     
 }
