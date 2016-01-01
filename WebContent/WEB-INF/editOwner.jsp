@@ -1,80 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="main.css" rel="stylesheet" type="text/css" media="screen" />
-    
-<script language="javascript">
-        function addRow(tableID) {
- 
-            var table = document.getElementById(tableID);
- 
-            var rowCount = table.rows.length;
-            var row = table.insertRow(rowCount);
- 
-            var colCount = table.rows[0].cells.length;
- 
-            for(var i=0; i<colCount; i++) {
- 
-                var newcell = row.insertCell(i);
- 
-                newcell.innerHTML = table.rows[0].cells[i].innerHTML;
-                //alert(newcell.childNodes);
-                switch(newcell.childNodes[0].type) {
-                    case "text":
-                            newcell.childNodes[0].value = "";
-                            break;
-                    case "checkbox":
-                            newcell.childNodes[0].checked = false;
-                            break;
-                    case "select-one":
-                            newcell.childNodes[0].selectedIndex = 0;
-                            break;
-                }
-            }
-        }
- 
-        function deleteRow(tableID) {
-            try {
-            var table = document.getElementById(tableID);
-            var rowCount = table.rows.length;
- 
-            for(var i=0; i<rowCount; i++) {
-                var row = table.rows[i];
-                var chkbox = row.cells[0].childNodes[0];
-                if(null != chkbox && true == chkbox.checked) {
-                    if(rowCount <= 1) {
-                        alert("Cannot delete all the rows.");
-                        break;
-                    }
-                    table.deleteRow(i);
-                    rowCount--;
-                    i--;
-                }
- 
- 
-            }
-            }catch(e) {
-                alert(e);
-            }
-        }
- 
-    </script>    
-<title>Edit Owner</title>
-</head>
-<body>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<div class="container">
-
-<jsp:include page="maininsert.jsp" />
-
-
-
-  <div class="content">
+<my:layout>
+	<jsp:attribute name="body">
+		<div class="content">
 <h2>Edit Owner</h2>
 <form action="EditOwner" method="post">
 <p>First Name:<br /><input name="firstName" type="text" value="<c:out value="${owner.firstName}" />" size="40" /><br />
@@ -224,10 +153,6 @@ Zip:
 
 </form>
 
-    <!-- end .content --></div>
-  <div class="footer">
-    <p>This .footer contains the declaration position:relative; to give Internet Explorer 6 hasLayout for the .footer and cause it to clear correctly. If you're not required to support IE6, you may remove it.</p>
-    <!-- end .footer --></div>
-<!-- end .container --></div>
-</body>
-</html>
+		<!-- end .content --></div>
+	</jsp:attribute>
+</my:layout>

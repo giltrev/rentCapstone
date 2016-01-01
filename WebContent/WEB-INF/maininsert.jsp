@@ -1,7 +1,7 @@
-  <div class="header"><a href="index.jsp"><img src="images/austinSky.jpg" alt="Austin" name="Austin" width="960" height="300" id="Austin" style="background-color: #C6D580; display:block;" /></a> 
+  <div class="header"><a href=""><img src="images/austinSky.jpg" alt="Austin" name="Austin" width="960" height="300" id="Austin" style="background-color: #C6D580; display:block;" /></a> 
     <!-- end .header --></div>  
     <div class="topnav"> 
-      <a href="index.jsp">Home Screen</a> | <a href="DisplayOwners">Owners</a> | <a href="DisplayProperties">Properties</a> |  <a href="DisplayTenants">Tenants</a> | <a href="DisplayServiceCalls">Service Calls</a> | <a href="DisplayVendors">Vendors</a>
+      <a href="">Home Screen</a> | <a href="DisplayOwners">Owners</a> | <a href="DisplayProperties">Properties</a> |  <a href="DisplayTenants">Tenants</a> | <a href="DisplayServiceCalls">Service Calls</a> | <a href="DisplayVendors">Vendors</a>
       <!-- end .topnav --></div>
   <div class="sidebar1">
     <ul class="nav">
