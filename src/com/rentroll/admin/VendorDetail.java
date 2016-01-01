@@ -36,7 +36,7 @@ public class VendorDetail extends HttpServlet {
 		
 		request.setAttribute("vendor", vendor);
 		
-		getServletContext().getRequestDispatcher("/vendorDetail.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/vendorDetail.jsp")
 		.forward(request, response);
 	}
 

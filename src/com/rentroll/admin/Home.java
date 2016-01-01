@@ -7,20 +7,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.rentroll.business.Owner;
-import com.rentroll.data.DbFunctions;
-
 /**
- * Servlet implementation class OwnerDetails
+ * Servlet implementation class Home
  */
-@WebServlet("/OwnerDetails")
-public class OwnerDetails extends HttpServlet {
+@WebServlet("/Home")
+public class Home extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OwnerDetails() {
+    public Home() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,14 +26,8 @@ public class OwnerDetails extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int personId = Integer.parseInt(request.getParameter("personId"));
-		
-		Owner owner = DbFunctions.selectOwner(personId);
-		
-		request.setAttribute("owner", owner);
-		
-		getServletContext().getRequestDispatcher("/WEB-INF/ownerDetail.jsp")
-		.forward(request, response);
+		// TODO Auto-generated method stub
+        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
 	}
 
 	/**

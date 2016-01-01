@@ -35,7 +35,7 @@ public class DisplayTenants extends HttpServlet {
 		
 		request.setAttribute("allTenants", allTenants);
 		
-		getServletContext().getRequestDispatcher("/displayTenants.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/displayTenants.jsp")
 		.forward(request, response);
 	}
 

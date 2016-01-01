@@ -340,13 +340,13 @@ public class CreateDatabase extends HttpServlet {
 		DbFunctions.insert(jackProp2Unit1);
 		DbFunctions.insert(jackProp2Unit2);
 		
-Property other_property = DbFunctions.selectProperty(1);
-		
-		
-		
-		for (Unit unit : other_property.getUnits()){
-			System.out.println(unit.getUnitId()+ " "+ unit.getUnitNumber());
-		}
+//Property other_property = DbFunctions.selectProperty(1);
+//		
+//		
+//		
+//		for (Unit unit : other_property.getUnits()){
+//			System.out.println(unit.getUnitId()+ " "+ unit.getUnitNumber());
+//		}
 		
 		DbFunctions.insert(jackProp2Unit3);
 		DbFunctions.insert(jackProp2Unit4);
@@ -1102,6 +1102,9 @@ Property other_property = DbFunctions.selectProperty(1);
 		DbFunctions.insert(robertProp3Unit1TenantWorkPhone);
 		DbFunctions.insert(robertProp3Unit2TenantWorkPhone);
 		
+		
+
+		
 	
 		Vendor vendor1 = new Vendor("Robert", "" , "Reyes", "Reyes HVAC", "HVAC",true);
 		Vendor vendor2 = new Vendor( "Tawna", "Teddy", "Villanueva", "Austin HVAC", "HVAC", true);
@@ -1125,14 +1128,14 @@ Property other_property = DbFunctions.selectProperty(1);
 		DbFunctions.insert(vendor9);
 		DbFunctions.insert(vendor10);
 		
-		other_property = DbFunctions.selectProperty(1);
-		
-		
-		
-		for (Unit unit : other_property.getUnits()){
-			System.out.println(unit.getUnitId()+ " "+ unit.getUnitNumber());
-		}
-		getServletContext().getRequestDispatcher("/index.jsp")
+//		Property other_property = DbFunctions.selectProperty(1);
+//		
+//		
+//		
+//		for (Unit unit : other_property.getUnits()){
+//			System.out.println(unit.getUnitId()+ " "+ unit.getUnitNumber());
+//		}
+		getServletContext().getRequestDispatcher("/WEB-INF/index.jsp")
 		.forward(request, response);
 		
 	}

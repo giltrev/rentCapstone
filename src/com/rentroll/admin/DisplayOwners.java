@@ -42,7 +42,7 @@ public class DisplayOwners extends HttpServlet {
 		
 		request.setAttribute("allOwners", allOwners);
 		
-		getServletContext().getRequestDispatcher("/displayOwners.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/displayOwners.jsp")
 		.forward(request, response);
 	}
 

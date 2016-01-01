@@ -39,11 +39,14 @@ public class EditOwner extends HttpServlet {
 		String lastName = request.getParameter("lastName");
 		String paymentMethod = request.getParameter("paymentMethod");
 		String activeTxt = request.getParameter("active");
+		System.out.println(activeTxt);
 		boolean activePerson;
 		if (activeTxt=="true"){
 			activePerson=true;
+			System.out.println("true");
 		} else{
 			activePerson=false;
+			System.out.println("false");
 		}
 		
 		Owner owner = DbFunctions.selectOwner(personId);
@@ -153,9 +156,9 @@ public class EditOwner extends HttpServlet {
 			DbFunctions.update(updateAddress);
 		}
 		
-		request.setAttribute("owner", owner);
+		request.setAttribute("personId", owner.getPersonId());
 		
-		getServletContext().getRequestDispatcher("/ownerDetail.jsp")
+		getServletContext().getRequestDispatcher("/OwnerDetails")
 		.forward(request, response);
 		
 	}

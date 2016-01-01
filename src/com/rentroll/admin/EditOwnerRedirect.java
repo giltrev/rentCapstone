@@ -34,7 +34,7 @@ public class EditOwnerRedirect extends HttpServlet {
 		
 		request.setAttribute("owner", DisplayOwner);
 		
-		getServletContext().getRequestDispatcher("/editOwner.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/editOwner.jsp")
 		.forward(request, response);
 	}
 

@@ -36,7 +36,7 @@ public class TenantDetail extends HttpServlet {
 		
 		request.setAttribute("tenant", tenant);
 		
-		getServletContext().getRequestDispatcher("/tenantDetail.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/tenantDetail.jsp")
 		.forward(request, response);
 	}
 

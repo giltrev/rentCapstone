@@ -35,7 +35,7 @@ public class DisplayProperties extends HttpServlet {
 		
 		request.setAttribute("allOwners", allOwners);
 		
-		getServletContext().getRequestDispatcher("/displayProperties.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/displayProperties.jsp")
 		.forward(request, response);
 	}
 

@@ -47,7 +47,7 @@ public class PropertyDetail extends HttpServlet {
 		
 		request.setAttribute("property", other_property);
 		
-		getServletContext().getRequestDispatcher("/propertyDetail.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/propertyDetail.jsp")
 		.forward(request, response);
 	}
 

@@ -35,7 +35,7 @@ public class DisplayUnits extends HttpServlet {
 		
 		request.setAttribute("property", property);
 		
-		getServletContext().getRequestDispatcher("/displayUnits.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/displayUnits.jsp")
 		.forward(request, response);
 	}
 

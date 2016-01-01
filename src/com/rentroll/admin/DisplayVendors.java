@@ -38,7 +38,7 @@ public class DisplayVendors extends HttpServlet {
 		
 		request.setAttribute("allVendors", allVendors);
 		
-		getServletContext().getRequestDispatcher("/displayVendors.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/displayVendors.jsp")
 		.forward(request, response);
 	}
 
