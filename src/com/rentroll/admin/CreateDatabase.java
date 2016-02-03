@@ -1,6 +1,9 @@
 package com.rentroll.admin;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,16 +13,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.rentroll.business.Address;
 import com.rentroll.business.EmailAddress;
+import com.rentroll.business.LedgerEntry;
 import com.rentroll.business.Owner;
 import com.rentroll.business.PhoneNumber;
-import com.rentroll.business.Property;
+import com.rentroll.business.PropertyManager;
+import com.rentroll.business.RentProperty;
+import com.rentroll.business.ServiceCall;
 import com.rentroll.business.Tenant;
 import com.rentroll.business.Unit;
 import com.rentroll.business.Vendor;
+import com.rentroll.data.AddRent;
+import com.rentroll.data.AddTenantToUnit;
 import com.rentroll.data.DbFunctions;
 
 /**
- * Servlet implementation class CreateDatabase
+ * Servlet implementation  class CreateDatabase
  */
 @WebServlet("/CreateDatabase")
 public class CreateDatabase extends HttpServlet {
@@ -36,12 +44,43 @@ public class CreateDatabase extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PropertyManager bg = new PropertyManager();
+		bg.setFirstName("Billy");
+		bg.setLastName("Gold");
+		bg.setCompanyname("Bill Gold Realty");
+		bg.setUserId("BGold100");
+		bg.setPassword("BGPassword");
+		bg.setPmType("admin");
+		
+		DbFunctions.insert(bg);
+		
+		
 		Owner jack = new Owner("Jack","Richard","Cranial", "wire");
 		Owner joey = new Owner("Joey","Jack","Jackson", "check");
 		Owner joe= new Owner("Joe","Jack", "Shmuck", "check");
 		Owner robert= new Owner("Robert", "Joseph","Hogan", "check");
 		Owner jane= new Owner("Jane","Rose", "Smith", "check");
+		
+		jack.setUserId("JackId");
+		joey.setUserId("JoeyId");
+		joe.setUserId("JoeId");
+		robert.setUserId("RobertId");
+		jane.setUserId("JaneId");
+		
+		jack.setPassword("JackPassword");
+		joey.setPassword("JoeyPassword");
+		joe.setPassword("JoePassword");
+		robert.setPassword("RobertPassword");
+		jane.setPassword("JanePassword");
+		
+		
+		jack.setActivePerson(true);
+		joey.setActivePerson(true);
+		joe.setActivePerson(true);
+		robert.setActivePerson(true);
+		jane.setActivePerson(true);
 		
 		DbFunctions.insert(jack);
 		DbFunctions.insert(joey);
@@ -169,26 +208,28 @@ public class CreateDatabase extends HttpServlet {
 		DbFunctions.insert(janeWorkAddress);
 		
 		
-		Property jackProp1 = new Property();
-		jackProp1.setPropAddress1("6649 N Blue Gum St");
+		RentProperty jackProp1 = new RentProperty();
+		jackProp1.setPropAddress1("66 Rainey St");
 		jackProp1.setPropCity("Austin");
 		jackProp1.setOwner(jack);
 		jackProp1.setPropertyType("Duplex");
 		jackProp1.setNumberOfUnits(2);
-		jackProp1.setPropZip("78704");
-		jackProp1.setCommission(.05);
+		jackProp1.setPropZip("78701");
+		jackProp1.setCommission(new BigDecimal(".05"));
 		jackProp1.setPropState("Texas");
+		jackProp1.setDescription("66 Rainey St, is perfect for renters who want to be close to Downtown but also cherish some peace and quiet. This 2 bedroom, 1.5 bath, 2-story unit is currently prepping for kitchen and bathroom renovation. New countertops, stainless steal hardware, decor, paint, etc. and will be ready for move in on Saturday, February 13th, 2016!");
 		
-		Property jackProp2 = new Property();
-		jackProp2.setPropName("Jack's Apartments");
+		RentProperty jackProp2 = new RentProperty();
+		jackProp2.setPropName("Atlantic Ave Apartments");
 		jackProp2.setPropAddress1("74874 Atlantic Ave");
 		jackProp2.setPropCity("Austin");
 		jackProp2.setOwner(jack);
 		jackProp2.setPropertyType("Apratment");
 		jackProp2.setNumberOfUnits(20);
 		jackProp2.setPropZip("78704");
-		jackProp2.setCommission(.03);
+		jackProp2.setCommission(new BigDecimal(".03"));
 		jackProp2.setPropState("Texas");
+		jackProp2.setDescription("Welcome to Atlantic Ave Apartments, South Austins newest premier address. Conveniently located in booming South Austin, residents are minutes away from an array of entertainment, dining, and shopping. Designed with first class amenities and designer features, Lenox Parkview was developed with your unique lifestyle in mind. Choose from our one, two or three bedroom luxury apartment homes with custom features including gourmet kitchens with stainless steel appliances, granite countertops, faux wood flooring, wood cabinets complimented by modern hardware, full-size washer and dryers, and private yards. From the luxury swimming pool with outdoor kitchen to the twenty-four hour fitness and wellness studio, Atlantic Ave is designed to enhance your lifestyle! NOW LEASING, Atlantic Ave invites you to learn more about our premier community!");
 		
 		
 		
@@ -200,59 +241,64 @@ public class CreateDatabase extends HttpServlet {
 		
 
 		
-		Property joeyProp1 = new Property();
-		joeyProp1.setPropName("Joey's Apartments");
-		joeyProp1.setPropAddress1("74874 Atlantic Ave");
+		RentProperty joeyProp1 = new RentProperty();
+		joeyProp1.setPropName("Esperanza Xing Apartments");
+		joeyProp1.setPropAddress1("74874 Esperanza Xing");
 		joeyProp1.setPropCity("Austin");
 		joeyProp1.setOwner(joey);
 		joeyProp1.setPropertyType("Apratment");
 		joeyProp1.setNumberOfUnits(15);
 		joeyProp1.setPropZip("78704");
-		joeyProp1.setCommission(.04);
+		joeyProp1.setCommission(new BigDecimal(".04"));
 		joeyProp1.setPropState("Texas");
+		joeyProp1.setDescription("High on style with elegantly appointed finishes. Esperanza Xing is centrally located across from The Domain & next to Top Golf in the high-tech corridor. With added extras at every corner, you will enjoy a choice of studio, 1 bedroom, 1 bedroom+den, 2 bedroom and 3 bedroom apartments- each fully equipped with stainless steel appliances, espresso cabinets, granite counter tops, wood-like flooring and large windows with solar shades.Relax with friends at any of the two pools, entertain in our clubroom, stay healthy in our fully equipped fitness center, and enjoy our indoor/outdoor bar and lounge for ultimate relaxation.");
 		
 		DbFunctions.insert(joeyProp1);
 
-		Property joeProp1 = new Property();
-		joeProp1.setPropAddress1("6649 N Blue Gum St");
+		RentProperty joeProp1 = new RentProperty();
+		joeProp1.setPropAddress1("2400 Nueces Street");
 		joeProp1.setPropCity("Austin");
 		joeProp1.setOwner(joe);
 		joeProp1.setPropertyType("Single Family");
 		joeProp1.setNumberOfUnits(1);
 		joeProp1.setPropZip("78704");
-		joeProp1.setCommission(.05);
+		joeProp1.setCommission(new BigDecimal(".05"));
 		joeProp1.setPropState("Texas");
+		joeProp1.setDescription("CLOSE TO SETON MEDICAL CENTER, CENTRAL MARKET, JEFFERSON SQUARE, AND EASY COMMUTE TO UT/DOWNTOWN. FRESH PAINT. DECK AND SMALL SIDE YARD");
 		
-		Property joeProp2 = new Property();
-		joeProp2.setPropName("Joe's Apartments");
-		joeProp2.setPropAddress1("74874 Atlantic Ave");
+		RentProperty joeProp2 = new RentProperty();
+		joeProp2.setPropName("EAST KOENIG RUGHS");
+		joeProp2.setPropAddress1("545321 Avenue F");
 		joeProp2.setPropCity("Austin");
 		joeProp2.setOwner(joe);
 		joeProp2.setPropertyType("Single Family");
 		joeProp2.setNumberOfUnits(1);
 		joeProp2.setPropZip("78704");
-		joeProp2.setCommission(.03);
+		joeProp2.setCommission(new BigDecimal(".03"));
 		joeProp2.setPropState("Texas");
+		joeProp2.setDescription("Nestled in the quiet outskirts of Hyde Park, East Koening Rughs are redefining luxury apartments in the North Loop district. Surrounded by bistros, hybrid coffee shop-cocktail spots, pubs, vintage boutiques and record stores, the developing North Loop Neighborhood parallels the eclectic feel of South Congress with edgy entertainment. Choose from any of our one, two and three bedroom floorplans with stylish features and sophisticated design. Our homes for rent offer a resort infinity edge pool with a water wading lounge, poolside grilling stations, an entertainment patio, an urban dog park, state of the art fitness center and business center. In addition, we include direct-level garage parking. Located just north of the UT intermural fields, we offer easy access to I-35, Mopac, Highway 183 and 290 making East Koening Rughs a perfect blend of distinct style and location. Please contact our professional and dedicated staff to schedule an appointment today!");
 		
-		Property joeProp3 = new Property();
-		joeProp3.setPropAddress1("123 Live Oak St");
+		RentProperty joeProp3 = new RentProperty();
+		joeProp3.setPropAddress1("2710 San Pedro Street");
 		joeProp3.setPropCity("Austin");
 		joeProp3.setOwner(joe);
 		joeProp3.setPropertyType("Single Family");
 		joeProp3.setNumberOfUnits(1);
 		joeProp3.setPropZip("78758");
-		joeProp3.setCommission(.06);
+		joeProp3.setCommission(new BigDecimal(".06"));
 		joeProp3.setPropState("Texas");
+		joeProp3.setDescription("2x2 two story vaulted ceilings nice floorplan one car garage small yard one bedroom up one bedroom down let negotiable no barking dogs or restricted prohibited breeds");
 		
-		Property joeProp4 = new Property();
+		RentProperty joeProp4 = new RentProperty();
 		joeProp4.setPropAddress1("123 Dead Oak St");
 		joeProp4.setPropCity("Austin");
 		joeProp4.setOwner(joe);
 		joeProp4.setPropertyType("Single Family");
 		joeProp4.setNumberOfUnits(1);
 		joeProp4.setPropZip("78758");
-		joeProp4.setCommission(.06);
+		joeProp4.setCommission(new BigDecimal(".06"));
 		joeProp4.setPropState("Texas");
+		joeProp4.setDescription("123 Dead Oak Street is perfect for renters who want to be close to Downtown but also cherish some peace and quiet. This 2 bedroom, 1.5 bath, 2-story unit is currently prepping for kitchen and bathroom renovation. New countertops, stainless steal hardware, decor, paint, etc. and will be ready for move in on Saturday, February 13th, 2016! Park your car or take advantage of extra storage in Unit B's 1-car garage, with additional parking available on the driveway and street. Feel free to warm up near the fireplace in the winter and outside on the two decks in the summer. One large deck extends right off the main level, and the second deck is private to the master bedroom upstairs. Both wood decks look over an un-developed, beautiful green space for maximum relaxation and great views of south east Austin. Tile covers the entire first floor of the unit with carpet upstairs. The owner will accept 1 dog under 35 pounds or 2 cats. The pet deposit is $300 per pet. The backyard would be great for dogs too. The kitchen comes with a fridge, gas stove, oven and dishwasher. Electric washer and electric/gas dryer hookups are available in the garage! 1713 Burton DR is conveniently located only blocks from a convenient store, gas station, Emo's Music Venue and bus stops. Future residents will be only a 5 minute drive to South Congress shopping, 10 minute drive to 6th Street and the Capital, and a 15 minute drive to UT campus");
 		
 		DbFunctions.insert(joeProp1);
 		DbFunctions.insert(joeProp2);
@@ -260,82 +306,86 @@ public class CreateDatabase extends HttpServlet {
 		DbFunctions.insert(joeProp4);
 		
 		
-		Property janeProp1 = new Property();
-		janeProp1.setPropName("Jane's Apartments");
-		janeProp1.setPropAddress1("74874 Atlantic Ave");
+		RentProperty janeProp1 = new RentProperty();
+		janeProp1.setPropName("Jane's Grandview");
+		janeProp1.setPropAddress1("9756 Champion Grandview Way");
 		janeProp1.setPropCity("Austin");
 		janeProp1.setOwner(jane);
 		janeProp1.setPropertyType("Apratment");
 		janeProp1.setNumberOfUnits(10);
 		janeProp1.setPropZip("78704");
-		janeProp1.setCommission(.04);
+		janeProp1.setCommission(new BigDecimal(".04"));
 		janeProp1.setPropState("Texas");
+		janeProp1.setDescription("Jane's Grandview is all about LIFE and STYLE. Yours! Our exquisite community nestled in the Hill Country, offers breathtaking views of surrounding canyons, yet is only minutes away from the Arboretum. Take a dip in the infinity edge pool while enjoying majestic views of the hills. Jane's Grandview is luxury living at its finest!");
 		
 		DbFunctions.insert(janeProp1);
 
 
 		
-		Property robertProp1 = new Property();
+		RentProperty robertProp1 = new RentProperty();
 		robertProp1.setPropAddress1("6649 N Blue Gum St");
-		robertProp1.setPropCity("Austin");
+		robertProp1.setPropCity("Round Rock");
 		robertProp1.setOwner(robert);
 		robertProp1.setPropertyType("Duplex");
 		robertProp1.setNumberOfUnits(2);
-		robertProp1.setPropZip("78704");
-		robertProp1.setCommission(.05);
+		robertProp1.setPropZip("78628");
+		robertProp1.setCommission(new BigDecimal(".05"));
 		robertProp1.setPropState("Texas");
+		robertProp1.setDescription("Totally renovated, well maintained 2 Bedroom/1 Bathroom duplex on Greenlawn in Round Rock. This very clean and just updated duplex is just minutes away from I-45 (tollway) and I-35. The duplex is available now!");
 		
-		Property robertProp2 = new Property();
-		robertProp2.setPropAddress1("74874 Atlantic Ave");
+		RentProperty robertProp2 = new RentProperty();
+		robertProp2.setPropAddress1("74874 Pecan Springs Road");
 		robertProp2.setPropCity("Austin");
 		robertProp2.setOwner(robert);
 		robertProp2.setPropertyType("Duplex");
 		robertProp2.setNumberOfUnits(2);
 		robertProp2.setPropZip("78704");
-		robertProp2.setCommission(.03);
+		robertProp2.setCommission(new BigDecimal(".03"));
 		robertProp2.setPropState("Texas");
+		robertProp2.setDescription("Walking distance to the booming Manor district with TONS of dining shopping entertainment. Private deck that is GREAT for entertaining. Original 4FXJGJ hardwood floors and a spacious downstairs that is decked out with updated finishes. Large lot with 2 reserved parking spaces.");
 		
-		Property robertProp3 = new Property();
+		RentProperty robertProp3 = new RentProperty();
 		robertProp3.setPropAddress1("123 Live Oak St");
 		robertProp3.setPropCity("Austin");
 		robertProp3.setOwner(robert);
 		robertProp3.setPropertyType("Duplex");
 		robertProp3.setNumberOfUnits(2);
 		robertProp3.setPropZip("78758");
-		robertProp3.setCommission(.06);
+		robertProp3.setCommission(new BigDecimal(".06"));
 		robertProp3.setPropState("Texas");
+		robertProp3.setDescription("Spacious unit, all bedrooms upstairs withcarpet, wood on stairs and stained concrete in living and kitchen. Units have been updated, remodel still in process, all new paint, 4FJMCX carpet, appliances! Pets negotiable. Small to medium sized pet okay. Unit has one car garage, Brand new fridge, gas stove and dishwasher provided.");
 		
 		
 		DbFunctions.insert(robertProp1);
 		DbFunctions.insert(robertProp2);
 		DbFunctions.insert(robertProp3);
 		
-		Unit jackProp1Unit1 = new Unit(jackProp1, "001",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit jackProp1Unit2 = new Unit(jackProp1, "002",2, 2, 1200D, 1000D, "Two Bedroom", "Vacant");
+		Unit jackProp1Unit1 = new Unit(jackProp1, "001",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit jackProp1Unit2 = new Unit(jackProp1, "002",2, 2, "1200", 1000D, "Two Bedroom", "Vacant");
 
 		DbFunctions.insert(jackProp1Unit1);
 		DbFunctions.insert(jackProp1Unit2);
 
-		Unit jackProp2Unit1 = new Unit(jackProp2, "001",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit jackProp2Unit2 = new Unit(jackProp2, "002",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit jackProp2Unit3 = new Unit(jackProp2, "003",2, 2, 1200D, 1000D, "Two Bedroom", "Vacant");
-		Unit jackProp2Unit4 = new Unit(jackProp2, "004",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit jackProp2Unit5 = new Unit(jackProp2, "005",2, 2, 1200D, 1000D, "Two Bedroom", "Vacant");
-		Unit jackProp2Unit6 = new Unit(jackProp2, "006",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit jackProp2Unit7 = new Unit(jackProp2, "007",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit jackProp2Unit8 = new Unit(jackProp2, "008",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit jackProp2Unit9 = new Unit(jackProp2, "009",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit jackProp2Unit10 = new Unit(jackProp2, "010",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit jackProp2Unit11 = new Unit(jackProp2, "011",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit jackProp2Unit12 = new Unit(jackProp2, "012",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit jackProp2Unit13 = new Unit(jackProp2, "013",1, 1, 900D, 1000D, "One Bedroom", "Vacant");
-		Unit jackProp2Unit14 = new Unit(jackProp2, "014",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit jackProp2Unit15 = new Unit(jackProp2, "015",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit jackProp2Unit16 = new Unit(jackProp2, "016",1, 1, 700D, 1000D, "Efficiency", "Occupied");
-		Unit jackProp2Unit17 = new Unit(jackProp2, "017",1, 1, 700D, 1000D, "Efficiency", "Occupied");
-		Unit jackProp2Unit18 = new Unit(jackProp2, "018",1, 1, 700D, 1000D, "Efficiency", "Occupied");
-		Unit jackProp2Unit19 = new Unit(jackProp2, "019",1, 1, 700D, 1000D, "Efficiency", "Occupied");
-		Unit jackProp2Unit20 = new Unit(jackProp2, "020",1, 1, 700D, 1000D, "Efficiency", "Occupied");
+		Unit jackProp2Unit1 = new Unit(jackProp2, "001",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit jackProp2Unit2 = new Unit(jackProp2, "002",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit jackProp2Unit3 = new Unit(jackProp2, "003",2, 2, "1200", 1000D, "Two Bedroom", "Vacant");
+		Unit jackProp2Unit4 = new Unit(jackProp2, "004",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit jackProp2Unit5 = new Unit(jackProp2, "005",2, 2, "1200", 1000D, "Two Bedroom", "Vacant");
+		Unit jackProp2Unit6 = new Unit(jackProp2, "006",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit jackProp2Unit7 = new Unit(jackProp2, "007",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit jackProp2Unit8 = new Unit(jackProp2, "008",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit jackProp2Unit9 = new Unit(jackProp2, "009",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit jackProp2Unit10 = new Unit(jackProp2, "010",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit jackProp2Unit11 = new Unit(jackProp2, "011",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit jackProp2Unit12 = new Unit(jackProp2, "012",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit jackProp2Unit13 = new Unit(jackProp2, "013",1, 1, "900", 1000D, "One Bedroom", "Vacant");
+		Unit jackProp2Unit14 = new Unit(jackProp2, "014",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit jackProp2Unit15 = new Unit(jackProp2, "015",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit jackProp2Unit16 = new Unit(jackProp2, "016",1, 1, "700", 1000D, "Efficiency", "Occupied");
+		Unit jackProp2Unit17 = new Unit(jackProp2, "017",1, 1, "700", 1000D, "Efficiency", "Occupied");
+		Unit jackProp2Unit18 = new Unit(jackProp2, "018",1, 1, "700", 1000D, "Efficiency", "Occupied");
+		Unit jackProp2Unit19 = new Unit(jackProp2, "019",1, 1, "700", 1000D, "Efficiency", "Occupied");
+		Unit jackProp2Unit20 = new Unit(jackProp2, "020",1, 1, "700", 1000D, "Efficiency", "Occupied");
 
 		DbFunctions.insert(jackProp2Unit1);
 		DbFunctions.insert(jackProp2Unit2);
@@ -368,21 +418,21 @@ public class CreateDatabase extends HttpServlet {
 		DbFunctions.insert(jackProp2Unit20);
 
 
-		Unit joeyProp1Unit1 = new Unit(joeyProp1, "001",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit joeyProp1Unit2 = new Unit(joeyProp1, "002",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit joeyProp1Unit3 = new Unit(joeyProp1, "003",2, 2, 1200D, 1000D, "Two Bedroom", "Vacant");
-		Unit joeyProp1Unit4 = new Unit(joeyProp1, "004",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit joeyProp1Unit5 = new Unit(joeyProp1, "005",2, 2, 1200D, 1000D, "Two Bedroom", "Vacant");
-		Unit joeyProp1Unit6 = new Unit(joeyProp1, "006",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit joeyProp1Unit7 = new Unit(joeyProp1, "007",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit joeyProp1Unit8 = new Unit(joeyProp1, "008",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit joeyProp1Unit9 = new Unit(joeyProp1, "009",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit joeyProp1Unit10 = new Unit(joeyProp1, "010",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit joeyProp1Unit11 = new Unit(joeyProp1, "011",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit joeyProp1Unit12 = new Unit(joeyProp1, "012",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit joeyProp1Unit13 = new Unit(joeyProp1, "013",1, 1, 900D, 1000D, "One Bedroom", "Vacant");
-		Unit joeyProp1Unit14 = new Unit(joeyProp1, "014",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit joeyProp1Unit15 = new Unit(joeyProp1, "015",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
+		Unit joeyProp1Unit1 = new Unit(joeyProp1, "001",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit joeyProp1Unit2 = new Unit(joeyProp1, "002",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit joeyProp1Unit3 = new Unit(joeyProp1, "003",2, 2, "1200", 1000D, "Two Bedroom", "Available");
+		Unit joeyProp1Unit4 = new Unit(joeyProp1, "004",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit joeyProp1Unit5 = new Unit(joeyProp1, "005",2, 2, "1200", 1000D, "Two Bedroom", "Available");
+		Unit joeyProp1Unit6 = new Unit(joeyProp1, "006",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit joeyProp1Unit7 = new Unit(joeyProp1, "007",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit joeyProp1Unit8 = new Unit(joeyProp1, "008",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit joeyProp1Unit9 = new Unit(joeyProp1, "009",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit joeyProp1Unit10 = new Unit(joeyProp1, "010",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit joeyProp1Unit11 = new Unit(joeyProp1, "011",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit joeyProp1Unit12 = new Unit(joeyProp1, "012",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit joeyProp1Unit13 = new Unit(joeyProp1, "013",1, 1, "900", 1000D, "One Bedroom", "Available");
+		Unit joeyProp1Unit14 = new Unit(joeyProp1, "014",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit joeyProp1Unit15 = new Unit(joeyProp1, "015",1, 1, "900", 1000D, "One Bedroom", "Occupied");
 
 		DbFunctions.insert(joeyProp1Unit1);
 		DbFunctions.insert(joeyProp1Unit2);
@@ -400,31 +450,31 @@ public class CreateDatabase extends HttpServlet {
 		DbFunctions.insert(joeyProp1Unit14);
 		DbFunctions.insert(joeyProp1Unit15);
 
-		Unit joeProp1Unit1 = new Unit(joeProp1, "001", 3, 4, 2000D, 2500D, "Three Bedroom House", "Occupied");
-		Unit joeProp2Unit1 = new Unit(joeProp2, "001", 3, 4, 2000D, 2500D, "Three Bedroom House", "Occupied");
-		Unit joeProp3Unit1 = new Unit(joeProp3, "001", 3, 4, 2000D, 2500D, "Three Bedroom House", "Occupied");
-		Unit joeProp4Unit1 = new Unit(joeProp4, "001", 3, 4, 2000D, 2500D, "Three Bedroom House", "Occupied");
+		Unit joeProp1Unit1 = new Unit(joeProp1, "001", 3, 4, "2000", 2500D, "Three Bedroom House", "Occupied");
+		Unit joeProp2Unit1 = new Unit(joeProp2, "001", 3, 4, "2000", 2500D, "Three Bedroom House", "Occupied");
+		Unit joeProp3Unit1 = new Unit(joeProp3, "001", 3, 4, "2000", 2500D, "Three Bedroom House", "Occupied");
+		Unit joeProp4Unit1 = new Unit(joeProp4, "001", 3, 4, "2000", 2500D, "Three Bedroom House", "Occupied");
 
 		DbFunctions.insert(joeProp1Unit1);
 		DbFunctions.insert(joeProp2Unit1);
 		DbFunctions.insert(joeProp3Unit1);
 		DbFunctions.insert(joeProp4Unit1);
 
-		Unit janeProp1Unit1 = new Unit(janeProp1, "001",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit janeProp1Unit2 = new Unit(janeProp1, "002",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit janeProp1Unit3 = new Unit(janeProp1, "003",2, 2, 1200D, 1000D, "Two Bedroom", "Vacant");
-		Unit janeProp1Unit4 = new Unit(janeProp1, "004",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit janeProp1Unit5 = new Unit(janeProp1, "005",2, 2, 1200D, 1000D, "Two Bedroom", "Vacant");
-		Unit janeProp1Unit6 = new Unit(janeProp1, "006",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit janeProp1Unit7 = new Unit(janeProp1, "007",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit janeProp1Unit8 = new Unit(janeProp1, "008",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit janeProp1Unit9 = new Unit(janeProp1, "009",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit janeProp1Unit10 = new Unit(janeProp1, "010",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit janeProp1Unit11 = new Unit(janeProp1, "011",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit janeProp1Unit12 = new Unit(janeProp1, "012",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit janeProp1Unit13 = new Unit(janeProp1, "013",1, 1, 900D, 1000D, "One Bedroom", "Vacant");
-		Unit janeProp1Unit14 = new Unit(janeProp1, "014",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
-		Unit janeProp1Unit15 = new Unit(janeProp1, "015",1, 1, 900D, 1000D, "One Bedroom", "Occupied");
+		Unit janeProp1Unit1 = new Unit(janeProp1, "001",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit janeProp1Unit2 = new Unit(janeProp1, "002",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit janeProp1Unit3 = new Unit(janeProp1, "003",2, 2, "1200", 1000D, "Two Bedroom", "Available");
+		Unit janeProp1Unit4 = new Unit(janeProp1, "004",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit janeProp1Unit5 = new Unit(janeProp1, "005",2, 2, "1200", 1000D, "Two Bedroom", "Vacant");
+		Unit janeProp1Unit6 = new Unit(janeProp1, "006",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit janeProp1Unit7 = new Unit(janeProp1, "007",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit janeProp1Unit8 = new Unit(janeProp1, "008",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit janeProp1Unit9 = new Unit(janeProp1, "009",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit janeProp1Unit10 = new Unit(janeProp1, "010",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit janeProp1Unit11 = new Unit(janeProp1, "011",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit janeProp1Unit12 = new Unit(janeProp1, "012",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit janeProp1Unit13 = new Unit(janeProp1, "013",1, 1, "900", 1000D, "One Bedroom", "Available");
+		Unit janeProp1Unit14 = new Unit(janeProp1, "014",1, 1, "900", 1000D, "One Bedroom", "Occupied");
+		Unit janeProp1Unit15 = new Unit(janeProp1, "015",1, 1, "900", 1000D, "One Bedroom", "Occupied");
 
 
 		DbFunctions.insert(janeProp1Unit1);
@@ -443,26 +493,28 @@ public class CreateDatabase extends HttpServlet {
 		DbFunctions.insert(janeProp1Unit14);
 		DbFunctions.insert(janeProp1Unit15);
 
-		Unit robertProp1Unit1 = new Unit(robertProp1, "001",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit robertProp1Unit2 = new Unit(robertProp1, "002",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
+		Unit robertProp1Unit1 = new Unit(robertProp1, "001",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit robertProp1Unit2 = new Unit(robertProp1, "002",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
 
 		DbFunctions.insert(robertProp1Unit1);
 		DbFunctions.insert(robertProp1Unit2);
 
-		Unit robertProp2Unit1 = new Unit(robertProp2, "001",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit robertProp2Unit2 = new Unit(robertProp2, "002",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
+		Unit robertProp2Unit1 = new Unit(robertProp2, "001",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit robertProp2Unit2 = new Unit(robertProp2, "002",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
 
 		DbFunctions.insert(robertProp2Unit1);
 		DbFunctions.insert(robertProp2Unit2);
 
-		Unit robertProp3Unit1 = new Unit(robertProp3, "001",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
-		Unit robertProp3Unit2 = new Unit(robertProp3, "002",2, 2, 1200D, 1000D, "Two Bedroom", "Occupied");
+		Unit robertProp3Unit1 = new Unit(robertProp3, "001",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
+		Unit robertProp3Unit2 = new Unit(robertProp3, "002",2, 2, "1200", 1000D, "Two Bedroom", "Occupied");
 
 		DbFunctions.insert(robertProp3Unit1);
 		DbFunctions.insert(robertProp3Unit2);
 		
 		
-		Tenant jackProp1Unit1Tenant = new Tenant ( jackProp1Unit1, "Tawna ", " Teddy" , "Villanueva" , "06/22/1995", "12/01/2016", 12345678, "Texas");
+		Tenant jackProp1Unit1Tenant = new Tenant ( jackProp1Unit1, "Gilbert", "Joe" , "Trevino" , "06/22/1995", "12/01/2016", 12345678, "Texas");
+		jackProp1Unit1Tenant.setUserId("Gilbert");
+		jackProp1Unit1Tenant.setPassword("password");
 		Tenant jackProp2Unit1Tenant = new Tenant ( jackProp2Unit1, "Virgie ", " Filiberto" , "Bevelacqua" , "11/04/1966", "05/01/2016", 12345678, "Texas");
 		Tenant jackProp2Unit2Tenant = new Tenant ( jackProp2Unit2, "Marguerita ", " Weldon" , "Louissant" , "03/07/1970", "02/01/2016", 12345678, "Texas");
 		Tenant jackProp2Unit4Tenant = new Tenant ( jackProp2Unit4, "Kristeen ", " Virgie" , "Paa" , "12/02/1998", "09/01/2016", 12345678, "Texas");
@@ -514,7 +566,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant robertProp2Unit2Tenant = new Tenant ( robertProp2Unit2, "Jennifer ", " Irma" , "Thyberg" , "06/11/1979", "04/01/2016", 12345678, "Texas");
 		Tenant robertProp3Unit1Tenant = new Tenant ( robertProp3Unit1, "Heike ", " Bette" , "Lungren" , "07/17/1990", "02/01/2016", 12345678, "Texas");
 		Tenant robertProp3Unit2Tenant = new Tenant ( robertProp3Unit2, "Kris ", " Glenna" , "Claucherty" , "03/30/1972", "10/01/2016", 12345678, "Texas");
+		
 
+		jackProp2Unit1Tenant.setUserId("Tennant2");
+		jackProp2Unit1Tenant.setPassword("T2Password");
+		
 		DbFunctions.insert(jackProp1Unit1Tenant);
 		DbFunctions.insert(jackProp2Unit1Tenant);
 		DbFunctions.insert(jackProp2Unit2Tenant);
@@ -1128,14 +1184,97 @@ public class CreateDatabase extends HttpServlet {
 		DbFunctions.insert(vendor9);
 		DbFunctions.insert(vendor10);
 		
-//		Property other_property = DbFunctions.selectProperty(1);
-//		
-//		
-//		
-//		for (Unit unit : other_property.getUnits()){
-//			System.out.println(unit.getUnitId()+ " "+ unit.getUnitNumber());
-//		}
-		getServletContext().getRequestDispatcher("/WEB-INF/index.jsp")
+		
+		PhoneNumber vendorWork1 =new PhoneNumber(vendor1, false , "work" , "512-447-1234");
+		PhoneNumber vendorWork2 =new PhoneNumber(vendor2, false , "work" , "512-447-1234");
+		PhoneNumber vendorWork3 =new PhoneNumber(vendor3, false , "work" , "512-447-1234");
+		PhoneNumber vendorWork4 =new PhoneNumber(vendor4, false , "work" , "512-447-1234");
+		PhoneNumber vendorWork5 =new PhoneNumber(vendor5, false , "work" , "512-447-1234");
+		PhoneNumber vendorWork6 =new PhoneNumber(vendor6, false , "work" , "512-447-1234");
+		PhoneNumber vendorWork7 =new PhoneNumber(vendor7, false , "work" , "512-447-1234");
+		PhoneNumber vendorWork8 =new PhoneNumber(vendor8, false , "work" , "512-447-1234");
+		PhoneNumber vendorWork9 =new PhoneNumber(vendor9, false , "work" , "512-447-1234");
+		PhoneNumber vendorWork10 =new PhoneNumber(vendor10, false , "work" , "512-447-1234");
+		
+		DbFunctions.insert(vendorWork1);
+		DbFunctions.insert(vendorWork2);
+		DbFunctions.insert(vendorWork3);
+		DbFunctions.insert(vendorWork4);
+		DbFunctions.insert(vendorWork5);
+		DbFunctions.insert(vendorWork6);
+		DbFunctions.insert(vendorWork7);
+		DbFunctions.insert(vendorWork8);
+		DbFunctions.insert(vendorWork9);
+		DbFunctions.insert(vendorWork10);
+		
+		
+		PhoneNumber vendorCell1 =new PhoneNumber(vendor1, false , "Cell" , "512-447-1234");
+		PhoneNumber vendorCell2 =new PhoneNumber(vendor2, false , "Cell" , "512-447-1234");
+		PhoneNumber vendorCell3 =new PhoneNumber(vendor3, false , "Cell" , "512-447-1234");
+		PhoneNumber vendorCell4 =new PhoneNumber(vendor4, false , "Cell" , "512-447-1234");
+		PhoneNumber vendorCell5 =new PhoneNumber(vendor5, false , "Cell" , "512-447-1234");
+		PhoneNumber vendorCell6 =new PhoneNumber(vendor6, false , "Cell" , "512-447-1234");
+		PhoneNumber vendorCell7 =new PhoneNumber(vendor7, false , "Cell" , "512-447-1234");
+		PhoneNumber vendorCell8 =new PhoneNumber(vendor8, false , "Cell" , "512-447-1234");
+		PhoneNumber vendorCell9 =new PhoneNumber(vendor9, false , "Cell" , "512-447-1234");
+		PhoneNumber vendorCell10 =new PhoneNumber(vendor10, false , "Cell" , "512-447-1234");
+		
+		DbFunctions.insert(vendorCell1);
+		DbFunctions.insert(vendorCell2);
+		DbFunctions.insert(vendorCell3);
+		DbFunctions.insert(vendorCell4);
+		DbFunctions.insert(vendorCell5);
+		DbFunctions.insert(vendorCell6);
+		DbFunctions.insert(vendorCell7);
+		DbFunctions.insert(vendorCell8);
+		DbFunctions.insert(vendorCell9);
+		DbFunctions.insert(vendorCell10);
+		
+		EmailAddress vendor1Email = new EmailAddress(vendor1, true, "work", "vendor1@aol.com");
+		EmailAddress vendor2Email = new EmailAddress(vendor2, true, "work", "vendor1@aol.com");
+		EmailAddress vendor3Email = new EmailAddress(vendor3, true, "work", "vendor1@aol.com");
+		EmailAddress vendor4Email = new EmailAddress(vendor4, true, "work", "vendor1@aol.com");
+		EmailAddress vendor5Email = new EmailAddress(vendor5, true, "work", "vendor1@aol.com");
+		EmailAddress vendor6Email = new EmailAddress(vendor6, true, "work", "vendor1@aol.com");
+		EmailAddress vendor7Email = new EmailAddress(vendor7, true, "work", "vendor1@aol.com");
+		EmailAddress vendor8Email = new EmailAddress(vendor8, true, "work", "vendor1@aol.com");
+		EmailAddress vendor9Email = new EmailAddress(vendor9, true, "work", "vendor1@aol.com");
+		EmailAddress vendor10Email = new EmailAddress(vendor10, true, "work", "vendor1@aol.com");
+
+
+		DbFunctions.insert(vendor1Email);
+		DbFunctions.insert(vendor2Email);
+		DbFunctions.insert(vendor3Email);
+		DbFunctions.insert(vendor4Email);
+		DbFunctions.insert(vendor5Email);
+		DbFunctions.insert(vendor6Email);
+		DbFunctions.insert(vendor7Email);
+		DbFunctions.insert(vendor8Email);
+		DbFunctions.insert(vendor9Email);
+		DbFunctions.insert(vendor10Email);
+		
+		ServiceCall serviceCall1 = new ServiceCall(jackProp1Unit1, "General Repair", "Broken garbage Disposal", "In Progress" , "0" , "30");
+		Set<Vendor>serviceCall1Vendors = new HashSet<Vendor>();
+		serviceCall1Vendors.add(vendor1);
+		serviceCall1.setVendors(serviceCall1Vendors);
+		DbFunctions.insert(serviceCall1);
+		
+		LedgerEntry ledger1 = new LedgerEntry( jackProp2Unit1 ,"01/01/2016", "Rent", 
+				"Monthly Rent Charge", "750.00", "0");
+		DbFunctions.insert(ledger1);
+		LedgerEntry ledger2 = new LedgerEntry( jackProp2Unit1 ,"01/01/2016", "Rent", 
+				"Monthly Rent Paid", "0", "750.00");
+		DbFunctions.insert(ledger2);
+		
+		AddTenantToUnit.addTenantToUnit();
+		
+		
+		
+//		AddRent.addRent();
+		
+		
+		
+		getServletContext().getRequestDispatcher("/Home")
 		.forward(request, response);
 		
 	}

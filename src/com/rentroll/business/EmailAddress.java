@@ -37,6 +37,7 @@ public class EmailAddress implements Serializable{
 	}
 	public Person getPerson() {
 		return person;
+//		return null;
 	}
 	public void setPerson(Person person) {
 		this.person = person;
@@ -68,7 +69,7 @@ public class EmailAddress implements Serializable{
 	public EmailAddress(Person person, boolean primaryEmail, String emailAddressType, String emailAddress){
 		this();
 		this.primaryEmail = primaryEmail;
-		this.person= person;
+		//this.person= person;
 		this.emailAddress= emailAddress;
 		this.emailAddressType= emailAddressType;
 		

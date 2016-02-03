@@ -1,10 +1,12 @@
 package com.rentroll.business;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,7 +14,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 
@@ -34,18 +42,48 @@ public class Person implements Serializable {
 	private String firstName;
 	private String lastName;
 	private String middleName;	
-	private boolean activePerson;
+	private boolean activePerson = true;
 	private String password;
 	private String userName;
 	
-	@OneToMany(targetEntity = EmailAddress.class, mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<EmailAddress> emailAddresses = new ArrayList<>();
+	@OneToOne()
+	@JoinColumn(name="createdById")
+	private PropertyManager createdBy;
+	@OneToOne
+	@JoinColumn(name="updateById")
+	private PropertyManager updatedBy;
+    
+	@Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created", nullable = false)
+    private Date created;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated", nullable = false)
+    private Date updated;
+	
 
+	
+    @PrePersist
+    protected void onCreate() {
+    updated = created = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+    updated = new Date();
+    }
+
+	
+	//mappedBy="person"
+	@OneToMany(targetEntity = EmailAddress.class,mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	private Set<EmailAddress> emailAddresses = new HashSet<>();
+
+	//mappedBy="person"
 	@OneToMany(targetEntity = PhoneNumber.class, mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<PhoneNumber> phoneNumbers = new ArrayList<>();
-
-	@OneToMany(targetEntity = Address.class, mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<Address> addresses = new ArrayList<>();
+	private Set<PhoneNumber> phoneNumbers = new HashSet<>();
+	 
+	@OneToMany(targetEntity = Address.class, mappedBy="person",fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	private Set<Address> addresses = new HashSet<>();
 	
 	
 	
@@ -75,22 +113,22 @@ public class Person implements Serializable {
 	}
 	
 
-	public List<EmailAddress> getEmailAddresses() {
+	public Set<EmailAddress> getEmailAddresses() {
 		return emailAddresses;
 	}
-	public void setEmailAddresses(List<EmailAddress> emailAddresses) {
+	public void setEmailAddresses(Set<EmailAddress> emailAddresses) {
 		this.emailAddresses = emailAddresses;
 	}
-	public List<PhoneNumber> getPhoneNumbers() {
+	public Set<PhoneNumber> getPhoneNumbers() {
 		return phoneNumbers;
 	}
-	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+	public void setPhoneNumbers(Set<PhoneNumber> phoneNumbers) {
 		this.phoneNumbers = phoneNumbers;
 	}
-	public List<Address> getAddresses() {
+	public Set<Address> getAddresses() {
 		return addresses;
 	}
-	public void setAddresses(List<Address> addresses) {
+	public void setAddresses(Set<Address> addresses) {
 		this.addresses = addresses;
 	}
 	
@@ -121,11 +159,45 @@ public class Person implements Serializable {
 	public void setActivePerson(boolean activePerson) {
 		this.activePerson = activePerson;
 	}
+
 	public String getUserName() {
 		return userName;
 	}
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+//	public void setCreated(Date created) {
+//		this.created = created;
+//	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public PropertyManager getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(PropertyManager createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public PropertyManager getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(PropertyManager updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+//	public void setUpdated(Date updated) {
+//		this.updated = updated;
+//	}
 	
 }

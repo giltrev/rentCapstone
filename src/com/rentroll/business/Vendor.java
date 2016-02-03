@@ -1,7 +1,9 @@
 package com.rentroll.business;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 
@@ -15,9 +17,10 @@ public class Vendor extends Person{
 	private static final long serialVersionUID = 1L;
 
 	private String companyName;
+	private String paymentType;
 	private String vendorType;
-	@ManyToOne
-	private ServiceCall serviceCall;
+	@ManyToMany(mappedBy="vendors")
+	private Set <ServiceCall> serviceCalls;
 	
 	public String getCompanyName() {
 		return companyName;
@@ -31,12 +34,7 @@ public class Vendor extends Person{
 	public void setVendorType(String vendorType) {
 		this.vendorType = vendorType;
 	}
-	public ServiceCall getServiceCall() {
-		return serviceCall;
-	}
-	public void setServiceCall(ServiceCall serviceCall) {
-		this.serviceCall = serviceCall;
-	}
+
 	public Vendor(){}
 	
 	public Vendor(String firstName,String middleName,String lastName,String companyName,
@@ -48,6 +46,18 @@ public class Vendor extends Person{
 		this.companyName = companyName;
 		this.vendorType = vendorType;
 		super.setActivePerson(active);
+	}
+	public Set<ServiceCall> getServiceCalls() {
+		return serviceCalls;
+	}
+	public void setServiceCalls(Set<ServiceCall> serviceCalls) {
+		this.serviceCalls = serviceCalls;
+	}
+	public String getPaymentType() {
+		return paymentType;
+	}
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
 	}
 
 }

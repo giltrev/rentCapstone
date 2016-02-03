@@ -22,8 +22,8 @@ public class Owner extends Person {
 
 	private String paymentMethod;
 	
-	@OneToMany(targetEntity = Property.class, mappedBy="owner", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<Property> properties;
+	@OneToMany(targetEntity = RentProperty.class, mappedBy="owner", fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
+	private List<RentProperty> properties;
 
 	public String getPaymentMethod() {
 		return paymentMethod;
@@ -32,10 +32,10 @@ public class Owner extends Person {
 		this.paymentMethod = paymentMethod;
 	}
 	
-	public List<Property> getProperties() {
+	public List<RentProperty> getProperties() {
 		return properties;
 	}
-	public void setProperties(List<Property> properties) {
+	public void setProperties(List<RentProperty> properties) {
 		this.properties = properties;
 	}
 	public Owner(){

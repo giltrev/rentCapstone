@@ -2,6 +2,7 @@ package com.rentroll.data;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -12,11 +13,16 @@ import javax.persistence.TypedQuery;
 
 import com.rentroll.business.Address;
 import com.rentroll.business.EmailAddress;
+import com.rentroll.business.LedgerEntry;
 import com.rentroll.business.Owner;
 import com.rentroll.business.Person;
 import com.rentroll.business.PhoneNumber;
-import com.rentroll.business.Property;
+import com.rentroll.business.Picture;
+import com.rentroll.business.PropertyManager;
+import com.rentroll.business.RentProperty;
+import com.rentroll.business.ServiceCall;
 import com.rentroll.business.Tenant;
+import com.rentroll.business.Unit;
 import com.rentroll.business.Vendor;
 
 
@@ -238,13 +244,13 @@ public class DbFunctions {
     }
     
     
-    public static Property selectProperty(int propId) {
+    public static RentProperty selectProperty(int propId) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        String qString = "SELECT u FROM Property u WHERE u.propId = :propId";
-        TypedQuery<Property> q = em.createQuery(qString, Property.class);
+        String qString = "SELECT u FROM RentProperty u WHERE u.propId = :propId";
+        TypedQuery<RentProperty> q = em.createQuery(qString, RentProperty.class);
         q.setParameter("propId", propId);
         try {
-        	Property property = q.getSingleResult();
+        	RentProperty property = q.getSingleResult();
             return property;
         } catch (NoResultException e) {
             return null;
@@ -312,5 +318,239 @@ public class DbFunctions {
             em.close();
         }
     }
+    
+    public static String ownerLogin(String userName){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Owner u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<Owner> q = em.createQuery(qString, Owner.class);
+        q.setParameter("userName", userName);
+        try {
+            Owner owner = q.getSingleResult();
+            return owner.getPassword();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }   
+    public static String tenantLogin(String userName){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Tenant u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<Tenant> q = em.createQuery(qString, Tenant.class);
+        q.setParameter("userName", userName);
+        try {
+        	Tenant tenant = q.getSingleResult();
+        	System.out.println("Is a tenant" + userName + "password" + tenant.getPassword());    
+        	return tenant.getPassword();
+        } catch (NoResultException e) {
+	        	System.out.println("not a tenant" + userName);     
+	        	return null;
+        } finally {
+            em.close();
+        }
+    } 
+    public static String vendorLogin(String userName){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Vendor u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<Vendor> q = em.createQuery(qString, Vendor.class);
+        q.setParameter("userName", userName);
+        try {
+        	Vendor vendor = q.getSingleResult();
+            return vendor.getPassword();
+        } catch (NoResultException e) {
+        System.out.println("not a Vendor");    
+        	return null;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public static String propManagerLogin(String userName){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM PropertyManager u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<PropertyManager> q = em.createQuery(qString, PropertyManager.class);
+        q.setParameter("userName", userName);
+        try {
+        	PropertyManager propManager = q.getSingleResult();
+            return propManager.getPassword();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public static Owner getOwnerUserName(String userName){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Owner u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<Owner> q = em.createQuery(qString, Owner.class);
+        q.setParameter("userName", userName);
+        try {
+        	Owner owner = q.getSingleResult();
+            return owner;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public static PropertyManager getPropManagerUserName(String userName){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM PropertyManager u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<PropertyManager> q = em.createQuery(qString, PropertyManager.class);
+        q.setParameter("userName", userName);
+        try {
+        	PropertyManager propManger = q.getSingleResult();
+            return propManger;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    public static List<ServiceCall> selectAllOpenServiceCalls() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i from ServiceCall i " +
+        		"WHERE i.status = :status";
+        TypedQuery<ServiceCall> q = em.createQuery(qString, ServiceCall.class);
+        q.setParameter("status", "In Progress");
+        List<ServiceCall> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    }
+    
+    
+    public static void addRents(){
+	    Calendar firstOfMonthCal = Calendar.getInstance();   
+	    firstOfMonthCal.set(Calendar.DAY_OF_MONTH, 1);
+	    Date firstOfMonth = firstOfMonthCal.getTime();
+	    
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i from Unit i " ;
+//                "WHERE i.tenant IS NOT NULL";
+        
+        
+        TypedQuery<Unit> q = em.createQuery(qString, Unit.class);
+        List<Unit> units = null;
+        try {
+            units = q.getResultList();
+        } catch (NoResultException ex) {
+        		units = null;
+        } finally {
+            em.close();
+        }
+        
+        for (Unit unit : units) {
+        	System.out.println("unit person id "+unit.getTenant().getPersonId());
+        		int counter = 0;	
+        		
+	        	List<LedgerEntry> unitledgerEntries = unit.getLedgerEntries();
+	        	if (unitledgerEntries.size()!=0){
+		        	for (LedgerEntry ledgerEntry : unitledgerEntries) {
+		        		Calendar calendar = Calendar.getInstance();
+		        		calendar.setTime(ledgerEntry.getDate());
+		        		if (calendar.YEAR==firstOfMonthCal.YEAR &&
+		        				calendar.MONTH==firstOfMonthCal.MONTH &&
+		        				calendar.DAY_OF_MONTH==firstOfMonthCal.DAY_OF_MONTH){
+		        			counter++;
+		        		}	
+		        	}
+	        	}
+	
+	        	if (counter==0){
+	        		LedgerEntry ledgerEnty = new LedgerEntry();	
+	        		ledgerEnty.setAccountName("RentCharge");
+	        		ledgerEnty.setDate(firstOfMonth);
+	        		ledgerEnty.setUnit(unit);
+	        		ledgerEnty.setDebit(unit.getRentRate());	
+	
+	        		DbFunctions.insert(ledgerEnty);
+	        	}
+        	
+        	
+        	
+		        
+        }
+    }
+    
+    public static List<RentProperty> selectAvailableUnits() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u.property from Unit u " +
+        		" WHERE u.status = 'Available'";
+        TypedQuery<RentProperty> q = em.createQuery(qString, RentProperty.class);
+        
+        List<RentProperty> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        System.out.println("DB Functions Results size is "+results.size());
+        return results;
+    }
+
+	public static Tenant selectTenantUserName(String userName) {
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Tenant u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<Tenant> q = em.createQuery(qString, Tenant.class);
+        q.setParameter("userName", userName);
+        try {
+        	Tenant tenant = q.getSingleResult();
+            return tenant;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+	}
+	
+	public static byte[] selectImage(int id){
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Picture u " +
+                "WHERE u.id = :id";
+        TypedQuery<Picture> q = em.createQuery(qString, Picture.class);
+        q.setParameter("id", id);
+        try {
+        	Picture picture = q.getSingleResult();
+            return picture.getImageFile();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+	}
+	public static byte[] selectIcon(int id){
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Picture u " +
+                "WHERE u.id = :id";
+        TypedQuery<Picture> q = em.createQuery(qString, Picture.class);
+        q.setParameter("id", id);
+        try {
+        	Picture picture = q.getSingleResult();
+            return picture.getIcon();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+	}
+    
     
 }

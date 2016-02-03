@@ -7,32 +7,63 @@
 			<p><a href='EditOwnerRedirect?personId=<c:out value="${owner.personId}" />'>editOwner</a>
 			<h2><c:out value="${owner.firstName}" /> <c:out value="${owner.middleName}" /> <c:out value="${owner.lastName}" /></h2>
 			
-			<h2>Addresses</h2>  
+			<h3>Addresses</h3>  
+
 			<c:forEach var="address" items="${owner.addresses}">
-				<p><c:if test="${address.primaryAddress==true}">
-					Primary Address<br />
+				<c:if test="${address.primaryAddress==true}">
+					<p class = "primary">
+					<c:out value="${address.addressType}" /> Address<br />
+					<c:out value="${address.address1}" /> <br />
+					<c:if test="${address.address2.length() != 0}">
+						<c:out value="${address.address2}" /><br />
+					</c:if>
+					<c:out value="${address.city}" />, <c:out value="${address.state}" />  <c:out value="${address.zip}" />  </p>
 				</c:if>
-				<c:out value="${address.addressType}" /> Address<br />
-				<c:out value="${address.address1}" /> <br />
-				<c:if test="${address.address2.length() != 0}">
-					<c:out value="${address.address2}" /><br />
+			</c:forEach>
+						<c:forEach var="address" items="${owner.addresses}">
+				<c:if test="${address.primaryAddress!=true}">
+					<p>
+					<c:out value="${address.addressType}" /> Address<br />
+					<c:out value="${address.address1}" /> <br />
+					<c:if test="${address.address2.length() != 0}">
+						<c:out value="${address.address2}" /><br />
+					</c:if>
+					<c:out value="${address.city}" />, <c:out value="${address.state}" />  <c:out value="${address.zip}" />  </p>
 				</c:if>
-				<c:out value="${address.city}" />, <c:out value="${address.state}" />  <c:out value="${address.zip}" />  </p>
 			</c:forEach>
 			 
-			<h2>Email Addresses</h2>
+			<h3>Email Addresses</h3>
 			<c:forEach var="email" items="${owner.emailAddresses}">
-				<c:out value="${email.emailAddressType}" /> <c:out value="${email.emailAddress}" /><br />
+				<c:if test="${email.primaryEmail==true}">
+				<p class = "primary" >
+				<c:out value="${email.emailAddressType}" /> <c:out value="${email.emailAddress}" /></p>
+				</c:if>
+			</c:forEach>
+				<c:forEach var="email" items="${owner.emailAddresses}">
+				<c:if test="${email.primaryEmail!=true}">
+				<p>
+				<c:out value="${email.emailAddressType}" /> <c:out value="${email.emailAddress}" /></p>
+				</c:if>
 			</c:forEach>
 			
-			<h2>Phone Numbers</h2>
+			<h3>Phone Numbers</h3>
 			<c:forEach var="pNumber" items="${owner.phoneNumbers}">
-				<c:out value="${pNumber.phoneType}" /> <c:out value="${pNumber.phoneNumber}" /><br />
+				<c:if test="${pNumber.primaryNumber==true}">
+				<p class = "primary">
+					<c:out value="${pNumber.phoneType}" /> <c:out value="${pNumber.phoneNumber}" /></p>
+				</c:if>
 			</c:forEach>
+			<c:forEach var="pNumber" items="${owner.phoneNumbers}">
+				<c:if test="${pNumber.primaryNumber!=true}">
+				<p>
+					<c:out value="${pNumber.phoneType}" /> <c:out value="${pNumber.phoneNumber}" /></p>
+				</c:if>
+			</c:forEach>
+			
 			 
-			<h2>Properties</h2>
+			<h3>Properties</h3>
 			<c:forEach var="property" items="${owner.properties}">
-				<c:out value="${property.propertyType}" /> at <c:out value="${property.propAddress1}" /> <br />
+				<p><c:out value="${property.propertyType}" /> at <c:out value="${property.propAddress1}" /> </p>
 			</c:forEach>
 
 		<!-- end .content --></div>

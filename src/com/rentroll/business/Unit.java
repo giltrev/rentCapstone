@@ -1,6 +1,7 @@
 package com.rentroll.business;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -25,30 +27,41 @@ public class Unit implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int unitId;
-	@ManyToOne
-	@JoinColumn(name="property_Id")
-	private Property property;
 	
-
+	@ManyToOne
+	@JoinColumn(name="propId")
+	private RentProperty property;
+	
+	
+    @OneToOne
+    @JoinColumn(name="tenantId")
+	private Tenant tenant;
+	
 	private String unitNumber;
 	private int numberOfBedrooms;
 	private int numberOfBathrooms;
-	private double rentRate;
+	private BigDecimal rentRate;
 	private double squareFootage;
 	private String floorplan;
+	
+	@OneToMany(targetEntity = ServiceCall.class, mappedBy="unit", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	private List<ServiceCall> serviceCalls;
 	
 	@OneToMany(targetEntity = Amenity.class, mappedBy="unit", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Amenity> amenities;
 	
-	@OneToMany(targetEntity = Picture.class, mappedBy="unit", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(targetEntity = Picture.class, fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Picture> pictures;
-	private String status;
+	private String status = "Vacant";
+	
+	@OneToMany(targetEntity = LedgerEntry.class,mappedBy="unit", fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
+	private List<LedgerEntry> ledgerEntries;
 	
 	
-	public Property getProperty() {
+	public RentProperty getProperty() {
 		return property;
 	}
-	public void setProperty(Property property) {
+	public void setProperty(RentProperty property) {
 		this.property = property;
 	}
 
@@ -70,10 +83,10 @@ public class Unit implements Serializable{
 	public void setNumberOfBathrooms(int numberOfBathrooms) {
 		this.numberOfBathrooms = numberOfBathrooms;
 	}
-	public double getRentRate() {
+	public BigDecimal getRentRate() {
 		return rentRate;
 	}
-	public void setRentRate(double rentRate) {
+	public void setRentRate(BigDecimal rentRate) {
 		this.rentRate = rentRate;
 	}
 	public double getSquareFootage() {
@@ -115,17 +128,36 @@ public class Unit implements Serializable{
 
 	public Unit(){}
 	
-	public Unit(Property property, String unitNumber, int numberOfBedrooms, int numberOfBathrooms, double rentRate, double squareFootage, String floorplan, String status){
+	public Unit(RentProperty property, String unitNumber, int numberOfBedrooms, int numberOfBathrooms, String rentRate, double squareFootage, String floorplan, String status){
 		this();
 		this.property= property;
 		this.unitNumber= unitNumber;
 		this.numberOfBedrooms = numberOfBedrooms;
 		this.numberOfBathrooms = numberOfBathrooms;
-		this.rentRate= rentRate;
+		this.rentRate= new BigDecimal(rentRate);
 		this.squareFootage = squareFootage;
 		this.floorplan = floorplan;
 		this.status = status;
+
 		
+	}
+	public List<ServiceCall> getServiceCalls() {
+		return serviceCalls;
+	}
+	public void setServiceCalls(List<ServiceCall> serviceCalls) {
+		this.serviceCalls = serviceCalls;
+	}
+	public List<LedgerEntry> getLedgerEntries() {
+		return ledgerEntries;
+	}
+	public void setLedgerEntries(List<LedgerEntry> ledgerEntries) {
+		this.ledgerEntries = ledgerEntries;
+	}
+	public Tenant getTenant() {
+		return tenant;
+	}
+	public void setTenant(Tenant tenant) {
+		this.tenant = tenant;
 	}
 
 
