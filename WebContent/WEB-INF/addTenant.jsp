@@ -1,7 +1,7 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<my:layout>
+<my:propManager>
 	<jsp:attribute name="body">
 		<div class="content">
 			<p>
@@ -12,19 +12,28 @@
 			
 	<form action="AddTenant" method="post">
 		<p>
+
+		
 		First Name:<br /><input name="firstName" type="text"  size="40" /><br />
 		Middle Name:<br /><input name="middleName" type="text"  size="40" /><br />
 		Last name:<br /><input name="lastName" type="text" size="40" /><br />
 		Active<input type="radio" name="activePerson" value="true" checked="checked"/><br />
 		Inactive<input type="radio" name="activePerson" value="false" />  <br />
-		First Name:<br /><input name="firstName" type="text"  size="40" /><br />
 		Lease Start Date:<br /><input name="leaseStartDate" type="text"  size="40" /><br />
 		Lease End Date:<br /><input name="leaseExpirationDate" type="text"  size="40" /><br />
+		Birth Date:<br /><input name="birthDate" type="text"  size="40" /><br />
 		Driver's License Number:<br /><input name="dlNumber" type="text"  size="40" /><br />
 		Driver's License State:<br /><input name="dlNumberState" type="text"  size="40" /><br />
-		Property:<br /><input name="property" type="text"  size="40" /><br />
-		Unit:<br /><input name="unitId" type="text"  size="40" /><br />
 		
+		Select Unit:<br />
+		<select name="unitId">			
+		<c:forEach var="unit" items="${units}">
+			
+			<option value="<c:out value="${unit.unitId}" />" ><c:out value="${unit.unitId}" /> | <c:out value="${unit.property.propAddress1}" /> # <c:out value="${unit.unitNumber}" /></option>
+			
+		</c:forEach>
+		</select>
+						  
 		
 		
 		</p>
@@ -135,4 +144,4 @@
 		
 		<!-- end .content --></div>
 	</jsp:attribute>
-</my:layout>
+</my:propManager>

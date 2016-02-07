@@ -1,6 +1,7 @@
 package com.rentroll.admin.person;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.rentroll.business.Address;
-import com.rentroll.business.Owner;
 import com.rentroll.data.DbFunctions;
 
 /**
@@ -30,8 +30,6 @@ public class AddAddress extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int personId = Integer.parseInt(request.getParameter("personId"));
-		Owner owner = DbFunctions.selectOwner(personId);
 		
 		String addressType=request.getParameter("addressType");
 		String address1=request.getParameter("address1");
@@ -56,7 +54,6 @@ public class AddAddress extends HttpServlet {
 			updateAddress.setCity(city);
 			updateAddress.setState(state);
 			updateAddress.setZip(zip);
-			updateAddress.setPerson(owner);
 			updateAddress.setPrimaryAddress(primaryAddress);
 			
 			

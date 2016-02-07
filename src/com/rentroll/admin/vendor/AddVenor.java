@@ -1,4 +1,4 @@
-package com.rentroll.admin.owner;
+package com.rentroll.admin.vendor;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -13,22 +13,22 @@ import javax.servlet.http.HttpSession;
 
 import com.rentroll.business.Address;
 import com.rentroll.business.EmailAddress;
-import com.rentroll.business.Owner;
 import com.rentroll.business.PhoneNumber;
 import com.rentroll.business.PropertyManager;
+import com.rentroll.business.Vendor;
 import com.rentroll.data.DbFunctions;
 
 /**
- * Servlet implementation class CreateOwner
+ * Servlet implementation class AddVenor
  */
-@WebServlet("/AddOwner")
-public class AddOwner extends HttpServlet {
+@WebServlet("/AddVenor")
+public class AddVenor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddOwner() {
+    public AddVenor() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,11 +37,12 @@ public class AddOwner extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
 		String firstName = request.getParameter("firstName");
 		String middleName = request.getParameter("middleName");
 		String lastName = request.getParameter("lastName");
-		String paymentMethod = request.getParameter("paymentMethod");
+		String paymentType = request.getParameter("paymentType");
+		String vendorType = request.getParameter("vendorType");
+		String companyName = request.getParameter("companyName");
 		String activeTxt = request.getParameter("active");
 		boolean activePerson;
 		if (activeTxt=="true"){
@@ -50,12 +51,14 @@ public class AddOwner extends HttpServlet {
 			activePerson=false;
 		}
 		
-		Owner owner = new Owner();
-		owner.setActivePerson(activePerson);
-		owner.setFirstName(firstName);
-		owner.setMiddleName(middleName);
-		owner.setLastName(lastName);
-		owner.setPaymentMethod(paymentMethod);
+		Vendor vendor = new Vendor();
+		vendor.setActivePerson(activePerson);
+		vendor.setFirstName(firstName);
+		vendor.setMiddleName(middleName);
+		vendor.setLastName(lastName);
+		vendor.setPaymentType(paymentType);
+		vendor.setVendorType(vendorType);
+		vendor.setCompanyName(companyName);
 		
 //		DbFunctions.insert(owner);
 //		Object id = DbFunctions.insertObjectId(owner);
@@ -65,9 +68,9 @@ public class AddOwner extends HttpServlet {
 //		System.out.println(10+printid);
 //		owner.setPersonId(printid);
 		HttpSession session = request.getSession();
-		owner.setCreatedBy((PropertyManager)session.getAttribute("propManager"));
-		System.out.println(owner.getCreatedBy().getFirstName());
-		DbFunctions.insert(owner);
+		vendor.setCreatedBy((PropertyManager)session.getAttribute("propManager"));
+		System.out.println(vendor.getCreatedBy().getFirstName());
+		DbFunctions.insert(vendor);
 		
 		int emailPrimarytxt=0;
 		if (request.getParameter("primaryEmail")!=null){
@@ -168,14 +171,14 @@ public class AddOwner extends HttpServlet {
 		
 
 		
-		owner.setEmailAddresses(emailAddresses);
-		owner.setPhoneNumbers(phoneNumbers);
-		owner.setAddresses(addresses);
-		DbFunctions.update(owner);
+		vendor.setEmailAddresses(emailAddresses);
+		vendor.setPhoneNumbers(phoneNumbers);
+		vendor.setAddresses(addresses);
+		DbFunctions.update(vendor);
 		
-		request.setAttribute("owner", owner);
+		request.setAttribute("vendor", vendor);
 		
-		getServletContext().getRequestDispatcher("/WEB-INF/ownerDetail.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/vendorDetail.jsp")
 		.forward(request, response);
 
 	}

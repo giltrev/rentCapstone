@@ -75,14 +75,17 @@ public class Person implements Serializable {
 
 	
 	//mappedBy="person"
-	@OneToMany(targetEntity = EmailAddress.class,mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(targetEntity = EmailAddress.class, fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Set<EmailAddress> emailAddresses = new HashSet<>();
 
 	//mappedBy="person"
-	@OneToMany(targetEntity = PhoneNumber.class, mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+//	@OneToMany(targetEntity = PhoneNumber.class, mappedBy="person", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+//	private Set<PhoneNumber> phoneNumbers = new HashSet<>();
+	
+	@OneToMany(targetEntity = PhoneNumber.class, fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Set<PhoneNumber> phoneNumbers = new HashSet<>();
 	 
-	@OneToMany(targetEntity = Address.class, mappedBy="person",fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(targetEntity = Address.class,fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Set<Address> addresses = new HashSet<>();
 	
 	

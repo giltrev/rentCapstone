@@ -3,6 +3,7 @@ package com.rentroll.business;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -33,9 +33,8 @@ public class Unit implements Serializable{
 	private RentProperty property;
 	
 	
-    @OneToOne
-    @JoinColumn(name="tenantId")
-	private Tenant tenant;
+	@OneToMany(targetEntity = Tenant.class, fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	private Set <Tenant> tenants;
 	
 	private String unitNumber;
 	private int numberOfBedrooms;
@@ -153,12 +152,13 @@ public class Unit implements Serializable{
 	public void setLedgerEntries(List<LedgerEntry> ledgerEntries) {
 		this.ledgerEntries = ledgerEntries;
 	}
-	public Tenant getTenant() {
-		return tenant;
+	public Set<Tenant> getTenants() {
+		return tenants;
 	}
-	public void setTenant(Tenant tenant) {
-		this.tenant = tenant;
+	public void setTenants(Set<Tenant> tenants) {
+		this.tenants = tenants;
 	}
+
 
 
 }

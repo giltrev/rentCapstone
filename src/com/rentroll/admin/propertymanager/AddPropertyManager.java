@@ -1,4 +1,4 @@
-package com.rentroll.admin.owner;
+package com.rentroll.admin.propertymanager;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -13,22 +13,21 @@ import javax.servlet.http.HttpSession;
 
 import com.rentroll.business.Address;
 import com.rentroll.business.EmailAddress;
-import com.rentroll.business.Owner;
 import com.rentroll.business.PhoneNumber;
 import com.rentroll.business.PropertyManager;
 import com.rentroll.data.DbFunctions;
 
 /**
- * Servlet implementation class CreateOwner
+ * Servlet implementation class AddPropertyManager
  */
-@WebServlet("/AddOwner")
-public class AddOwner extends HttpServlet {
+@WebServlet("/AddPropertyManager")
+public class AddPropertyManager extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddOwner() {
+    public AddPropertyManager() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,11 +36,11 @@ public class AddOwner extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
 		String firstName = request.getParameter("firstName");
 		String middleName = request.getParameter("middleName");
 		String lastName = request.getParameter("lastName");
-		String paymentMethod = request.getParameter("paymentMethod");
+		String companyname = request.getParameter("companyname");
+		String pmType = request.getParameter("pmType");
 		String activeTxt = request.getParameter("active");
 		boolean activePerson;
 		if (activeTxt=="true"){
@@ -49,13 +48,13 @@ public class AddOwner extends HttpServlet {
 		} else{
 			activePerson=false;
 		}
-		
-		Owner owner = new Owner();
-		owner.setActivePerson(activePerson);
-		owner.setFirstName(firstName);
-		owner.setMiddleName(middleName);
-		owner.setLastName(lastName);
-		owner.setPaymentMethod(paymentMethod);
+		PropertyManager propManager = new PropertyManager();
+		propManager.setActivePerson(activePerson);
+		propManager.setFirstName(firstName);
+		propManager.setMiddleName(middleName);
+		propManager.setLastName(lastName);
+		propManager.setCompanyname(companyname);
+		propManager.setPmType(pmType);
 		
 //		DbFunctions.insert(owner);
 //		Object id = DbFunctions.insertObjectId(owner);
@@ -65,9 +64,9 @@ public class AddOwner extends HttpServlet {
 //		System.out.println(10+printid);
 //		owner.setPersonId(printid);
 		HttpSession session = request.getSession();
-		owner.setCreatedBy((PropertyManager)session.getAttribute("propManager"));
-		System.out.println(owner.getCreatedBy().getFirstName());
-		DbFunctions.insert(owner);
+		propManager.setCreatedBy((PropertyManager)session.getAttribute("propManager"));
+		System.out.println(propManager.getCreatedBy().getFirstName());
+		DbFunctions.insert(propManager);
 		
 		int emailPrimarytxt=0;
 		if (request.getParameter("primaryEmail")!=null){
@@ -168,14 +167,14 @@ public class AddOwner extends HttpServlet {
 		
 
 		
-		owner.setEmailAddresses(emailAddresses);
-		owner.setPhoneNumbers(phoneNumbers);
-		owner.setAddresses(addresses);
-		DbFunctions.update(owner);
+		propManager.setEmailAddresses(emailAddresses);
+		propManager.setPhoneNumbers(phoneNumbers);
+		propManager.setAddresses(addresses);
+		DbFunctions.update(propManager);
 		
-		request.setAttribute("owner", owner);
+		request.setAttribute("propManager", propManager);
 		
-		getServletContext().getRequestDispatcher("/WEB-INF/ownerDetail.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/propManagerDetail.jsp")
 		.forward(request, response);
 
 	}

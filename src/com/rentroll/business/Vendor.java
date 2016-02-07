@@ -3,6 +3,7 @@ package com.rentroll.business;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -19,7 +20,7 @@ public class Vendor extends Person{
 	private String companyName;
 	private String paymentType;
 	private String vendorType;
-	@ManyToMany(mappedBy="vendors")
+	@ManyToMany(mappedBy="vendors",fetch = FetchType.EAGER)
 	private Set <ServiceCall> serviceCalls;
 	
 	public String getCompanyName() {

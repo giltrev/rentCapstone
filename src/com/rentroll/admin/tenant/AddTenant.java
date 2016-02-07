@@ -1,6 +1,9 @@
-package com.rentroll.admin.owner;
+package com.rentroll.admin.tenant;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,22 +16,23 @@ import javax.servlet.http.HttpSession;
 
 import com.rentroll.business.Address;
 import com.rentroll.business.EmailAddress;
-import com.rentroll.business.Owner;
 import com.rentroll.business.PhoneNumber;
 import com.rentroll.business.PropertyManager;
+import com.rentroll.business.Tenant;
+import com.rentroll.business.Unit;
 import com.rentroll.data.DbFunctions;
 
 /**
- * Servlet implementation class CreateOwner
+ * Servlet implementation class AddTenant
  */
-@WebServlet("/AddOwner")
-public class AddOwner extends HttpServlet {
+@WebServlet("/AddTenant")
+public class AddTenant extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddOwner() {
+    public AddTenant() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,37 +41,48 @@ public class AddOwner extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
 		String firstName = request.getParameter("firstName");
 		String middleName = request.getParameter("middleName");
 		String lastName = request.getParameter("lastName");
-		String paymentMethod = request.getParameter("paymentMethod");
 		String activeTxt = request.getParameter("active");
+		int unitId = Integer.parseInt(request.getParameter("unitId"));
+		String leaseStartDate  = request.getParameter("leaseStartDate");
+		String leaseExpirationDate  = request.getParameter("leaseExpirationDate");
+		String birthDateTxt  = request.getParameter("birthDate");
+		Unit unit = DbFunctions.selectUnit(unitId);	
 		boolean activePerson;
 		if (activeTxt=="true"){
 			activePerson=true;
 		} else{
 			activePerson=false;
 		}
+		Date startDate=null;
+		Date endDate=null;   
+		Date birthDate=null;
+		try {
+			birthDate = new SimpleDateFormat("MM/dd/yyyy").parse(birthDateTxt);
+			endDate = new SimpleDateFormat("MM/dd/yyyy").parse(leaseExpirationDate);
+			startDate = new SimpleDateFormat("MM/dd/yyyy").parse(leaseStartDate);
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
+		Tenant tenant = new Tenant();
+		tenant.setActivePerson(activePerson);
+		tenant.setFirstName(firstName);
+		tenant.setMiddleName(middleName);
+		tenant.setLastName(lastName);
+		tenant.setUnit(unit);
+		tenant.setLeaseExpirationDate(endDate);
+		tenant.setLeaseStartDate(startDate);
+		tenant.setBirthDate(birthDate);
 		
-		Owner owner = new Owner();
-		owner.setActivePerson(activePerson);
-		owner.setFirstName(firstName);
-		owner.setMiddleName(middleName);
-		owner.setLastName(lastName);
-		owner.setPaymentMethod(paymentMethod);
 		
-//		DbFunctions.insert(owner);
-//		Object id = DbFunctions.insertObjectId(owner);
-//		Integer printid = Integer.parseInt(id.toString());
-		
-//		request.getSession().setAttribute("ownerid", id);
-//		System.out.println(10+printid);
-//		owner.setPersonId(printid);
+
 		HttpSession session = request.getSession();
-		owner.setCreatedBy((PropertyManager)session.getAttribute("propManager"));
-		System.out.println(owner.getCreatedBy().getFirstName());
-		DbFunctions.insert(owner);
+		tenant.setCreatedBy((PropertyManager)session.getAttribute("propManager"));
+		System.out.println(tenant.getCreatedBy().getFirstName());
+		DbFunctions.insert(tenant);
 		
 		int emailPrimarytxt=0;
 		if (request.getParameter("primaryEmail")!=null){
@@ -168,14 +183,14 @@ public class AddOwner extends HttpServlet {
 		
 
 		
-		owner.setEmailAddresses(emailAddresses);
-		owner.setPhoneNumbers(phoneNumbers);
-		owner.setAddresses(addresses);
-		DbFunctions.update(owner);
+		tenant.setEmailAddresses(emailAddresses);
+		tenant.setPhoneNumbers(phoneNumbers);
+		tenant.setAddresses(addresses);
+		DbFunctions.update(tenant);
 		
-		request.setAttribute("owner", owner);
+		request.setAttribute("tenant", tenant);
 		
-		getServletContext().getRequestDispatcher("/WEB-INF/ownerDetail.jsp")
+		getServletContext().getRequestDispatcher("/WEB-INF/tenantDetail.jsp")
 		.forward(request, response);
 
 	}

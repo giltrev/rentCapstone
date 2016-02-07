@@ -1,7 +1,7 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<my:layout>
+<my:propManager>
 	<jsp:attribute name="body">
 		<div class="content">
 			<h2>Edit Owner</h2>
@@ -138,4 +138,4 @@
 
 		<!-- end .content --></div>
 	</jsp:attribute>
-</my:layout>
+</my:propManager>

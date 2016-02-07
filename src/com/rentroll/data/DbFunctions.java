@@ -318,6 +318,21 @@ public class DbFunctions {
             em.close();
         }
     }
+    public static Vendor selectVendorUserName(String userName) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Vendor u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<Vendor> q = em.createQuery(qString, Vendor.class);
+        q.setParameter("userName", userName);
+        try {
+        	Vendor vendor = q.getSingleResult();
+            return vendor;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
     
     public static String ownerLogin(String userName){
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
@@ -455,7 +470,6 @@ public class DbFunctions {
         }
         
         for (Unit unit : units) {
-        	System.out.println("unit person id "+unit.getTenant().getPersonId());
         		int counter = 0;	
         		
 	        	List<LedgerEntry> unitledgerEntries = unit.getLedgerEntries();
@@ -552,5 +566,51 @@ public class DbFunctions {
         }
 	}
     
-    
+	public static List<RentProperty> SelectAllProperties() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u.property from Unit u ";
+        TypedQuery<RentProperty> q = em.createQuery(qString, RentProperty.class);
+        
+        List<RentProperty> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        System.out.println("DB Functions Results size is "+results.size());
+        return results;
+    }
+	public static List<Unit> selectAllUnits() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u from Unit u " ;
+        TypedQuery<Unit> q = em.createQuery(qString, Unit.class);
+        
+        List<Unit> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        System.out.println("There are Units "+results.size());
+        return results;
+    }
+	public static Unit selectUnit(int id){
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Unit u " +
+                "WHERE u.id = :id";
+        TypedQuery<Unit> q = em.createQuery(qString, Unit.class);
+        q.setParameter("id", id);
+        try {
+        	Unit unit = q.getSingleResult();
+            return unit;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+	}
 }

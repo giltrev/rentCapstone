@@ -2,7 +2,6 @@ package com.rentroll.business;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;

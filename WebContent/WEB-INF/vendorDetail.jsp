@@ -1,11 +1,11 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<my:layout>
+<my:propManager>
 	<jsp:attribute name="body">
 		<div class="content">
 			<p>
-				<a href='EditVendor?personId=<c:out value="${vendor.personId}" />'>editOwner</a>
+				<a href='EditVendor?personId=<c:out value="${vendor.personId}" />'>Edit Vendor</a>
 			</p>
 			<h2><c:out value="${vendor.firstName}" /> <c:out value="${vendor.middleName}" /> <c:out value="${vendor.lastName}" /></h2>
 			<c:out value="${vendor.companyName}" /> <br />
@@ -38,4 +38,4 @@
    
 		<!-- end .content --></div>
 	</jsp:attribute>
-</my:layout>
+</my:propManager>

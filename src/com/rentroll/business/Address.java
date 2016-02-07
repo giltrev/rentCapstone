@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,9 +20,6 @@ public class Address implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int addressId;
-	
-	@ManyToOne
-	private Person person;
 	private boolean primaryAddress;
 	private String addressType;
 	private String address1;
@@ -38,12 +34,6 @@ public class Address implements Serializable{
 	}
 	public void setAddressId(int addressId) {
 		this.addressId = addressId;
-	}
-	public Person getPerson() {
-		return person;
-	}
-	public void setPerson(Person person) {
-		this.person = person;
 	}
 	public String getAddressType() {
 		return addressType;
@@ -95,7 +85,6 @@ public class Address implements Serializable{
 	public Address(Person person, boolean primaryAddress, String addressType, String address1, String address2, String city, String state, String zip){
 		this();
 		this.primaryAddress = primaryAddress;
-		this.person = person;
 		this.addressType = addressType;
 		this.address1 = address1;
 		this.address2 = address2;

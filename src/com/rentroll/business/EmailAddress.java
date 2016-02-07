@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 
 @Entity
@@ -21,8 +20,6 @@ public class EmailAddress implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int emailAddressId;
 	
-	@ManyToOne
-	private Person person;
 	private String emailAddressType;
 	private String emailAddress;
 	private boolean primaryEmail;
@@ -34,13 +31,6 @@ public class EmailAddress implements Serializable{
 	}
 	public void setEmailAddressId(int emailAddressId) {
 		this.emailAddressId = emailAddressId;
-	}
-	public Person getPerson() {
-		return person;
-//		return null;
-	}
-	public void setPerson(Person person) {
-		this.person = person;
 	}
 	public String getEmailAddressType() {
 		return emailAddressType;
@@ -66,12 +56,12 @@ public class EmailAddress implements Serializable{
 	public EmailAddress(){
 		
 	}
-	public EmailAddress(Person person, boolean primaryEmail, String emailAddressType, String emailAddress){
+	public EmailAddress(boolean primaryEmail, String emailAddressType, String emailAddress){
 		this();
-		this.primaryEmail = primaryEmail;
-		//this.person= person;
+		this.primaryEmail= primaryEmail;
 		this.emailAddress= emailAddress;
 		this.emailAddressType= emailAddressType;
 		
 	}
+	
 }

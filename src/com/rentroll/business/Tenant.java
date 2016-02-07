@@ -8,7 +8,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,8 +24,10 @@ public class Tenant extends Person implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name="unitId")
 	private Unit unit;
+	
 	@Temporal(TemporalType.DATE)
 	private Date birthDate;
 	
@@ -35,7 +38,7 @@ public class Tenant extends Person implements Serializable{
 	
 	@Temporal(TemporalType.DATE)
 	private Date leaseExpirationDate;
-	
+	private boolean primaryTenant;
 	
 	private int dlNumber;
 	private String dlNumberState;
@@ -79,8 +82,9 @@ public class Tenant extends Person implements Serializable{
 	}
 	public Tenant(){}
 	
-	public Tenant(Unit unit, String firstName, String middleName, String lastName,  String birthDate, String leaseExpirationDate, int dlNumber, String dlNumberState){
+	public Tenant(Unit unit, String firstName, String middleName, String lastName,  String birthDate, String leaseExpirationDate, int dlNumber, String dlNumberState, boolean primaryTenant){
 		this();
+		this.primaryTenant= primaryTenant;
 		super.setFirstName(firstName);
 		super.setMiddleName(middleName);
 		super.setLastName(lastName);
@@ -93,14 +97,12 @@ public class Tenant extends Person implements Serializable{
 			e.printStackTrace();
 		}
 		
-		//this.birthDate = birthDate;
 		try {
 			this.leaseExpirationDate = format.parse(leaseExpirationDate);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//this.leaseExpirationDate = leaseExpirationDate;
 		this.dlNumber = dlNumber;
 		this.dlNumberState = dlNumberState;
 		
@@ -110,6 +112,12 @@ public class Tenant extends Person implements Serializable{
 	}
 	public void setLeaseStartDate(Date leaseStartDate) {
 		this.leaseStartDate = leaseStartDate;
+	}
+	public boolean isPrimaryTenant() {
+		return primaryTenant;
+	}
+	public void setPrimaryTenant(boolean primaryTenant) {
+		this.primaryTenant = primaryTenant;
 	}
 	
 	

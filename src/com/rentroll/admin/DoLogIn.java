@@ -33,8 +33,9 @@ public class DoLogIn extends HttpServlet {
 
 		
 		if (request.getParameter("userId")== null|| request.getParameter("password")==null ||request.getParameter("userId").isEmpty() || request.getParameter("password").isEmpty() ){
-			response.getWriter().append("NO BUENO! fix your stuff");
-			System.out.println("No bueno");
+			request.setAttribute("loginMessage", "The UserId and Password combination did not match or empty, Please try again");
+			getServletContext().getRequestDispatcher("/login")
+			.forward(request, response);
 //			RequestDispatcher dispatcher=getServletContext().getRequestDispatcher( "/WEB-INF/login.jsp" );
 //			dispatcher.forward( request, response );
 			return;
@@ -49,54 +50,102 @@ public class DoLogIn extends HttpServlet {
 		
 		if (DbFunctions.ownerLogin(userId)!=null){
 			ownerPassword = DbFunctions.ownerLogin(userId);
+			if (ownerPassword.equals(password)  ){
+				session.setAttribute("userId", userId);
+				session.setAttribute("pType", "owner");
+				session.setAttribute("owner", DbFunctions.getOwnerUserName(userId));
+				getServletContext().getRequestDispatcher("/WEB-INF/ownerView.jsp")
+				.forward(request, response);
+				
+			}
+			else {
+				request.setAttribute("loginMessage", "The UserId and Password combination did not match, Please try again");
+				getServletContext().getRequestDispatcher("/login")
+				.forward(request, response);
+			}
+			return;
 		}
 		if (DbFunctions.tenantLogin(userId)!=null){
 			tenantPassword = DbFunctions.tenantLogin(userId);
-			System.out.println("Ran Line 55!!");
-			session.setAttribute("userId", userId);
-			session.setAttribute("pType", "tenant");
-			session.setAttribute("tenant", DbFunctions.selectTenantUserName(userId));
-			getServletContext().getRequestDispatcher("/WEB-INF/tenantView.jsp")
-			.forward(request, response);
+			if (tenantPassword.equals(password)  ){
+				System.out.println("Ran Line 55!!");
+				session.setAttribute("userId", userId);
+				session.setAttribute("pType", "tenant");
+				session.setAttribute("tenant", DbFunctions.selectTenantUserName(userId));
+				getServletContext().getRequestDispatcher("/WEB-INF/tenantView.jsp")
+				.forward(request, response);
+			}
+			else {
+				request.setAttribute("loginMessage", "The UserId and Password combination did not match, Please try again");
+				getServletContext().getRequestDispatcher("/login")
+				.forward(request, response);
+			}
 			return;
 			
 		}
 		if (DbFunctions.vendorLogin(userId)!=null){
 			vendorPassword = DbFunctions.vendorLogin(userId);
+			if (vendorPassword.equals(password)  ){
+				session.setAttribute("userId", userId);
+				session.setAttribute("pType", "vendor");
+				session.setAttribute("vendor", DbFunctions.selectVendorUserName(userId));
+				getServletContext().getRequestDispatcher("/WEB-INF/vendorView.jsp")
+				.forward(request, response);
+			}
+			else {
+				request.setAttribute("loginMessage", "The UserId and Password combination did not match, Please try again");
+				getServletContext().getRequestDispatcher("/login")
+				.forward(request, response);
+			}
+			return;
 		}
 		if (DbFunctions.propManagerLogin(userId)!=null){
 			propManagerPassword = DbFunctions.propManagerLogin(userId);
-		}
-		if (ownerPassword.equals(password)  ){
-			session.setAttribute("userId", userId);
-			session.setAttribute("pType", "owner");
-			session.setAttribute("owner", DbFunctions.getOwnerUserName(userId));
-			getServletContext().getRequestDispatcher("/WEB-INF/ownerView.jsp")
-			.forward(request, response);
+			if (propManagerPassword.equals(password)  ){
+				session.setAttribute("userId", userId);
+				session.setAttribute("pType", "propManager");
+				session.setAttribute("propManager", DbFunctions.getPropManagerUserName(userId));
+				getServletContext().getRequestDispatcher("/WEB-INF/propManagerView.jsp")
+				.forward(request, response);
+			}
+			else {
+				request.setAttribute("loginMessage", "The UserId and Password combination did not match, Please try again");
+				getServletContext().getRequestDispatcher("/login")
+				.forward(request, response);
+			}
 			return;
 		}
-		if (tenantPassword.equals(password)  ){
-			
-			session.setAttribute("userId", userId);
-			session.setAttribute("pType", "tenant");
-			session.setAttribute("tenant", DbFunctions.selectTenantUserName(userId));
-			getServletContext().getRequestDispatcher("/WEB-INF/tenantView.jsp")
-			.forward(request, response);
-			return;
-		}
-		if (vendorPassword.equals(password)  ){
-			session.setAttribute("userId", userId);
-			session.setAttribute("pType", "vendor");
-			getServletContext().getRequestDispatcher("/WEB-INF/vendorView.jsp")
-			.forward(request, response);
-		}
-		if (propManagerPassword.equals(password)  ){
-			session.setAttribute("userId", userId);
-			session.setAttribute("pType", "propManager");
-			session.setAttribute("propManager", DbFunctions.getPropManagerUserName(userId));
-			getServletContext().getRequestDispatcher("/WEB-INF/propManagerView.jsp")
-			.forward(request, response);
-		}
+//		if (ownerPassword.equals(password)  ){
+//			session.setAttribute("userId", userId);
+//			session.setAttribute("pType", "owner");
+//			session.setAttribute("owner", DbFunctions.getOwnerUserName(userId));
+//			getServletContext().getRequestDispatcher("/WEB-INF/ownerView.jsp")
+//			.forward(request, response);
+//			return;
+//		}
+//		if (tenantPassword.equals(password)  ){
+//			
+//			session.setAttribute("userId", userId);
+//			session.setAttribute("pType", "tenant");
+//			session.setAttribute("tenant", DbFunctions.selectTenantUserName(userId));
+//			getServletContext().getRequestDispatcher("/WEB-INF/tenantView.jsp")
+//			.forward(request, response);
+//			return;
+//		}
+//		if (vendorPassword.equals(password)  ){
+//			session.setAttribute("userId", userId);
+//			session.setAttribute("pType", "vendor");
+//			session.setAttribute("vendor", DbFunctions.selectVendorUserName(userId));
+//			getServletContext().getRequestDispatcher("/WEB-INF/vendorView.jsp")
+//			.forward(request, response);
+//		}
+//		if (propManagerPassword.equals(password)  ){
+//			session.setAttribute("userId", userId);
+//			session.setAttribute("pType", "propManager");
+//			session.setAttribute("propManager", DbFunctions.getPropManagerUserName(userId));
+//			getServletContext().getRequestDispatcher("/WEB-INF/propManagerView.jsp")
+//			.forward(request, response);
+//		}
 		else {
 			request.setAttribute("loginMessage", "The UserId and Password combination did not match, Please try again");
 			getServletContext().getRequestDispatcher("/login")
