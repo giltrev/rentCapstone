@@ -23,6 +23,9 @@ import com.rentroll.business.Tenant;
 import com.rentroll.business.Unit;
 import com.rentroll.business.Vendor;
 import com.rentroll.data.DbFunctions;
+import com.rentroll.lists.AmenityList;
+import com.rentroll.lists.PaymentMethod;
+import com.rentroll.lists.VendorType;
 
 /**
  * Servlet implementation  class CreateDatabase
@@ -53,6 +56,58 @@ public class CreateDatabase extends HttpServlet {
 		bg.setPmType("admin");
 		
 		DbFunctions.insert(bg);
+		
+		PaymentMethod cash= new PaymentMethod("Cash");
+		PaymentMethod check= new PaymentMethod("Check");
+		PaymentMethod bankTransfer= new PaymentMethod("Bank Transfer");
+		PaymentMethod escrow= new PaymentMethod("Escrow");
+		
+		DbFunctions.insert(cash);
+		DbFunctions.insert(check);
+		DbFunctions.insert(bankTransfer);
+		DbFunctions.insert(escrow);
+		
+		VendorType plumber = new VendorType("Plumber");
+		VendorType electricain = new VendorType("Electrician");
+		VendorType hvac = new VendorType("HVAC");
+		VendorType landscape = new VendorType("Landscape");
+		VendorType painter = new VendorType("Painter");
+		VendorType handyMan = new VendorType("Handy Man");
+		VendorType cleaning = new VendorType("Cleaning");
+		
+		DbFunctions.insert(plumber);
+		DbFunctions.insert(electricain);
+		DbFunctions.insert(hvac);
+		DbFunctions.insert(landscape);
+		DbFunctions.insert(painter);
+		DbFunctions.insert(handyMan);
+		DbFunctions.insert(cleaning);
+		
+		AmenityList pool = new AmenityList("Pool");
+		AmenityList gym = new AmenityList("Fitness Studio");
+		AmenityList gameRoom = new AmenityList("Gaming Room");
+		AmenityList todlerRoom = new AmenityList("Toddler Room");
+		AmenityList spa = new AmenityList("Spa");
+		AmenityList indoorBasketball = new AmenityList("Indoor Basketball");
+		AmenityList doorperson = new AmenityList("Doorperson");
+		AmenityList freeWiFi = new AmenityList("Free Wi-Fi");
+		AmenityList storage = new AmenityList("On Site Storage");
+		AmenityList clubhouse = new AmenityList("Resident Clubhouse");
+		AmenityList businessCenter = new AmenityList("Business Center");
+		AmenityList onSiteMgt = new AmenityList("On-site Management");
+		
+		DbFunctions.insert(pool);
+		DbFunctions.insert(gym);
+		DbFunctions.insert(gameRoom);
+		DbFunctions.insert(todlerRoom);
+		DbFunctions.insert(spa);
+		DbFunctions.insert(indoorBasketball);
+		DbFunctions.insert(doorperson);
+		DbFunctions.insert(freeWiFi);
+		DbFunctions.insert(storage);
+		DbFunctions.insert(clubhouse);
+		DbFunctions.insert(businessCenter);
+		DbFunctions.insert(onSiteMgt);
 		
 		
 		Owner jack = new Owner("Jack","Richard","Cranial", "wire");

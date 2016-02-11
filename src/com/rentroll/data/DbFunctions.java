@@ -1,11 +1,16 @@
 package com.rentroll.data;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
@@ -613,4 +618,17 @@ public class DbFunctions {
             em.close();
         }
 	}
+	   public static byte[] hashPassword( final char[] password, final byte[] salt, final int iterations, final int keyLength ) {
+		   
+	       try {
+	           SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
+	           PBEKeySpec spec = new PBEKeySpec( password, salt, iterations, keyLength );
+	           SecretKey key = skf.generateSecret( spec );
+	           byte[] res = key.getEncoded( );
+	           return res;
+	 
+	       } catch( NoSuchAlgorithmException | InvalidKeySpecException e ) {
+	           throw new RuntimeException( e );
+	       }
+	   }
 }

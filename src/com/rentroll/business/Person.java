@@ -43,6 +43,8 @@ public class Person implements Serializable {
 	private String lastName;
 	private String middleName;	
 	private boolean activePerson = true;
+	
+	
 	private String password;
 	private String userName;
 	
