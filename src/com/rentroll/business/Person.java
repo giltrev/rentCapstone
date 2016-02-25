@@ -22,6 +22,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.rentroll.data.DbFunctions;
+
 
 
 
@@ -44,7 +46,7 @@ public class Person implements Serializable {
 	private String middleName;	
 	private boolean activePerson = true;
 	
-	
+	private final byte[] salt= DbFunctions.getSalt() ;
 	private String password;
 	private String userName;
 	
@@ -199,6 +201,18 @@ public class Person implements Serializable {
 
 	public void setUpdatedBy(PropertyManager updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public byte[] getSalt() {
+		return salt;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 
 //	public void setUpdated(Date updated) {

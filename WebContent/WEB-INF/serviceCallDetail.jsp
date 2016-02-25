@@ -14,11 +14,19 @@
 			<c:out value="${serviceCall.serviceCallDetail}" /><br>
 			Image(s)<br>
 			<c:forEach var="picture" items="${serviceCall.pictures}">
-			<img alt="Image" src="displayIcon?id=<c:out value="${picture.picId}" />">	<br>
-			<img alt="Image" src="displayImage?id=<c:out value="${picture.picId}" />">	<br>		
+			<img  alt="Image" src="displayImage?id=<c:out value="${picture.picId}" />">	<br>	
+			<img  alt="Image" src="displayImage?id=2">	<br>	
+			</c:forEach>
+			
+			
+			<c:if test="${serviceCall.vendors!=null}"> 
+			
+			Vendor(s)<br>
+			<c:forEach var="vendor" items="${serviceCall.vendors}">
+			<c:out value="${vendor.companyName}" /><br>		
 			</c:forEach>
 		
-		
+			</c:if>
 			
 
 		<!-- end .content --></div>

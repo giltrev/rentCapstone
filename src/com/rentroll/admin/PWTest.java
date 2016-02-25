@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.plaf.synth.SynthSeparatorUI;
+import javax.xml.bind.DatatypeConverter;
 
 import com.rentroll.data.DbFunctions;
 
@@ -43,46 +44,62 @@ public class PWTest extends HttpServlet {
 		Random random = new Random();
 		String userId = request.getParameter("userId");
 		String password = request.getParameter("password");
-		byte[] salt = new byte[32];
+		byte[] salt = new byte[4];
 		random.nextBytes(salt);
-		byte[] salt2 = new byte[32];
+		byte[] salt2 = new byte[4];
 		random.nextBytes(salt2);
 		
-		byte[] storedPassword = DbFunctions.hashPassword("Julianna6".toCharArray(), salt, 1000, 100);
-		byte[] hashPassword = DbFunctions.hashPassword(password.toCharArray(), salt, 1000, 100);
+		
+		String storedPassword = DbFunctions.hashPassword("Julianna6", salt);
+		String hashPassword = DbFunctions.hashPassword(password, salt);
 		System.out.println("User ID " + userId);
-		System.out.println("password " + password + " length "+ hashPassword.length);
+		System.out.println("password " + password + " length "+ hashPassword.length());
 		Base64.Encoder enc = Base64.getEncoder();
-		System.out.printf("salt: %s%n", enc.encodeToString(salt));
-		String hashedPW = enc.encodeToString(hashPassword);
-		System.out.println(hashedPW);
-		System.out.printf("hashPassword: %s%n", enc.encodeToString(hashPassword));
-		System.out.printf("storedPassword: %s%n", enc.encodeToString(storedPassword));
-		String hash = enc.encodeToString(hashPassword) + enc.encodeToString(salt);
-		System.out.println("hashed " + hash);
-		System.out.println(salt);
-		
-		if (slowEquals(storedPassword,hashPassword)){
-			System.out.println("passwords match!!");
-		} else {
-			System.out.println("passwords DO NOT match!!");
-
-		}
-		Base64.Decoder dec = Base64.getDecoder();
-		String gotSalt = hash.substring(hashedPW.length());
-		System.out.println(gotSalt);
-		byte[] retrievedSalt = dec.decode(gotSalt);
-		System.out.println(gotSalt);
-		
-		
-		String asciipw = new String(hashPassword, "UTF-8");
-		System.out.println("ascii password " + asciipw);
-		
-		if (slowEquals(retrievedSalt,salt)){
-			System.out.println("Salts match!!");
-		} else {
-			System.out.println("Salts DO NOT match!!");
-		}
+//		System.out.printf("salt: %s%n", enc.encodeToString(salt));
+//		String hashedPW = enc.encodeToString(hashPassword);
+//		System.out.println(hashedPW);
+//		System.out.printf("hashPassword: %s%n", enc.encodeToString(hashPassword));
+//		System.out.printf("storedPassword: %s%n", enc.encodeToString(storedPassword));
+//		String hash = enc.encodeToString(hashPassword) + enc.encodeToString(salt);
+//		System.out.println("hashed " + hash);
+//		System.out.println(salt);
+//		
+//		if (slowEquals(storedPassword,hashPassword)){
+//			System.out.println("passwords match!!");
+//		} else {
+//			System.out.println("passwords DO NOT match!!");
+//
+//		}
+//		Base64.Decoder dec = Base64.getDecoder();
+//		String gotSalt = hash.substring(hashedPW.length());
+//		System.out.println(gotSalt);
+//		byte[] retrievedSalt = dec.decode(gotSalt);
+//		System.out.println(gotSalt);
+//		String hexSalt = DatatypeConverter.printHexBinary(salt);
+//		
+//		String passwrodAndSalt = "Julianna6" + hexSalt;
+//		System.out.println("passwrodAndSalt " + passwrodAndSalt); 
+//		
+//		String enteredPasswrodAndSalt = password + hexSalt;
+//		System.out.println("enteredPasswrodAndSalt " + enteredPasswrodAndSalt);
+//		
+//		String enteredPasswrodAndSaltHashed = DbFunctions.hashPassword(enteredPasswrodAndSalt, salt);
+//		String passwrodAndSaltHashed = DbFunctions.hashPassword(passwrodAndSalt, salt);
+//		
+//		
+////		String enteredHex = DatatypeConverter.printHexBinary(enteredPasswrodAndSaltHashed);
+////		String hex = DatatypeConverter.printHexBinary(passwrodAndSaltHashed);
+//	    System.out.println("passwrodAndSaltHashed  " + passwrodAndSaltHashed);
+//	    System.out.println("Entered passwrodAndSaltHashed  " + enteredPasswrodAndSaltHashed);
+//	    
+//	   
+//	    
+//		
+//		if (slowEquals(retrievedSalt,salt)){
+//			System.out.println("Salts match!!");
+//		} else {
+//			System.out.println("Salts DO NOT match!!");
+//		}
 		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}

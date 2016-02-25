@@ -38,7 +38,7 @@ public class DisplayOwners extends HttpServlet {
 		
 		request.setAttribute("allOwners", allOwners);
 		
-		allOwners = DbFunctions.selectAllOwners();
+		allOwners = DbFunctions.selectActiveOwners();
 		System.out.println("Total Persons is " + allOwners.size());
 		
 		

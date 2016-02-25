@@ -1,25 +1,35 @@
-package com.rentroll.admin;
+package com.rentroll.admin.propertymanager;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.rentroll.business.PropertyManager;
+import com.rentroll.business.ServiceCall;
+import com.rentroll.business.Tenant;
+import com.rentroll.business.Vendor;
+import com.rentroll.data.DbFunctions;
 
 /**
- * Servlet implementation class TestImage
+ * Servlet implementation class AssignServiceCallRedirect
  */
-@WebServlet("/TestImage")
-public class TestImage extends HttpServlet {
+@WebServlet("/AddServiceCallRedirectPM")
+public class AddServiceCallRedirectPropManger extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TestImage() {
+    public AddServiceCallRedirectPropManger() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,11 +38,9 @@ public class TestImage extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = 1;
-		request.setAttribute("id", id);
-		
-		RequestDispatcher dispatcher=getServletContext().getRequestDispatcher( "/WEB-INF/displayImage1.jsp" );
-		dispatcher.forward( request, response );
+
+		getServletContext().getRequestDispatcher("/WEB-INF/addVendor.jsp")
+		.forward(request, response);
 	}
 
 	/**

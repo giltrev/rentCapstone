@@ -5,10 +5,10 @@
 	<jsp:attribute name="body">
 		<div class="content">
 			<c:if test="${property.propAddress2 != null}">
-				<h1> <c:out value="${property.propName}" /></h1>
+				<h3> <c:out value="${property.propName}" /></h3>
 			</c:if>
 			
-			<h2><c:out value="${property.propAddress1}" /></h2>
+			<h4><c:out value="${property.propAddress1}" /></h4>
 			<p>
 				<c:if test="${property.propAddress2 != null}">
 					<c:out value="${property.propAddress2}" /><br />
@@ -24,8 +24,8 @@
 					<tr>
 						<th>Unit ID</th>
 						<th>Unit Number</th>
-						<th>Number of Bedrooms</th>
-						<th>Number of Baths</th>
+						<th>Bedrooms</th>
+						<th>Baths</th>
 						<th>Rent Rate</th>
 						<th>Square Feet</th>
 						<th>Floor Plan</th>

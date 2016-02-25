@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -15,8 +17,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.xml.bind.DatatypeConverter;
 
 import com.rentroll.business.Address;
+import com.rentroll.business.Contact;
 import com.rentroll.business.EmailAddress;
 import com.rentroll.business.LedgerEntry;
 import com.rentroll.business.Owner;
@@ -138,6 +142,23 @@ public class DbFunctions {
             em.close();
         }
     }
+    
+    public static List<Owner> selectActiveOwners() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i from Owner i " +
+                "WHERE i.activePerson = true";
+        TypedQuery<Owner> q = em.createQuery(qString, Owner.class);
+        List<Owner> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    } 
     public static List<Person> selectActivePerons() {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String qString = "SELECT i from Person i " +
@@ -154,6 +175,25 @@ public class DbFunctions {
         
         return results;
     }  
+    
+    public static List<Contact> selectActiveContacts() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i from Contact i " +
+                "WHERE i.active = true";
+        TypedQuery<Contact> q = em.createQuery(qString, Contact.class);
+        List<Contact> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    } 
+    
+    
     public static List<Person> selectAllPerons() {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String qString = "SELECT i from Person i " ;
@@ -184,6 +224,38 @@ public class DbFunctions {
         
         return results;
     } 
+    public static List<Vendor> selectAllVendor() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT i from Vendor i " ;
+        TypedQuery<Vendor> q = em.createQuery(qString, Vendor.class);
+        List<Vendor> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    }
+    
+    public static Contact selectContact(int contactId) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Contact u " +
+                "WHERE u.contactId = :contactId";
+        TypedQuery<Contact> q = em.createQuery(qString, Contact.class);
+        q.setParameter("contactId", contactId);
+        try {
+        	Contact contact = q.getSingleResult();
+            return contact;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    
     public static Owner selectOwner(int personId) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String qString = "SELECT u FROM Owner u " +
@@ -347,6 +419,7 @@ public class DbFunctions {
         q.setParameter("userName", userName);
         try {
             Owner owner = q.getSingleResult();
+            System.out.println("Is a tenant" + userName + "password" + owner.getPassword()); 
             return owner.getPassword();
         } catch (NoResultException e) {
             return null;
@@ -362,7 +435,7 @@ public class DbFunctions {
         q.setParameter("userName", userName);
         try {
         	Tenant tenant = q.getSingleResult();
-        	System.out.println("Is a tenant" + userName + "password" + tenant.getPassword());    
+//        	System.out.println("Is a tenant" + userName + "password" + tenant.getPassword());    
         	return tenant.getPassword();
         } catch (NoResultException e) {
 	        	System.out.println("not a tenant" + userName);     
@@ -435,12 +508,62 @@ public class DbFunctions {
             em.close();
         }
     }
+    public static Vendor getVendorUserName(String userName){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Vendor u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<Vendor> q = em.createQuery(qString, Vendor.class);
+        q.setParameter("userName", userName);
+        try {
+        	Vendor vendor = q.getSingleResult();
+            return vendor;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    public static Tenant getTenantUserName(String userName){
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM Tenant u " +
+                "WHERE u.userName = :userName";
+        TypedQuery<Tenant> q = em.createQuery(qString, Tenant.class);
+        q.setParameter("userName", userName);
+        try {
+        	Tenant tenant = q.getSingleResult();
+            return tenant;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    
     public static List<ServiceCall> selectAllOpenServiceCalls() {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         String qString = "SELECT i from ServiceCall i " +
-        		"WHERE i.status = :status";
+        		"WHERE i.status != :status";
         TypedQuery<ServiceCall> q = em.createQuery(qString, ServiceCall.class);
-        q.setParameter("status", "In Progress");
+        q.setParameter("status", "Complete");
+        List<ServiceCall> results = null;
+        try {
+            results = q.getResultList();
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+        
+        return results;
+    }
+    
+    
+    public static List<ServiceCall> vendorServiceCalls(Vendor vendor) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString ="SELECT i from ServiceCall i " +
+        		"WHERE :venodr MEMBER OF  ServiceCall.vendors";
+        TypedQuery<ServiceCall> q = em.createQuery(qString, ServiceCall.class);
+        q.setParameter("vendor", vendor);
         List<ServiceCall> results = null;
         try {
             results = q.getResultList();
@@ -477,7 +600,7 @@ public class DbFunctions {
         for (Unit unit : units) {
         		int counter = 0;	
         		
-	        	List<LedgerEntry> unitledgerEntries = unit.getLedgerEntries();
+	        	Set<LedgerEntry> unitledgerEntries = unit.getLedgerEntries();
 	        	if (unitledgerEntries.size()!=0){
 		        	for (LedgerEntry ledgerEntry : unitledgerEntries) {
 		        		Calendar calendar = Calendar.getInstance();
@@ -573,7 +696,7 @@ public class DbFunctions {
     
 	public static List<RentProperty> SelectAllProperties() {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        String qString = "SELECT u.property from Unit u ";
+        String qString = "SELECT u from RentProperty u ";
         TypedQuery<RentProperty> q = em.createQuery(qString, RentProperty.class);
         
         List<RentProperty> results = null;
@@ -618,17 +741,46 @@ public class DbFunctions {
             em.close();
         }
 	}
-	   public static byte[] hashPassword( final char[] password, final byte[] salt, final int iterations, final int keyLength ) {
+	
+	public static ServiceCall selectServiceCall(int id){
+		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        String qString = "SELECT u FROM ServiceCall u " +
+                "WHERE u.scId = :id";
+        TypedQuery<ServiceCall> q = em.createQuery(qString, ServiceCall.class);
+        q.setParameter("id", id);
+        try {
+        	ServiceCall serviceCall = q.getSingleResult();
+            return serviceCall;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+	}
+	
+	   public static String hashPassword( String passwordIn, final byte[] salt) {
+		   final int iterations= 1000;
+		   final int keyLength = 100;
+		   String hexSalt = DatatypeConverter.printHexBinary(salt);
+		   String passwordAndSalt =  passwordIn+hexSalt;
 		   
+		   final char[] password = passwordAndSalt.toCharArray();
 	       try {
 	           SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
 	           PBEKeySpec spec = new PBEKeySpec( password, salt, iterations, keyLength );
 	           SecretKey key = skf.generateSecret( spec );
 	           byte[] res = key.getEncoded( );
-	           return res;
+	           String enteredHex = DatatypeConverter.printHexBinary(res);
+	           return enteredHex;
 	 
 	       } catch( NoSuchAlgorithmException | InvalidKeySpecException e ) {
 	           throw new RuntimeException( e );
 	       }
+	   }
+	   public static byte[] getSalt(){
+		   Random random = new Random();
+			byte[] salt = new byte[4];
+			random.nextBytes(salt);
+			return salt;
 	   }
 }

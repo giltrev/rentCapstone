@@ -4,7 +4,9 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -21,7 +23,10 @@ public class Vendor extends Person{
 	private String paymentType;
 	private String vendorType;
 	@ManyToMany(mappedBy="vendors",fetch = FetchType.EAGER)
-	private Set <ServiceCall> serviceCalls;
+	private Set <ServiceCall> serviceCalls = null;
+	@OneToOne
+	@JoinColumn(name="picId")
+	private Picture picture;
 	
 	public String getCompanyName() {
 		return companyName;
@@ -59,6 +64,12 @@ public class Vendor extends Person{
 	}
 	public void setPaymentType(String paymentType) {
 		this.paymentType = paymentType;
+	}
+	public Picture getPicture() {
+		return picture;
+	}
+	public void setPicture(Picture picture) {
+		this.picture = picture;
 	}
 
 }

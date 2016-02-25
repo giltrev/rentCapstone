@@ -6,34 +6,71 @@
 		<div class="content">
 		    
 		    
-		    Welcome <c:out value="${tenant.firstName}" /> <c:out value="${tenant.lastName}" /><br>
-		    <c:out value="${tenant.unit.property.propAddress1}" /> # <c:out value="${tenant.unit.unitNumber}" /><br>
-		    <c:out value="${tenant.unit.property.propCity}" /> <c:out value="${tenant.unit.property.propState}" /> <c:out value="${tenant.unit.property.propZip}" />
+
+		    
+		    <form method="post" action="CreateServiceCallPM" enctype="multipart/form-data">
+		    	
+		    	  <div class="form-group">
+				    <label for="reportedBy">Reported By </label>
+					<select class="form-control" name="tenantId">
+					  <c:forEach var="tenant" varStatus="status" items="${tenants}">
+					  	<option value="<c:out value='${tenant.personId}' />">
+					   <c:out value='${tenant.lastName}' />, <c:out value='${tenant.firstName}' />
+					  	</option>
+						</c:forEach>
+					</select>
+				  </div>
+		    
+				<label for="createServiceCallPM">Best time to reach tenant</label>
+				<div class="radio">
+				  <label>
+				    <input type="radio" name="reachTime" id="ASAP" value="ASAP" checked>
+				    ASAP
+				  </label>
+				</div> 
+				<div class="radio">
+				  <label>
+				    <input type="radio" name="reachTime" id="Morning" value="Morning">
+				   	Morning
+				  </label>
+				</div> 
+				<div class="radio">
+					<label>
+					    <input type="radio" name="reachTime" id="Afternoon" value="Afternoon">
+						Afternoon
+					</label>
+				</div> 
+				<div class="radio">
+					<label>
+					    <input type="radio" name="reachTime" id="Night" value="Night">
+						Night
+					</label>
+				</div>	
+				
+				
+				<label for="createServiceCall">Services Needed / Comments</label>
+				<textarea class="form-control" name='serviceCallDetail' rows="3"></textarea>
+				
+				<div class="form-group">
+				    <label for="vendor">Assign Vendor </label>
+					<select class="form-control" name="vendorId">
+					  <c:forEach var="vendor" varStatus="status" items="${vendors}">
+					  
+					 
+					  
+					  	<option value="<c:out value='${vendor.personId}' />">
+					   <c:out value='${vendor.companyName}' />,  <c:out value='${vendor.firstName}' /> <c:out value='${vendor.lastName}' />
+					  	</option>
+						</c:forEach>
+					</select>
+				  </div>
+				
+
+			  <button type="submit" class="btn btn-primary">Submit</button>
+			</form>
 		     
 		    
-		    <form method="post" action="CreateServiceCall" enctype="multipart/form-data">
-          
-                Best time to reach you<br>
-                <input type="radio" name="reachTime" value="ASAP" /> ASAP
-                <input type="radio" name="reachTime" value="Morning" /> Morning
-                <input type="radio" name="reachTime" value="Afternoon" /> Afternoon
-                <input type="radio" name="reachTime" value="Night" /> Night<br>
-                
-                Services Needed / Comments <br>
-                <textarea name='serviceCallDetail'  tabindex='12' rows='10' cols='100' ></textarea><br>
-                    
-                Portrait Photo: <br>
-                    <input type="file" name="photo" size="50"/><br>
-                    <input type="file" name="photo" size="50"/><br>
-                    <input type="file" name="photo" size="50"/><br>
-              
 
-                
-               
-                        <input type="submit" value="Save">
-		 
-		    
-		    </form>
 		    
 		    
 		    

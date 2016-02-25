@@ -6,14 +6,19 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,24 +39,31 @@ public class ServiceCall implements Serializable{
 	@ManyToOne()
 	private Unit unit;
 	
+	private boolean active= true;
+	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date initTime;
+	private Date initTime = new Date();
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
+	
+	
+	@OneToOne
+	@JoinColumn(name="personId")
+	private Tenant reportedBy;
 	
 	@Lob
 	@Column(name="serviceCallDetail", length=5000)
 	private String serviceCallDetail;
 	
-	@ManyToMany(targetEntity=Vendor.class)
-	private Set<Vendor> vendors;
+	@ManyToMany(fetch = FetchType.EAGER, targetEntity=Vendor.class)
+	private Set<Vendor> vendors = null;
 	private String vendorComments;
 	private BigDecimal partsCost;
 	private BigDecimal laborCost;
 	
-	private String status;
+	private String status = "Open";
 	
-	@OneToMany(targetEntity=Picture.class)
+	@OneToMany( fetch = FetchType.EAGER, targetEntity=Picture.class )
 	private Set <Picture> pictures;
 	
 	private String reachTime;
@@ -149,6 +161,18 @@ public class ServiceCall implements Serializable{
 	}
 	public void setReachTime(String reachTime) {
 		this.reachTime = reachTime;
+	}
+	public Tenant getReportedBy() {
+		return reportedBy;
+	}
+	public void setReportedBy(Tenant reportedBy) {
+		this.reportedBy = reportedBy;
+	}
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	

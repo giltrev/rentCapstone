@@ -3,17 +3,25 @@
 
 <my:propManager>
 	<jsp:attribute name="body">
-		<div class="content">
-		<h3>hello <c:out value="${owner.middleName}" /> </h3>
 		
-			<c:forEach var="owner" items="${allOwners}">
-				<h2><c:out value="${owner.firstName}" /> <c:out value="${owner.middleName}" /> <c:out value="${owner.lastName}" /></h2>
-				<ul>
-					<c:forEach var="property" items="${owner.properties}">
-						<li> <a href="PropertyDetail?propId=<c:out value="${property.propId}" />"> <c:out value="${property.propertyType}" /> at <c:out value="${property.propAddress1}" /></a> </li>
-					</c:forEach>
-				</ul>
-			</c:forEach>
-		<!-- end .content --></div>
+		<div class="content">
+				<h3>Properties</h3>
+				<table class="table table-hover">
+				  <tr>
+				    <th>Type</th> 
+				    <th>Address</th>
+				    <th>Owner</th>
+				  </tr>
+				  <c:forEach var="property" items="${properties}">
+				  <tr class='clickable-row' data-href='PropertyDetail?propId=<c:out value="${property.propId}" />'>
+				    <td><c:out value="${property.propertyType}" /></td> 
+				    <td><c:out value="${property.propAddress1}" /> </td>
+				    <td><c:out value="${property.owner.firstName}" /> <c:out value="${property.owner.lastName}" /></td>
+				  </tr>
+				</c:forEach>
+				</table>
+			<!-- end .content --></div>
+		
+		
 	</jsp:attribute>
 </my:propManager>

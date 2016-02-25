@@ -45,18 +45,8 @@ public class CreateServiceCall extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		
-		
-	
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		String serviceCallDetail = request.getParameter("serviceCallDetail");
-//		Tenant tenant = DbFunctions.selectTenant((Integer)session.getAttribute("userId"));
 		Tenant tenant = (Tenant)session.getAttribute("tenant");
         InputStream inputStream = null; // input stream of the upload file
         
@@ -69,7 +59,7 @@ public class CreateServiceCall extends HttpServlet {
 //        Part[] fileParts=(Part[])request.getAttribute("photo");
         
         for (Part filePart : fileParts) {
-            if (filePart != null && filePart.getName().equals("photo")&& filePart.getContentType().equals("image/jpeg") ) {
+            if (filePart != null && filePart.getName().equals("photo")&& (filePart.getContentType().equals("image/jpeg")||filePart.getContentType().equals("image/png")|| filePart.getContentType().equals("image/gif") )) {
                 // prints out some information for debugging
                 System.out.println(filePart.getName());
                 System.out.println(filePart.getSize());
@@ -77,48 +67,40 @@ public class CreateServiceCall extends HttpServlet {
                  
                 // obtains input stream of the upload file
                 inputStream = filePart.getInputStream();
-                
-                
             
             Picture picture = new Picture();
             byte[] imageFile = IOUtils.toByteArray(inputStream);
             picture.setImageFile(imageFile);
-            
-            
-            
-
             	
             DbFunctions.insert(picture);
             pictures.add(picture);
             }
 		}
         
-
-        
-        Calendar calendar = Calendar.getInstance();
-        Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
-        
-        
-        
-        
-        
-        
 		System.out.println("Service Call Detail"+ serviceCallDetail);
 		ServiceCall serviceCall = new ServiceCall();
 		serviceCall.setServiceCallDetail(serviceCallDetail);
-		serviceCall.setInitTime(currentTimestamp);
 		serviceCall.setUnit(tenant.getUnit());
-		serviceCall.setStatus("Opened");
+		serviceCall.setReportedBy(tenant);
 		
-		
-		
+		System.out.println("pictures size " + pictures.size());
 		serviceCall.setPictures(pictures);
 		DbFunctions.insert(serviceCall);
+		tenant.getUnit().getServiceCalls().add(serviceCall);
 		
-		request.setAttribute("serviceCall", serviceCall);
-		
-		getServletContext().getRequestDispatcher("/WEB-INF/serviceCallDetail.jsp")
+//		request.setAttribute("serviceCall", serviceCall);
+		request.setAttribute("tenant", tenant);
+		getServletContext().getRequestDispatcher("/WEB-INF/tenantView.jsp")
 		.forward(request, response);
+		
+	
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
 	}
 
 }

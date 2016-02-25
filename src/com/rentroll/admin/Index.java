@@ -2,12 +2,18 @@ package com.rentroll.admin;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.rentroll.business.RentProperty;
+import com.rentroll.data.DbFunctions;
 
 /**
  * Servlet implementation class Index
@@ -29,8 +35,15 @@ public class Index extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 request.setAttribute("now", new Date());
+			List<RentProperty> availableUnitsList = DbFunctions.selectAvailableUnits();
+			Set<RentProperty> availableUnits = new HashSet<>();
+			availableUnits.addAll(availableUnitsList);
+			
+			request.setAttribute("availableUnits", availableUnits);
+			System.out.println("Available units in HOME.java size is "+ availableUnits.size());
+			getServletContext().getRequestDispatcher("/WEB-INF/index.jsp")
+			.forward(request, response);
 
-	        request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
 	}
 
 	/**

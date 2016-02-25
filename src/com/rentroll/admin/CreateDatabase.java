@@ -1,6 +1,7 @@
 package com.rentroll.admin;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,11 +12,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+
 import com.rentroll.business.Address;
 import com.rentroll.business.EmailAddress;
 import com.rentroll.business.LedgerEntry;
 import com.rentroll.business.Owner;
 import com.rentroll.business.PhoneNumber;
+import com.rentroll.business.Picture;
 import com.rentroll.business.PropertyManager;
 import com.rentroll.business.RentProperty;
 import com.rentroll.business.ServiceCall;
@@ -52,9 +56,8 @@ public class CreateDatabase extends HttpServlet {
 		bg.setLastName("Gold");
 		bg.setCompanyname("Bill Gold Realty");
 		bg.setUserId("BGold100");
-		bg.setPassword("BGPassword");
 		bg.setPmType("admin");
-		
+		bg.setPassword(DbFunctions.hashPassword("BGPassword", bg.getSalt() ));
 		DbFunctions.insert(bg);
 		
 		PaymentMethod cash= new PaymentMethod("Cash");
@@ -116,17 +119,18 @@ public class CreateDatabase extends HttpServlet {
 		Owner robert= new Owner("Robert", "Joseph","Hogan", "check");
 		Owner jane= new Owner("Jane","Rose", "Smith", "check");
 		
-		jack.setUserId("JackId");
+		jack.setUserId("Jackid");
 		joey.setUserId("JoeyId");
 		joe.setUserId("JoeId");
 		robert.setUserId("RobertId");
 		jane.setUserId("JaneId");
+		jack.setPassword(DbFunctions.hashPassword("MyPassword", jack.getSalt() ));
+		joey.setPassword(DbFunctions.hashPassword("JoeyPassword", joey.getSalt() ));
+		joe.setPassword(DbFunctions.hashPassword("JoePassword", joe.getSalt() ));
+		robert.setPassword(DbFunctions.hashPassword("RobertPassword", robert.getSalt() ));
+		jane.setPassword(DbFunctions.hashPassword("JanePassword", jane.getSalt() ));
 		
-		jack.setPassword("JackPassword");
-		joey.setPassword("JoeyPassword");
-		joe.setPassword("JoePassword");
-		robert.setPassword("RobertPassword");
-		jane.setPassword("JanePassword");
+
 		
 		
 		jack.setActivePerson(true);
@@ -136,6 +140,9 @@ public class CreateDatabase extends HttpServlet {
 		jane.setActivePerson(true);
 		
 
+		
+		
+		
 		
 		
 		EmailAddress jackHomeEmail= new EmailAddress(false, "work", "jackWork@aol.com");
@@ -202,7 +209,7 @@ public class CreateDatabase extends HttpServlet {
 		jacksPhoneNumbers.add(jackWorkPhone);
 		
 		jack.setPhoneNumbers(jacksPhoneNumbers);
-		DbFunctions.update(jack);
+//		DbFunctions.update(jack);
 		
 		PhoneNumber joeyCellPhone =new PhoneNumber(false , "Cell" , "512-447-1234");
 		PhoneNumber joeyHomePhone =new PhoneNumber(true , "Home" , "512-412-4344");
@@ -594,11 +601,11 @@ public class CreateDatabase extends HttpServlet {
 		
 		Tenant jackProp1Unit1Tenant = new Tenant ( jackProp1Unit1, "Catalina", "Katina" , "Wildfong" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp1Unit1Tenant.setUserId("Catalina.Wildfong@gmail.com");
-		jackProp1Unit1Tenant.setPassword("Katina");
+		jackProp1Unit1Tenant.setPassword(DbFunctions.hashPassword("Katina", jackProp1Unit1Tenant.getSalt() ));
 
-		PhoneNumber jackProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp1Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp1Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "714-523-6653");
+		PhoneNumber jackProp1Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "936-988-8171");
+		PhoneNumber jackProp1Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "216-871-6876");
 
 		jackProp1Unit1Tenant.getPhoneNumbers().add(jackProp1Unit1TenantCellPhone);
 		jackProp1Unit1Tenant.getPhoneNumbers().add(jackProp1Unit1TenantWorkPhone);
@@ -615,10 +622,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp1Unit1Tenant2 = new Tenant ( jackProp1Unit1, "Karan", "Kristeen" , "Nicka" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp1Unit1Tenant2.setUserId("Karan.Nicka@gmail.com");
 		jackProp1Unit1Tenant2.setPassword("Kristeen");
+		jackProp1Unit1Tenant2.setPassword(DbFunctions.hashPassword("Kristeen", jackProp1Unit1Tenant2.getSalt() ));
 
-		PhoneNumber jackProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp1Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp1Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "817-213-8851");
+		PhoneNumber jackProp1Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "847-265-6609");
+		PhoneNumber jackProp1Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "314-697-3652");
 
 		jackProp1Unit1Tenant2.getPhoneNumbers().add(jackProp1Unit1Tenant2CellPhone);
 		jackProp1Unit1Tenant2.getPhoneNumbers().add(jackProp1Unit1Tenant2WorkPhone);
@@ -639,15 +647,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp1Unit1Tenanats.add(jackProp1Unit1Tenant);
 		jackProp1Unit1Tenanats.add(jackProp1Unit1Tenant2);
 		jackProp1Unit1.setTenants(jackProp1Unit1Tenanats);
+		DbFunctions.update(jackProp1Unit1);
+
+
 
 
 		Tenant jackProp2Unit1Tenant = new Tenant ( jackProp2Unit1, "Lezlie", "Roosevelt" , "Kippley" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit1Tenant.setUserId("Lezlie.Kippley@gmail.com");
-		jackProp2Unit1Tenant.setPassword("Roosevelt");
+		jackProp2Unit1Tenant.setPassword(DbFunctions.hashPassword("Roosevelt", jackProp2Unit1Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "415-306-7897");
+		PhoneNumber jackProp2Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "508-315-3867");
+		PhoneNumber jackProp2Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "215-511-3531");
 
 		jackProp2Unit1Tenant.getPhoneNumbers().add(jackProp2Unit1TenantCellPhone);
 		jackProp2Unit1Tenant.getPhoneNumbers().add(jackProp2Unit1TenantWorkPhone);
@@ -664,10 +675,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit1Tenant2 = new Tenant ( jackProp2Unit1, "Fletcher", "Youlanda" , "Threets" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit1Tenant2.setUserId("Fletcher.Threets@gmail.com");
 		jackProp2Unit1Tenant2.setPassword("Youlanda");
+		jackProp2Unit1Tenant2.setPassword(DbFunctions.hashPassword("Youlanda", jackProp2Unit1Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "503-939-3153");
+		PhoneNumber jackProp2Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "919-715-3791");
+		PhoneNumber jackProp2Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "773-352-3437");
 
 		jackProp2Unit1Tenant2.getPhoneNumbers().add(jackProp2Unit1Tenant2CellPhone);
 		jackProp2Unit1Tenant2.getPhoneNumbers().add(jackProp2Unit1Tenant2WorkPhone);
@@ -688,15 +700,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit1Tenanats.add(jackProp2Unit1Tenant);
 		jackProp2Unit1Tenanats.add(jackProp2Unit1Tenant2);
 		jackProp2Unit1.setTenants(jackProp2Unit1Tenanats);
+		DbFunctions.update(jackProp2Unit1);
+
+
 
 
 		Tenant jackProp2Unit2Tenant = new Tenant ( jackProp2Unit2, "Marge", "Nickolas" , "Latzke" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit2Tenant.setUserId("Marge.Latzke@gmail.com");
-		jackProp2Unit2Tenant.setPassword("Nickolas");
+		jackProp2Unit2Tenant.setPassword(DbFunctions.hashPassword("Nickolas", jackProp2Unit2Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit2TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit2TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "701-898-2154");
+		PhoneNumber jackProp2Unit2TenantWorkPhone =new PhoneNumber( false , "Work" , "732-635-3453");
+		PhoneNumber jackProp2Unit2TenantHomePhone =new PhoneNumber( false , "Home" , "574-330-1884");
 
 		jackProp2Unit2Tenant.getPhoneNumbers().add(jackProp2Unit2TenantCellPhone);
 		jackProp2Unit2Tenant.getPhoneNumbers().add(jackProp2Unit2TenantWorkPhone);
@@ -713,10 +728,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit2Tenant2 = new Tenant ( jackProp2Unit2, "Lai", "Gracia" , "Sergi" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit2Tenant2.setUserId("Lai.Sergi@gmail.com");
 		jackProp2Unit2Tenant2.setPassword("Gracia");
+		jackProp2Unit2Tenant2.setPassword(DbFunctions.hashPassword("Gracia", jackProp2Unit2Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit2Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit2Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "631-443-4710");
+		PhoneNumber jackProp2Unit2Tenant2WorkPhone =new PhoneNumber( false , "Work" , "337-991-8070");
+		PhoneNumber jackProp2Unit2Tenant2HomePhone =new PhoneNumber( false , "Home" , "248-793-4966");
 
 		jackProp2Unit2Tenant2.getPhoneNumbers().add(jackProp2Unit2Tenant2CellPhone);
 		jackProp2Unit2Tenant2.getPhoneNumbers().add(jackProp2Unit2Tenant2WorkPhone);
@@ -737,15 +753,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit2Tenanats.add(jackProp2Unit2Tenant);
 		jackProp2Unit2Tenanats.add(jackProp2Unit2Tenant2);
 		jackProp2Unit2.setTenants(jackProp2Unit2Tenanats);
+		DbFunctions.update(jackProp2Unit2);
+
+
 
 
 		Tenant jackProp2Unit4Tenant = new Tenant ( jackProp2Unit4, "Rozella", "Natalie" , "Meisel" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit4Tenant.setUserId("Rozella.Meisel@gmail.com");
-		jackProp2Unit4Tenant.setPassword("Natalie");
+		jackProp2Unit4Tenant.setPassword(DbFunctions.hashPassword("Natalie", jackProp2Unit4Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit4TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit4TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit4TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit4TenantCellPhone =new PhoneNumber( true , "Cell" , "208-862-5339");
+		PhoneNumber jackProp2Unit4TenantWorkPhone =new PhoneNumber( false , "Work" , "901-869-4314");
+		PhoneNumber jackProp2Unit4TenantHomePhone =new PhoneNumber( false , "Home" , "269-431-9464");
 
 		jackProp2Unit4Tenant.getPhoneNumbers().add(jackProp2Unit4TenantCellPhone);
 		jackProp2Unit4Tenant.getPhoneNumbers().add(jackProp2Unit4TenantWorkPhone);
@@ -762,10 +781,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit4Tenant2 = new Tenant ( jackProp2Unit4, "Dulce", "Hubert" , "Schirpke" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit4Tenant2.setUserId("Dulce.Schirpke@gmail.com");
 		jackProp2Unit4Tenant2.setPassword("Hubert");
+		jackProp2Unit4Tenant2.setPassword(DbFunctions.hashPassword("Hubert", jackProp2Unit4Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit4Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit4Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit4Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit4Tenant2CellPhone =new PhoneNumber( true , "Cell" , "215-907-9111");
+		PhoneNumber jackProp2Unit4Tenant2WorkPhone =new PhoneNumber( false , "Work" , "208-206-9848");
+		PhoneNumber jackProp2Unit4Tenant2HomePhone =new PhoneNumber( false , "Home" , "601-973-5754");
 
 		jackProp2Unit4Tenant2.getPhoneNumbers().add(jackProp2Unit4Tenant2CellPhone);
 		jackProp2Unit4Tenant2.getPhoneNumbers().add(jackProp2Unit4Tenant2WorkPhone);
@@ -786,15 +806,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit4Tenanats.add(jackProp2Unit4Tenant);
 		jackProp2Unit4Tenanats.add(jackProp2Unit4Tenant2);
 		jackProp2Unit4.setTenants(jackProp2Unit4Tenanats);
+		DbFunctions.update(jackProp2Unit4);
+
+
 
 
 		Tenant jackProp2Unit6Tenant = new Tenant ( jackProp2Unit6, "Sarah", "Alease" , "Bowley" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit6Tenant.setUserId("Sarah.Bowley@gmail.com");
-		jackProp2Unit6Tenant.setPassword("Alease");
+		jackProp2Unit6Tenant.setPassword(DbFunctions.hashPassword("Alease", jackProp2Unit6Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit6TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit6TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit6TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit6TenantCellPhone =new PhoneNumber( true , "Cell" , "973-310-1634");
+		PhoneNumber jackProp2Unit6TenantWorkPhone =new PhoneNumber( false , "Work" , "775-578-1214");
+		PhoneNumber jackProp2Unit6TenantHomePhone =new PhoneNumber( false , "Home" , "602-953-6360");
 
 		jackProp2Unit6Tenant.getPhoneNumbers().add(jackProp2Unit6TenantCellPhone);
 		jackProp2Unit6Tenant.getPhoneNumbers().add(jackProp2Unit6TenantWorkPhone);
@@ -811,10 +834,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit6Tenant2 = new Tenant ( jackProp2Unit6, "Daron", "Corinne" , "Palaspas" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit6Tenant2.setUserId("Daron.Palaspas@gmail.com");
 		jackProp2Unit6Tenant2.setPassword("Corinne");
+		jackProp2Unit6Tenant2.setPassword(DbFunctions.hashPassword("Corinne", jackProp2Unit6Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit6Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit6Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit6Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit6Tenant2CellPhone =new PhoneNumber( true , "Cell" , "561-470-4574");
+		PhoneNumber jackProp2Unit6Tenant2WorkPhone =new PhoneNumber( false , "Work" , "401-559-8961");
+		PhoneNumber jackProp2Unit6Tenant2HomePhone =new PhoneNumber( false , "Home" , "208-737-8439");
 
 		jackProp2Unit6Tenant2.getPhoneNumbers().add(jackProp2Unit6Tenant2CellPhone);
 		jackProp2Unit6Tenant2.getPhoneNumbers().add(jackProp2Unit6Tenant2WorkPhone);
@@ -835,15 +859,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit6Tenanats.add(jackProp2Unit6Tenant);
 		jackProp2Unit6Tenanats.add(jackProp2Unit6Tenant2);
 		jackProp2Unit6.setTenants(jackProp2Unit6Tenanats);
+		DbFunctions.update(jackProp2Unit6);
+
+
 
 
 		Tenant jackProp2Unit7Tenant = new Tenant ( jackProp2Unit7, "Kimberlie", "Deeanna" , "Berray" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit7Tenant.setUserId("Kimberlie.Berray@gmail.com");
-		jackProp2Unit7Tenant.setPassword("Deeanna");
+		jackProp2Unit7Tenant.setPassword(DbFunctions.hashPassword("Deeanna", jackProp2Unit7Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit7TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit7TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit7TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit7TenantCellPhone =new PhoneNumber( true , "Cell" , "337-740-9323");
+		PhoneNumber jackProp2Unit7TenantWorkPhone =new PhoneNumber( false , "Work" , "615-726-4537");
+		PhoneNumber jackProp2Unit7TenantHomePhone =new PhoneNumber( false , "Home" , "908-470-4661");
 
 		jackProp2Unit7Tenant.getPhoneNumbers().add(jackProp2Unit7TenantCellPhone);
 		jackProp2Unit7Tenant.getPhoneNumbers().add(jackProp2Unit7TenantWorkPhone);
@@ -860,10 +887,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit7Tenant2 = new Tenant ( jackProp2Unit7, "Lavonna", "Shawnda" , "Jeanty" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit7Tenant2.setUserId("Lavonna.Jeanty@gmail.com");
 		jackProp2Unit7Tenant2.setPassword("Shawnda");
+		jackProp2Unit7Tenant2.setPassword(DbFunctions.hashPassword("Shawnda", jackProp2Unit7Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit7Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit7Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit7Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit7Tenant2CellPhone =new PhoneNumber( true , "Cell" , "850-430-1663");
+		PhoneNumber jackProp2Unit7Tenant2WorkPhone =new PhoneNumber( false , "Work" , "972-961-4968");
+		PhoneNumber jackProp2Unit7Tenant2HomePhone =new PhoneNumber( false , "Home" , "718-478-8568");
 
 		jackProp2Unit7Tenant2.getPhoneNumbers().add(jackProp2Unit7Tenant2CellPhone);
 		jackProp2Unit7Tenant2.getPhoneNumbers().add(jackProp2Unit7Tenant2WorkPhone);
@@ -884,15 +912,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit7Tenanats.add(jackProp2Unit7Tenant);
 		jackProp2Unit7Tenanats.add(jackProp2Unit7Tenant2);
 		jackProp2Unit7.setTenants(jackProp2Unit7Tenanats);
+		DbFunctions.update(jackProp2Unit7);
+
+
 
 
 		Tenant jackProp2Unit8Tenant = new Tenant ( jackProp2Unit8, "Gilma", "Theodora" , "Menter" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit8Tenant.setUserId("Gilma.Menter@gmail.com");
-		jackProp2Unit8Tenant.setPassword("Theodora");
+		jackProp2Unit8Tenant.setPassword(DbFunctions.hashPassword("Theodora", jackProp2Unit8Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit8TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit8TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit8TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit8TenantCellPhone =new PhoneNumber( true , "Cell" , "601-567-5386");
+		PhoneNumber jackProp2Unit8TenantWorkPhone =new PhoneNumber( false , "Work" , "914-796-3775");
+		PhoneNumber jackProp2Unit8TenantHomePhone =new PhoneNumber( false , "Home" , "904-627-4341");
 
 		jackProp2Unit8Tenant.getPhoneNumbers().add(jackProp2Unit8TenantCellPhone);
 		jackProp2Unit8Tenant.getPhoneNumbers().add(jackProp2Unit8TenantWorkPhone);
@@ -909,10 +940,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit8Tenant2 = new Tenant ( jackProp2Unit8, "Lenna", "Teri" , "Acey" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit8Tenant2.setUserId("Lenna.Acey@gmail.com");
 		jackProp2Unit8Tenant2.setPassword("Teri");
+		jackProp2Unit8Tenant2.setPassword(DbFunctions.hashPassword("Teri", jackProp2Unit8Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit8Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit8Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit8Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit8Tenant2CellPhone =new PhoneNumber( true , "Cell" , "973-482-2430");
+		PhoneNumber jackProp2Unit8Tenant2WorkPhone =new PhoneNumber( false , "Work" , "586-247-1614");
+		PhoneNumber jackProp2Unit8Tenant2HomePhone =new PhoneNumber( false , "Home" , "715-530-9863");
 
 		jackProp2Unit8Tenant2.getPhoneNumbers().add(jackProp2Unit8Tenant2CellPhone);
 		jackProp2Unit8Tenant2.getPhoneNumbers().add(jackProp2Unit8Tenant2WorkPhone);
@@ -933,15 +965,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit8Tenanats.add(jackProp2Unit8Tenant);
 		jackProp2Unit8Tenanats.add(jackProp2Unit8Tenant2);
 		jackProp2Unit8.setTenants(jackProp2Unit8Tenanats);
+		DbFunctions.update(jackProp2Unit8);
+
+
 
 
 		Tenant jackProp2Unit9Tenant = new Tenant ( jackProp2Unit9, "Vi", "Vallie" , "Timenez" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit9Tenant.setUserId("Vi.Timenez@gmail.com");
-		jackProp2Unit9Tenant.setPassword("Vallie");
+		jackProp2Unit9Tenant.setPassword(DbFunctions.hashPassword("Vallie", jackProp2Unit9Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit9TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit9TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit9TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit9TenantCellPhone =new PhoneNumber( true , "Cell" , "314-359-9566");
+		PhoneNumber jackProp2Unit9TenantWorkPhone =new PhoneNumber( false , "Work" , "952-906-4597");
+		PhoneNumber jackProp2Unit9TenantHomePhone =new PhoneNumber( false , "Home" , "215-794-4519");
 
 		jackProp2Unit9Tenant.getPhoneNumbers().add(jackProp2Unit9TenantCellPhone);
 		jackProp2Unit9Tenant.getPhoneNumbers().add(jackProp2Unit9TenantWorkPhone);
@@ -958,10 +993,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit9Tenant2 = new Tenant ( jackProp2Unit9, "Andra", "Clay" , "Felger" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit9Tenant2.setUserId("Andra.Felger@gmail.com");
 		jackProp2Unit9Tenant2.setPassword("Clay");
+		jackProp2Unit9Tenant2.setPassword(DbFunctions.hashPassword("Clay", jackProp2Unit9Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit9Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit9Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit9Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit9Tenant2CellPhone =new PhoneNumber( true , "Cell" , "407-538-5106");
+		PhoneNumber jackProp2Unit9Tenant2WorkPhone =new PhoneNumber( false , "Work" , "248-697-7722");
+		PhoneNumber jackProp2Unit9Tenant2HomePhone =new PhoneNumber( false , "Home" , "325-667-7868");
 
 		jackProp2Unit9Tenant2.getPhoneNumbers().add(jackProp2Unit9Tenant2CellPhone);
 		jackProp2Unit9Tenant2.getPhoneNumbers().add(jackProp2Unit9Tenant2WorkPhone);
@@ -982,15 +1018,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit9Tenanats.add(jackProp2Unit9Tenant);
 		jackProp2Unit9Tenanats.add(jackProp2Unit9Tenant2);
 		jackProp2Unit9.setTenants(jackProp2Unit9Tenanats);
+		DbFunctions.update(jackProp2Unit9);
+
+
 
 
 		Tenant jackProp2Unit10Tenant = new Tenant ( jackProp2Unit10, "Mattie", "Louvenia" , "Harabedian" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit10Tenant.setUserId("Mattie.Harabedian@gmail.com");
-		jackProp2Unit10Tenant.setPassword("Louvenia");
+		jackProp2Unit10Tenant.setPassword(DbFunctions.hashPassword("Louvenia", jackProp2Unit10Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit10TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit10TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit10TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit10TenantCellPhone =new PhoneNumber( true , "Cell" , "619-509-5282");
+		PhoneNumber jackProp2Unit10TenantWorkPhone =new PhoneNumber( false , "Work" , "626-293-7678");
+		PhoneNumber jackProp2Unit10TenantHomePhone =new PhoneNumber( false , "Home" , "856-702-3676");
 
 		jackProp2Unit10Tenant.getPhoneNumbers().add(jackProp2Unit10TenantCellPhone);
 		jackProp2Unit10Tenant.getPhoneNumbers().add(jackProp2Unit10TenantWorkPhone);
@@ -1007,10 +1046,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit10Tenant2 = new Tenant ( jackProp2Unit10, "Erick", "Mirta" , "Lorens" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit10Tenant2.setUserId("Erick.Lorens@gmail.com");
 		jackProp2Unit10Tenant2.setPassword("Mirta");
+		jackProp2Unit10Tenant2.setPassword(DbFunctions.hashPassword("Mirta", jackProp2Unit10Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit10Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit10Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit10Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit10Tenant2CellPhone =new PhoneNumber( true , "Cell" , "203-461-1949");
+		PhoneNumber jackProp2Unit10Tenant2WorkPhone =new PhoneNumber( false , "Work" , "516-357-3362");
+		PhoneNumber jackProp2Unit10Tenant2HomePhone =new PhoneNumber( false , "Home" , "919-715-3791");
 
 		jackProp2Unit10Tenant2.getPhoneNumbers().add(jackProp2Unit10Tenant2CellPhone);
 		jackProp2Unit10Tenant2.getPhoneNumbers().add(jackProp2Unit10Tenant2WorkPhone);
@@ -1031,15 +1071,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit10Tenanats.add(jackProp2Unit10Tenant);
 		jackProp2Unit10Tenanats.add(jackProp2Unit10Tenant2);
 		jackProp2Unit10.setTenants(jackProp2Unit10Tenanats);
+		DbFunctions.update(jackProp2Unit10);
+
+
 
 
 		Tenant jackProp2Unit11Tenant = new Tenant ( jackProp2Unit11, "Selma", "Kaitlyn" , "Hidvegi" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit11Tenant.setUserId("Selma.Hidvegi@gmail.com");
-		jackProp2Unit11Tenant.setPassword("Kaitlyn");
+		jackProp2Unit11Tenant.setPassword(DbFunctions.hashPassword("Kaitlyn", jackProp2Unit11Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit11TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit11TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit11TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit11TenantCellPhone =new PhoneNumber( true , "Cell" , "910-922-3672");
+		PhoneNumber jackProp2Unit11TenantWorkPhone =new PhoneNumber( false , "Work" , "760-465-4762");
+		PhoneNumber jackProp2Unit11TenantHomePhone =new PhoneNumber( false , "Home" , "719-223-2074");
 
 		jackProp2Unit11Tenant.getPhoneNumbers().add(jackProp2Unit11TenantCellPhone);
 		jackProp2Unit11Tenant.getPhoneNumbers().add(jackProp2Unit11TenantWorkPhone);
@@ -1056,10 +1099,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit11Tenant2 = new Tenant ( jackProp2Unit11, "Leonora", "Earleen" , "Fredicks" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit11Tenant2.setUserId("Leonora.Fredicks@gmail.com");
 		jackProp2Unit11Tenant2.setPassword("Earleen");
+		jackProp2Unit11Tenant2.setPassword(DbFunctions.hashPassword("Earleen", jackProp2Unit11Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit11Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit11Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit11Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit11Tenant2CellPhone =new PhoneNumber( true , "Cell" , "608-382-4541");
+		PhoneNumber jackProp2Unit11Tenant2WorkPhone =new PhoneNumber( false , "Work" , "404-607-8435");
+		PhoneNumber jackProp2Unit11Tenant2HomePhone =new PhoneNumber( false , "Home" , "602-953-6360");
 
 		jackProp2Unit11Tenant2.getPhoneNumbers().add(jackProp2Unit11Tenant2CellPhone);
 		jackProp2Unit11Tenant2.getPhoneNumbers().add(jackProp2Unit11Tenant2WorkPhone);
@@ -1080,15 +1124,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit11Tenanats.add(jackProp2Unit11Tenant);
 		jackProp2Unit11Tenanats.add(jackProp2Unit11Tenant2);
 		jackProp2Unit11.setTenants(jackProp2Unit11Tenanats);
+		DbFunctions.update(jackProp2Unit11);
+
+
 
 
 		Tenant jackProp2Unit12Tenant = new Tenant ( jackProp2Unit12, "Judy", "Carmelina" , "Rhym" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit12Tenant.setUserId("Judy.Rhym@gmail.com");
-		jackProp2Unit12Tenant.setPassword("Carmelina");
+		jackProp2Unit12Tenant.setPassword(DbFunctions.hashPassword("Carmelina", jackProp2Unit12Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit12TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit12TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit12TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit12TenantCellPhone =new PhoneNumber( true , "Cell" , "410-890-7866");
+		PhoneNumber jackProp2Unit12TenantWorkPhone =new PhoneNumber( false , "Work" , "775-848-9135");
+		PhoneNumber jackProp2Unit12TenantHomePhone =new PhoneNumber( false , "Home" , "907-227-6777");
 
 		jackProp2Unit12Tenant.getPhoneNumbers().add(jackProp2Unit12TenantCellPhone);
 		jackProp2Unit12Tenant.getPhoneNumbers().add(jackProp2Unit12TenantWorkPhone);
@@ -1105,10 +1152,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit12Tenant2 = new Tenant ( jackProp2Unit12, "Raul", "James" , "Lapage" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit12Tenant2.setUserId("Raul.Lapage@gmail.com");
 		jackProp2Unit12Tenant2.setPassword("James");
+		jackProp2Unit12Tenant2.setPassword(DbFunctions.hashPassword("James", jackProp2Unit12Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit12Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit12Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit12Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit12Tenant2CellPhone =new PhoneNumber( true , "Cell" , "907-385-4412");
+		PhoneNumber jackProp2Unit12Tenant2WorkPhone =new PhoneNumber( false , "Work" , "973-355-2120");
+		PhoneNumber jackProp2Unit12Tenant2HomePhone =new PhoneNumber( false , "Home" , "216-733-8494");
 
 		jackProp2Unit12Tenant2.getPhoneNumbers().add(jackProp2Unit12Tenant2CellPhone);
 		jackProp2Unit12Tenant2.getPhoneNumbers().add(jackProp2Unit12Tenant2WorkPhone);
@@ -1129,15 +1177,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit12Tenanats.add(jackProp2Unit12Tenant);
 		jackProp2Unit12Tenanats.add(jackProp2Unit12Tenant2);
 		jackProp2Unit12.setTenants(jackProp2Unit12Tenanats);
+		DbFunctions.update(jackProp2Unit12);
+
+
 
 
 		Tenant jackProp2Unit14Tenant = new Tenant ( jackProp2Unit14, "Dierdre", "Devorah" , "Isenhower" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit14Tenant.setUserId("Dierdre.Isenhower@gmail.com");
-		jackProp2Unit14Tenant.setPassword("Devorah");
+		jackProp2Unit14Tenant.setPassword(DbFunctions.hashPassword("Devorah", jackProp2Unit14Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit14TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit14TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit14TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit14TenantCellPhone =new PhoneNumber( true , "Cell" , "616-737-3085");
+		PhoneNumber jackProp2Unit14TenantWorkPhone =new PhoneNumber( false , "Work" , "310-968-1219");
+		PhoneNumber jackProp2Unit14TenantHomePhone =new PhoneNumber( false , "Home" , "315-640-6357");
 
 		jackProp2Unit14Tenant.getPhoneNumbers().add(jackProp2Unit14TenantCellPhone);
 		jackProp2Unit14Tenant.getPhoneNumbers().add(jackProp2Unit14TenantWorkPhone);
@@ -1154,10 +1205,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit14Tenant2 = new Tenant ( jackProp2Unit14, "Theodora", "Ahmed" , "Lipke" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit14Tenant2.setUserId("Theodora.Lipke@gmail.com");
 		jackProp2Unit14Tenant2.setPassword("Ahmed");
+		jackProp2Unit14Tenant2.setPassword(DbFunctions.hashPassword("Ahmed", jackProp2Unit14Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit14Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit14Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit14Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit14Tenant2CellPhone =new PhoneNumber( true , "Cell" , "803-352-5387");
+		PhoneNumber jackProp2Unit14Tenant2WorkPhone =new PhoneNumber( false , "Work" , "410-863-8263");
+		PhoneNumber jackProp2Unit14Tenant2HomePhone =new PhoneNumber( false , "Home" , "408-813-1105");
 
 		jackProp2Unit14Tenant2.getPhoneNumbers().add(jackProp2Unit14Tenant2CellPhone);
 		jackProp2Unit14Tenant2.getPhoneNumbers().add(jackProp2Unit14Tenant2WorkPhone);
@@ -1178,15 +1230,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit14Tenanats.add(jackProp2Unit14Tenant);
 		jackProp2Unit14Tenanats.add(jackProp2Unit14Tenant2);
 		jackProp2Unit14.setTenants(jackProp2Unit14Tenanats);
+		DbFunctions.update(jackProp2Unit14);
+
+
 
 
 		Tenant jackProp2Unit15Tenant = new Tenant ( jackProp2Unit15, "Jina", "Jaclyn" , "Hollack" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit15Tenant.setUserId("Jina.Hollack@gmail.com");
-		jackProp2Unit15Tenant.setPassword("Jaclyn");
+		jackProp2Unit15Tenant.setPassword(DbFunctions.hashPassword("Jaclyn", jackProp2Unit15Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit15TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit15TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit15TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit15TenantCellPhone =new PhoneNumber( true , "Cell" , "918-644-9555");
+		PhoneNumber jackProp2Unit15TenantWorkPhone =new PhoneNumber( false , "Work" , "717-632-5831");
+		PhoneNumber jackProp2Unit15TenantHomePhone =new PhoneNumber( false , "Home" , "508-315-3867");
 
 		jackProp2Unit15Tenant.getPhoneNumbers().add(jackProp2Unit15TenantCellPhone);
 		jackProp2Unit15Tenant.getPhoneNumbers().add(jackProp2Unit15TenantWorkPhone);
@@ -1203,10 +1258,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit15Tenant2 = new Tenant ( jackProp2Unit15, "Kanisha", "Mitsue" , "Hollack" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit15Tenant2.setUserId("Kanisha.Hollack@gmail.com");
 		jackProp2Unit15Tenant2.setPassword("Mitsue");
+		jackProp2Unit15Tenant2.setPassword(DbFunctions.hashPassword("Mitsue", jackProp2Unit15Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit15Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit15Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit15Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit15Tenant2CellPhone =new PhoneNumber( true , "Cell" , "626-866-2339");
+		PhoneNumber jackProp2Unit15Tenant2WorkPhone =new PhoneNumber( false , "Work" , "952-479-2375");
+		PhoneNumber jackProp2Unit15Tenant2HomePhone =new PhoneNumber( false , "Home" , "602-442-3092");
 
 		jackProp2Unit15Tenant2.getPhoneNumbers().add(jackProp2Unit15Tenant2CellPhone);
 		jackProp2Unit15Tenant2.getPhoneNumbers().add(jackProp2Unit15Tenant2WorkPhone);
@@ -1227,15 +1283,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit15Tenanats.add(jackProp2Unit15Tenant);
 		jackProp2Unit15Tenanats.add(jackProp2Unit15Tenant2);
 		jackProp2Unit15.setTenants(jackProp2Unit15Tenanats);
+		DbFunctions.update(jackProp2Unit15);
+
+
 
 
 		Tenant jackProp2Unit16Tenant = new Tenant ( jackProp2Unit16, "Emerson", "Keneth" , "Adkin" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit16Tenant.setUserId("Emerson.Adkin@gmail.com");
-		jackProp2Unit16Tenant.setPassword("Keneth");
+		jackProp2Unit16Tenant.setPassword(DbFunctions.hashPassword("Keneth", jackProp2Unit16Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit16TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit16TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit16TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit16TenantCellPhone =new PhoneNumber( true , "Cell" , "631-748-6479");
+		PhoneNumber jackProp2Unit16TenantWorkPhone =new PhoneNumber( false , "Work" , "508-897-7916");
+		PhoneNumber jackProp2Unit16TenantHomePhone =new PhoneNumber( false , "Home" , "386-208-6976");
 
 		jackProp2Unit16Tenant.getPhoneNumbers().add(jackProp2Unit16TenantCellPhone);
 		jackProp2Unit16Tenant.getPhoneNumbers().add(jackProp2Unit16TenantWorkPhone);
@@ -1252,10 +1311,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit16Tenant2 = new Tenant ( jackProp2Unit16, "Lilli", "Rolland" , "Greenbush" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit16Tenant2.setUserId("Lilli.Greenbush@gmail.com");
 		jackProp2Unit16Tenant2.setPassword("Rolland");
+		jackProp2Unit16Tenant2.setPassword(DbFunctions.hashPassword("Rolland", jackProp2Unit16Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit16Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit16Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit16Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit16Tenant2CellPhone =new PhoneNumber( true , "Cell" , "330-537-5358");
+		PhoneNumber jackProp2Unit16Tenant2WorkPhone =new PhoneNumber( false , "Work" , "505-335-5293");
+		PhoneNumber jackProp2Unit16Tenant2HomePhone =new PhoneNumber( false , "Home" , "212-428-9538");
 
 		jackProp2Unit16Tenant2.getPhoneNumbers().add(jackProp2Unit16Tenant2CellPhone);
 		jackProp2Unit16Tenant2.getPhoneNumbers().add(jackProp2Unit16Tenant2WorkPhone);
@@ -1276,15 +1336,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit16Tenanats.add(jackProp2Unit16Tenant);
 		jackProp2Unit16Tenanats.add(jackProp2Unit16Tenant2);
 		jackProp2Unit16.setTenants(jackProp2Unit16Tenanats);
+		DbFunctions.update(jackProp2Unit16);
+
+
 
 
 		Tenant jackProp2Unit17Tenant = new Tenant ( jackProp2Unit17, "Cammy", "Veronika" , "Treston" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit17Tenant.setUserId("Cammy.Treston@gmail.com");
-		jackProp2Unit17Tenant.setPassword("Veronika");
+		jackProp2Unit17Tenant.setPassword(DbFunctions.hashPassword("Veronika", jackProp2Unit17Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit17TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit17TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit17TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit17TenantCellPhone =new PhoneNumber( true , "Cell" , "908-722-7128");
+		PhoneNumber jackProp2Unit17TenantWorkPhone =new PhoneNumber( false , "Work" , "307-279-3793");
+		PhoneNumber jackProp2Unit17TenantHomePhone =new PhoneNumber( false , "Home" , "904-514-9918");
 
 		jackProp2Unit17Tenant.getPhoneNumbers().add(jackProp2Unit17TenantCellPhone);
 		jackProp2Unit17Tenant.getPhoneNumbers().add(jackProp2Unit17TenantWorkPhone);
@@ -1301,10 +1364,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit17Tenant2 = new Tenant ( jackProp2Unit17, "Leota", "Jolanda" , "Arceo" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit17Tenant2.setUserId("Leota.Arceo@gmail.com");
 		jackProp2Unit17Tenant2.setPassword("Jolanda");
+		jackProp2Unit17Tenant2.setPassword(DbFunctions.hashPassword("Jolanda", jackProp2Unit17Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit17Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit17Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit17Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit17Tenant2CellPhone =new PhoneNumber( true , "Cell" , "901-901-4726");
+		PhoneNumber jackProp2Unit17Tenant2WorkPhone =new PhoneNumber( false , "Work" , "214-529-1949");
+		PhoneNumber jackProp2Unit17Tenant2HomePhone =new PhoneNumber( false , "Home" , "706-616-5131");
 
 		jackProp2Unit17Tenant2.getPhoneNumbers().add(jackProp2Unit17Tenant2CellPhone);
 		jackProp2Unit17Tenant2.getPhoneNumbers().add(jackProp2Unit17Tenant2WorkPhone);
@@ -1325,15 +1389,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit17Tenanats.add(jackProp2Unit17Tenant);
 		jackProp2Unit17Tenanats.add(jackProp2Unit17Tenant2);
 		jackProp2Unit17.setTenants(jackProp2Unit17Tenanats);
+		DbFunctions.update(jackProp2Unit17);
+
+
 
 
 		Tenant jackProp2Unit18Tenant = new Tenant ( jackProp2Unit18, "Cecilia", "Janey" , "Caiafa" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit18Tenant.setUserId("Cecilia.Caiafa@gmail.com");
-		jackProp2Unit18Tenant.setPassword("Janey");
+		jackProp2Unit18Tenant.setPassword(DbFunctions.hashPassword("Janey", jackProp2Unit18Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit18TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit18TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit18TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit18TenantCellPhone =new PhoneNumber( true , "Cell" , "518-966-7987");
+		PhoneNumber jackProp2Unit18TenantWorkPhone =new PhoneNumber( false , "Work" , "414-377-2880");
+		PhoneNumber jackProp2Unit18TenantHomePhone =new PhoneNumber( false , "Home" , "212-428-9538");
 
 		jackProp2Unit18Tenant.getPhoneNumbers().add(jackProp2Unit18TenantCellPhone);
 		jackProp2Unit18Tenant.getPhoneNumbers().add(jackProp2Unit18TenantWorkPhone);
@@ -1350,10 +1417,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit18Tenant2 = new Tenant ( jackProp2Unit18, "Dyan", "Carissa" , "Gwalthney" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit18Tenant2.setUserId("Dyan.Gwalthney@gmail.com");
 		jackProp2Unit18Tenant2.setPassword("Carissa");
+		jackProp2Unit18Tenant2.setPassword(DbFunctions.hashPassword("Carissa", jackProp2Unit18Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit18Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit18Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit18Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit18Tenant2CellPhone =new PhoneNumber( true , "Cell" , "301-841-5012");
+		PhoneNumber jackProp2Unit18Tenant2WorkPhone =new PhoneNumber( false , "Work" , "703-874-4248");
+		PhoneNumber jackProp2Unit18Tenant2HomePhone =new PhoneNumber( false , "Home" , "305-857-5489");
 
 		jackProp2Unit18Tenant2.getPhoneNumbers().add(jackProp2Unit18Tenant2CellPhone);
 		jackProp2Unit18Tenant2.getPhoneNumbers().add(jackProp2Unit18Tenant2WorkPhone);
@@ -1374,15 +1442,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit18Tenanats.add(jackProp2Unit18Tenant);
 		jackProp2Unit18Tenanats.add(jackProp2Unit18Tenant2);
 		jackProp2Unit18.setTenants(jackProp2Unit18Tenanats);
+		DbFunctions.update(jackProp2Unit18);
+
+
 
 
 		Tenant jackProp2Unit19Tenant = new Tenant ( jackProp2Unit19, "Carmen", "Jess" , "Papasergi" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit19Tenant.setUserId("Carmen.Papasergi@gmail.com");
-		jackProp2Unit19Tenant.setPassword("Jess");
+		jackProp2Unit19Tenant.setPassword(DbFunctions.hashPassword("Jess", jackProp2Unit19Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit19TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit19TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit19TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit19TenantCellPhone =new PhoneNumber( true , "Cell" , "626-636-4117");
+		PhoneNumber jackProp2Unit19TenantWorkPhone =new PhoneNumber( false , "Work" , "305-575-8481");
+		PhoneNumber jackProp2Unit19TenantHomePhone =new PhoneNumber( false , "Home" , "408-813-1105");
 
 		jackProp2Unit19Tenant.getPhoneNumbers().add(jackProp2Unit19TenantCellPhone);
 		jackProp2Unit19Tenant.getPhoneNumbers().add(jackProp2Unit19TenantWorkPhone);
@@ -1399,10 +1470,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit19Tenant2 = new Tenant ( jackProp2Unit19, "Ozell", "Yolando" , "Adkin" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit19Tenant2.setUserId("Ozell.Adkin@gmail.com");
 		jackProp2Unit19Tenant2.setPassword("Yolando");
+		jackProp2Unit19Tenant2.setPassword(DbFunctions.hashPassword("Yolando", jackProp2Unit19Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit19Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit19Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit19Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit19Tenant2CellPhone =new PhoneNumber( true , "Cell" , "408-805-4309");
+		PhoneNumber jackProp2Unit19Tenant2WorkPhone =new PhoneNumber( false , "Work" , "732-904-2931");
+		PhoneNumber jackProp2Unit19Tenant2HomePhone =new PhoneNumber( false , "Home" , "419-313-5571");
 
 		jackProp2Unit19Tenant2.getPhoneNumbers().add(jackProp2Unit19Tenant2CellPhone);
 		jackProp2Unit19Tenant2.getPhoneNumbers().add(jackProp2Unit19Tenant2WorkPhone);
@@ -1423,15 +1495,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit19Tenanats.add(jackProp2Unit19Tenant);
 		jackProp2Unit19Tenanats.add(jackProp2Unit19Tenant2);
 		jackProp2Unit19.setTenants(jackProp2Unit19Tenanats);
+		DbFunctions.update(jackProp2Unit19);
+
+
 
 
 		Tenant jackProp2Unit20Tenant = new Tenant ( jackProp2Unit20, "Ressie", "Peggie" , "Plumer" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		jackProp2Unit20Tenant.setUserId("Ressie.Plumer@gmail.com");
-		jackProp2Unit20Tenant.setPassword("Peggie");
+		jackProp2Unit20Tenant.setPassword(DbFunctions.hashPassword("Peggie", jackProp2Unit20Tenant.getSalt() ));
 
-		PhoneNumber jackProp2Unit20TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit20TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit20TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit20TenantCellPhone =new PhoneNumber( true , "Cell" , "718-201-3751");
+		PhoneNumber jackProp2Unit20TenantWorkPhone =new PhoneNumber( false , "Work" , "407-564-8113");
+		PhoneNumber jackProp2Unit20TenantHomePhone =new PhoneNumber( false , "Home" , "201-365-8698");
 
 		jackProp2Unit20Tenant.getPhoneNumbers().add(jackProp2Unit20TenantCellPhone);
 		jackProp2Unit20Tenant.getPhoneNumbers().add(jackProp2Unit20TenantWorkPhone);
@@ -1448,10 +1523,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant jackProp2Unit20Tenant2 = new Tenant ( jackProp2Unit20, "Nobuko", "Arminda" , "Meteer" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		jackProp2Unit20Tenant2.setUserId("Nobuko.Meteer@gmail.com");
 		jackProp2Unit20Tenant2.setPassword("Arminda");
+		jackProp2Unit20Tenant2.setPassword(DbFunctions.hashPassword("Arminda", jackProp2Unit20Tenant2.getSalt() ));
 
-		PhoneNumber jackProp2Unit20Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber jackProp2Unit20Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber jackProp2Unit20Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber jackProp2Unit20Tenant2CellPhone =new PhoneNumber( true , "Cell" , "407-312-1691");
+		PhoneNumber jackProp2Unit20Tenant2WorkPhone =new PhoneNumber( false , "Work" , "512-528-9933");
+		PhoneNumber jackProp2Unit20Tenant2HomePhone =new PhoneNumber( false , "Home" , "610-752-2683");
 
 		jackProp2Unit20Tenant2.getPhoneNumbers().add(jackProp2Unit20Tenant2CellPhone);
 		jackProp2Unit20Tenant2.getPhoneNumbers().add(jackProp2Unit20Tenant2WorkPhone);
@@ -1472,15 +1548,18 @@ public class CreateDatabase extends HttpServlet {
 		jackProp2Unit20Tenanats.add(jackProp2Unit20Tenant);
 		jackProp2Unit20Tenanats.add(jackProp2Unit20Tenant2);
 		jackProp2Unit20.setTenants(jackProp2Unit20Tenanats);
+		DbFunctions.update(jackProp2Unit20);
+
+
 
 
 		Tenant joeyProp1Unit1Tenant = new Tenant ( joeyProp1Unit1, "Gregoria", "Timothy" , "Lueckenbach" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit1Tenant.setUserId("Gregoria.Lueckenbach@gmail.com");
-		joeyProp1Unit1Tenant.setPassword("Timothy");
+		joeyProp1Unit1Tenant.setPassword(DbFunctions.hashPassword("Timothy", joeyProp1Unit1Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "231-467-9978");
+		PhoneNumber joeyProp1Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "508-504-6388");
+		PhoneNumber joeyProp1Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "931-486-6946");
 
 		joeyProp1Unit1Tenant.getPhoneNumbers().add(joeyProp1Unit1TenantCellPhone);
 		joeyProp1Unit1Tenant.getPhoneNumbers().add(joeyProp1Unit1TenantWorkPhone);
@@ -1497,10 +1576,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit1Tenant2 = new Tenant ( joeyProp1Unit1, "Johnna", "Rozella" , "Nievas" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit1Tenant2.setUserId("Johnna.Nievas@gmail.com");
 		joeyProp1Unit1Tenant2.setPassword("Rozella");
+		joeyProp1Unit1Tenant2.setPassword(DbFunctions.hashPassword("Rozella", joeyProp1Unit1Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "909-993-3242");
+		PhoneNumber joeyProp1Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "215-794-4519");
+		PhoneNumber joeyProp1Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "310-694-8466");
 
 		joeyProp1Unit1Tenant2.getPhoneNumbers().add(joeyProp1Unit1Tenant2CellPhone);
 		joeyProp1Unit1Tenant2.getPhoneNumbers().add(joeyProp1Unit1Tenant2WorkPhone);
@@ -1521,15 +1601,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit1Tenanats.add(joeyProp1Unit1Tenant);
 		joeyProp1Unit1Tenanats.add(joeyProp1Unit1Tenant2);
 		joeyProp1Unit1.setTenants(joeyProp1Unit1Tenanats);
+		DbFunctions.update(joeyProp1Unit1);
+
+
 
 
 		Tenant joeyProp1Unit2Tenant = new Tenant ( joeyProp1Unit2, "Helene", "Goldie" , "Hughey" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit2Tenant.setUserId("Helene.Hughey@gmail.com");
-		joeyProp1Unit2Tenant.setPassword("Goldie");
+		joeyProp1Unit2Tenant.setPassword(DbFunctions.hashPassword("Goldie", joeyProp1Unit2Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit2TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit2TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "248-913-4677");
+		PhoneNumber joeyProp1Unit2TenantWorkPhone =new PhoneNumber( false , "Work" , "706-616-5131");
+		PhoneNumber joeyProp1Unit2TenantHomePhone =new PhoneNumber( false , "Home" , "410-522-7621");
 
 		joeyProp1Unit2Tenant.getPhoneNumbers().add(joeyProp1Unit2TenantCellPhone);
 		joeyProp1Unit2Tenant.getPhoneNumbers().add(joeyProp1Unit2TenantWorkPhone);
@@ -1546,10 +1629,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit2Tenant2 = new Tenant ( joeyProp1Unit2, "Carissa", "Mozell" , "Poullion" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit2Tenant2.setUserId("Carissa.Poullion@gmail.com");
 		joeyProp1Unit2Tenant2.setPassword("Mozell");
+		joeyProp1Unit2Tenant2.setPassword(DbFunctions.hashPassword("Mozell", joeyProp1Unit2Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit2Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit2Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "269-756-7222");
+		PhoneNumber joeyProp1Unit2Tenant2WorkPhone =new PhoneNumber( false , "Work" , "773-857-2231");
+		PhoneNumber joeyProp1Unit2Tenant2HomePhone =new PhoneNumber( false , "Home" , "517-747-7664");
 
 		joeyProp1Unit2Tenant2.getPhoneNumbers().add(joeyProp1Unit2Tenant2CellPhone);
 		joeyProp1Unit2Tenant2.getPhoneNumbers().add(joeyProp1Unit2Tenant2WorkPhone);
@@ -1570,15 +1654,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit2Tenanats.add(joeyProp1Unit2Tenant);
 		joeyProp1Unit2Tenanats.add(joeyProp1Unit2Tenant2);
 		joeyProp1Unit2.setTenants(joeyProp1Unit2Tenanats);
+		DbFunctions.update(joeyProp1Unit2);
+
+
 
 
 		Tenant joeyProp1Unit4Tenant = new Tenant ( joeyProp1Unit4, "Lashaunda", "Nichelle" , "Ostrosky" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit4Tenant.setUserId("Lashaunda.Ostrosky@gmail.com");
-		joeyProp1Unit4Tenant.setPassword("Nichelle");
+		joeyProp1Unit4Tenant.setPassword(DbFunctions.hashPassword("Nichelle", joeyProp1Unit4Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit4TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit4TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit4TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit4TenantCellPhone =new PhoneNumber( true , "Cell" , "770-507-8791");
+		PhoneNumber joeyProp1Unit4TenantWorkPhone =new PhoneNumber( false , "Work" , "925-522-7798");
+		PhoneNumber joeyProp1Unit4TenantHomePhone =new PhoneNumber( false , "Home" , "212-462-9157");
 
 		joeyProp1Unit4Tenant.getPhoneNumbers().add(joeyProp1Unit4TenantCellPhone);
 		joeyProp1Unit4Tenant.getPhoneNumbers().add(joeyProp1Unit4TenantWorkPhone);
@@ -1595,10 +1682,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit4Tenant2 = new Tenant ( joeyProp1Unit4, "Rikki", "Pamella" , "Sawchuk" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit4Tenant2.setUserId("Rikki.Sawchuk@gmail.com");
 		joeyProp1Unit4Tenant2.setPassword("Pamella");
+		joeyProp1Unit4Tenant2.setPassword(DbFunctions.hashPassword("Pamella", joeyProp1Unit4Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit4Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit4Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit4Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit4Tenant2CellPhone =new PhoneNumber( true , "Cell" , "612-508-2655");
+		PhoneNumber joeyProp1Unit4Tenant2WorkPhone =new PhoneNumber( false , "Work" , "609-234-8376");
+		PhoneNumber joeyProp1Unit4Tenant2HomePhone =new PhoneNumber( false , "Home" , "808-475-2310");
 
 		joeyProp1Unit4Tenant2.getPhoneNumbers().add(joeyProp1Unit4Tenant2CellPhone);
 		joeyProp1Unit4Tenant2.getPhoneNumbers().add(joeyProp1Unit4Tenant2WorkPhone);
@@ -1619,15 +1707,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit4Tenanats.add(joeyProp1Unit4Tenant);
 		joeyProp1Unit4Tenanats.add(joeyProp1Unit4Tenant2);
 		joeyProp1Unit4.setTenants(joeyProp1Unit4Tenanats);
+		DbFunctions.update(joeyProp1Unit4);
+
+
 
 
 		Tenant joeyProp1Unit6Tenant = new Tenant ( joeyProp1Unit6, "Justine", "Gwenn" , "Brucato" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit6Tenant.setUserId("Justine.Brucato@gmail.com");
-		joeyProp1Unit6Tenant.setPassword("Gwenn");
+		joeyProp1Unit6Tenant.setPassword(DbFunctions.hashPassword("Gwenn", joeyProp1Unit6Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit6TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit6TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit6TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit6TenantCellPhone =new PhoneNumber( true , "Cell" , "760-971-4322");
+		PhoneNumber joeyProp1Unit6TenantWorkPhone =new PhoneNumber( false , "Work" , "516-376-4230");
+		PhoneNumber joeyProp1Unit6TenantHomePhone =new PhoneNumber( false , "Home" , "601-637-5479");
 
 		joeyProp1Unit6Tenant.getPhoneNumbers().add(joeyProp1Unit6TenantCellPhone);
 		joeyProp1Unit6Tenant.getPhoneNumbers().add(joeyProp1Unit6TenantWorkPhone);
@@ -1644,10 +1735,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit6Tenant2 = new Tenant ( joeyProp1Unit6, "Glenn", "Daron" , "Tromblay" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit6Tenant2.setUserId("Glenn.Tromblay@gmail.com");
 		joeyProp1Unit6Tenant2.setPassword("Daron");
+		joeyProp1Unit6Tenant2.setPassword(DbFunctions.hashPassword("Daron", joeyProp1Unit6Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit6Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit6Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit6Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit6Tenant2CellPhone =new PhoneNumber( true , "Cell" , "248-913-4677");
+		PhoneNumber joeyProp1Unit6Tenant2WorkPhone =new PhoneNumber( false , "Work" , "517-867-8077");
+		PhoneNumber joeyProp1Unit6Tenant2HomePhone =new PhoneNumber( false , "Home" , "760-465-4762");
 
 		joeyProp1Unit6Tenant2.getPhoneNumbers().add(joeyProp1Unit6Tenant2CellPhone);
 		joeyProp1Unit6Tenant2.getPhoneNumbers().add(joeyProp1Unit6Tenant2WorkPhone);
@@ -1668,15 +1760,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit6Tenanats.add(joeyProp1Unit6Tenant);
 		joeyProp1Unit6Tenanats.add(joeyProp1Unit6Tenant2);
 		joeyProp1Unit6.setTenants(joeyProp1Unit6Tenanats);
+		DbFunctions.update(joeyProp1Unit6);
+
+
 
 
 		Tenant joeyProp1Unit7Tenant = new Tenant ( joeyProp1Unit7, "Vi", "Serina" , "Rauser" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit7Tenant.setUserId("Vi.Rauser@gmail.com");
-		joeyProp1Unit7Tenant.setPassword("Serina");
+		joeyProp1Unit7Tenant.setPassword(DbFunctions.hashPassword("Serina", joeyProp1Unit7Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit7TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit7TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit7TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit7TenantCellPhone =new PhoneNumber( true , "Cell" , "325-869-2649");
+		PhoneNumber joeyProp1Unit7TenantWorkPhone =new PhoneNumber( false , "Work" , "574-405-1983");
+		PhoneNumber joeyProp1Unit7TenantHomePhone =new PhoneNumber( false , "Home" , "206-923-6042");
 
 		joeyProp1Unit7Tenant.getPhoneNumbers().add(joeyProp1Unit7TenantCellPhone);
 		joeyProp1Unit7Tenant.getPhoneNumbers().add(joeyProp1Unit7TenantWorkPhone);
@@ -1693,10 +1788,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit7Tenant2 = new Tenant ( joeyProp1Unit7, "Fannie", "Cherry" , "Stimmel" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit7Tenant2.setUserId("Fannie.Stimmel@gmail.com");
 		joeyProp1Unit7Tenant2.setPassword("Cherry");
+		joeyProp1Unit7Tenant2.setPassword(DbFunctions.hashPassword("Cherry", joeyProp1Unit7Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit7Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit7Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit7Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit7Tenant2CellPhone =new PhoneNumber( true , "Cell" , "212-402-9216");
+		PhoneNumber joeyProp1Unit7Tenant2WorkPhone =new PhoneNumber( false , "Work" , "804-808-9574");
+		PhoneNumber joeyProp1Unit7Tenant2HomePhone =new PhoneNumber( false , "Home" , "808-526-5863");
 
 		joeyProp1Unit7Tenant2.getPhoneNumbers().add(joeyProp1Unit7Tenant2CellPhone);
 		joeyProp1Unit7Tenant2.getPhoneNumbers().add(joeyProp1Unit7Tenant2WorkPhone);
@@ -1717,15 +1813,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit7Tenanats.add(joeyProp1Unit7Tenant);
 		joeyProp1Unit7Tenanats.add(joeyProp1Unit7Tenant2);
 		joeyProp1Unit7.setTenants(joeyProp1Unit7Tenanats);
+		DbFunctions.update(joeyProp1Unit7);
+
+
 
 
 		Tenant joeyProp1Unit8Tenant = new Tenant ( joeyProp1Unit8, "Erick", "Malcolm" , "Lorens" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit8Tenant.setUserId("Erick.Lorens@gmail.com");
-		joeyProp1Unit8Tenant.setPassword("Malcolm");
+		joeyProp1Unit8Tenant.setPassword(DbFunctions.hashPassword("Malcolm", joeyProp1Unit8Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit8TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit8TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit8TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit8TenantCellPhone =new PhoneNumber( true , "Cell" , "760-291-5497");
+		PhoneNumber joeyProp1Unit8TenantWorkPhone =new PhoneNumber( false , "Work" , "303-521-9860");
+		PhoneNumber joeyProp1Unit8TenantHomePhone =new PhoneNumber( false , "Home" , "619-695-8086");
 
 		joeyProp1Unit8Tenant.getPhoneNumbers().add(joeyProp1Unit8TenantCellPhone);
 		joeyProp1Unit8Tenant.getPhoneNumbers().add(joeyProp1Unit8TenantWorkPhone);
@@ -1742,10 +1841,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit8Tenant2 = new Tenant ( joeyProp1Unit8, "Benedict", "Colette" , "Schnitzler" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit8Tenant2.setUserId("Benedict.Schnitzler@gmail.com");
 		joeyProp1Unit8Tenant2.setPassword("Colette");
+		joeyProp1Unit8Tenant2.setPassword(DbFunctions.hashPassword("Colette", joeyProp1Unit8Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit8Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit8Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit8Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit8Tenant2CellPhone =new PhoneNumber( true , "Cell" , "949-867-4077");
+		PhoneNumber joeyProp1Unit8Tenant2WorkPhone =new PhoneNumber( false , "Work" , "214-225-5850");
+		PhoneNumber joeyProp1Unit8Tenant2HomePhone =new PhoneNumber( false , "Home" , "858-732-1884");
 
 		joeyProp1Unit8Tenant2.getPhoneNumbers().add(joeyProp1Unit8Tenant2CellPhone);
 		joeyProp1Unit8Tenant2.getPhoneNumbers().add(joeyProp1Unit8Tenant2WorkPhone);
@@ -1766,15 +1866,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit8Tenanats.add(joeyProp1Unit8Tenant);
 		joeyProp1Unit8Tenanats.add(joeyProp1Unit8Tenant2);
 		joeyProp1Unit8.setTenants(joeyProp1Unit8Tenanats);
+		DbFunctions.update(joeyProp1Unit8);
+
+
 
 
 		Tenant joeyProp1Unit9Tenant = new Tenant ( joeyProp1Unit9, "Gary", "Winfred" , "Steffensmeier" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit9Tenant.setUserId("Gary.Steffensmeier@gmail.com");
-		joeyProp1Unit9Tenant.setPassword("Winfred");
+		joeyProp1Unit9Tenant.setPassword(DbFunctions.hashPassword("Winfred", joeyProp1Unit9Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit9TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit9TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit9TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit9TenantCellPhone =new PhoneNumber( true , "Cell" , "608-382-4541");
+		PhoneNumber joeyProp1Unit9TenantWorkPhone =new PhoneNumber( false , "Work" , "817-819-7799");
+		PhoneNumber joeyProp1Unit9TenantHomePhone =new PhoneNumber( false , "Home" , "406-374-7752");
 
 		joeyProp1Unit9Tenant.getPhoneNumbers().add(joeyProp1Unit9TenantCellPhone);
 		joeyProp1Unit9Tenant.getPhoneNumbers().add(joeyProp1Unit9TenantWorkPhone);
@@ -1791,10 +1894,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit9Tenant2 = new Tenant ( joeyProp1Unit9, "Elly", "Deonna" , "Schnitzler" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit9Tenant2.setUserId("Elly.Schnitzler@gmail.com");
 		joeyProp1Unit9Tenant2.setPassword("Deonna");
+		joeyProp1Unit9Tenant2.setPassword(DbFunctions.hashPassword("Deonna", joeyProp1Unit9Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit9Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit9Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit9Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit9Tenant2CellPhone =new PhoneNumber( true , "Cell" , "508-855-9887");
+		PhoneNumber joeyProp1Unit9Tenant2WorkPhone =new PhoneNumber( false , "Work" , "608-586-6912");
+		PhoneNumber joeyProp1Unit9Tenant2HomePhone =new PhoneNumber( false , "Home" , "574-330-1884");
 
 		joeyProp1Unit9Tenant2.getPhoneNumbers().add(joeyProp1Unit9Tenant2CellPhone);
 		joeyProp1Unit9Tenant2.getPhoneNumbers().add(joeyProp1Unit9Tenant2WorkPhone);
@@ -1815,15 +1919,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit9Tenanats.add(joeyProp1Unit9Tenant);
 		joeyProp1Unit9Tenanats.add(joeyProp1Unit9Tenant2);
 		joeyProp1Unit9.setTenants(joeyProp1Unit9Tenanats);
+		DbFunctions.update(joeyProp1Unit9);
+
+
 
 
 		Tenant joeyProp1Unit10Tenant = new Tenant ( joeyProp1Unit10, "Quentin", "Dierdre" , "Setter" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit10Tenant.setUserId("Quentin.Setter@gmail.com");
-		joeyProp1Unit10Tenant.setPassword("Dierdre");
+		joeyProp1Unit10Tenant.setPassword(DbFunctions.hashPassword("Dierdre", joeyProp1Unit10Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit10TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit10TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit10TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit10TenantCellPhone =new PhoneNumber( true , "Cell" , "419-939-3613");
+		PhoneNumber joeyProp1Unit10TenantWorkPhone =new PhoneNumber( false , "Work" , "925-522-7798");
+		PhoneNumber joeyProp1Unit10TenantHomePhone =new PhoneNumber( false , "Home" , "419-313-5571");
 
 		joeyProp1Unit10Tenant.getPhoneNumbers().add(joeyProp1Unit10TenantCellPhone);
 		joeyProp1Unit10Tenant.getPhoneNumbers().add(joeyProp1Unit10TenantWorkPhone);
@@ -1840,10 +1947,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit10Tenant2 = new Tenant ( joeyProp1Unit10, "Scarlet", "Amber" , "Angalich" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit10Tenant2.setUserId("Scarlet.Angalich@gmail.com");
 		joeyProp1Unit10Tenant2.setPassword("Amber");
+		joeyProp1Unit10Tenant2.setPassword(DbFunctions.hashPassword("Amber", joeyProp1Unit10Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit10Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit10Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit10Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit10Tenant2CellPhone =new PhoneNumber( true , "Cell" , "516-968-6051");
+		PhoneNumber joeyProp1Unit10Tenant2WorkPhone =new PhoneNumber( false , "Work" , "803-975-3405");
+		PhoneNumber joeyProp1Unit10Tenant2HomePhone =new PhoneNumber( false , "Home" , "305-304-6573");
 
 		joeyProp1Unit10Tenant2.getPhoneNumbers().add(joeyProp1Unit10Tenant2CellPhone);
 		joeyProp1Unit10Tenant2.getPhoneNumbers().add(joeyProp1Unit10Tenant2WorkPhone);
@@ -1864,15 +1972,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit10Tenanats.add(joeyProp1Unit10Tenant);
 		joeyProp1Unit10Tenanats.add(joeyProp1Unit10Tenant2);
 		joeyProp1Unit10.setTenants(joeyProp1Unit10Tenanats);
+		DbFunctions.update(joeyProp1Unit10);
+
+
 
 
 		Tenant joeyProp1Unit11Tenant = new Tenant ( joeyProp1Unit11, "Gertude", "Karl" , "Aquas" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit11Tenant.setUserId("Gertude.Aquas@gmail.com");
-		joeyProp1Unit11Tenant.setPassword("Karl");
+		joeyProp1Unit11Tenant.setPassword(DbFunctions.hashPassword("Karl", joeyProp1Unit11Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit11TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit11TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit11TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit11TenantCellPhone =new PhoneNumber( true , "Cell" , "703-235-3937");
+		PhoneNumber joeyProp1Unit11TenantWorkPhone =new PhoneNumber( false , "Work" , "952-938-9457");
+		PhoneNumber joeyProp1Unit11TenantHomePhone =new PhoneNumber( false , "Home" , "617-997-5771");
 
 		joeyProp1Unit11Tenant.getPhoneNumbers().add(joeyProp1Unit11TenantCellPhone);
 		joeyProp1Unit11Tenant.getPhoneNumbers().add(joeyProp1Unit11TenantWorkPhone);
@@ -1889,10 +2000,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit11Tenant2 = new Tenant ( joeyProp1Unit11, "Twana", "Lashawnda" , "Dilliard" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit11Tenant2.setUserId("Twana.Dilliard@gmail.com");
 		joeyProp1Unit11Tenant2.setPassword("Lashawnda");
+		joeyProp1Unit11Tenant2.setPassword(DbFunctions.hashPassword("Lashawnda", joeyProp1Unit11Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit11Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit11Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit11Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit11Tenant2CellPhone =new PhoneNumber( true , "Cell" , "260-273-3725");
+		PhoneNumber joeyProp1Unit11Tenant2WorkPhone =new PhoneNumber( false , "Work" , "513-863-9471");
+		PhoneNumber joeyProp1Unit11Tenant2HomePhone =new PhoneNumber( false , "Home" , "215-351-8523");
 
 		joeyProp1Unit11Tenant2.getPhoneNumbers().add(joeyProp1Unit11Tenant2CellPhone);
 		joeyProp1Unit11Tenant2.getPhoneNumbers().add(joeyProp1Unit11Tenant2WorkPhone);
@@ -1913,15 +2025,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit11Tenanats.add(joeyProp1Unit11Tenant);
 		joeyProp1Unit11Tenanats.add(joeyProp1Unit11Tenant2);
 		joeyProp1Unit11.setTenants(joeyProp1Unit11Tenanats);
+		DbFunctions.update(joeyProp1Unit11);
+
+
 
 
 		Tenant joeyProp1Unit12Tenant = new Tenant ( joeyProp1Unit12, "Paz", "My" , "Pawlowicz" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit12Tenant.setUserId("Paz.Pawlowicz@gmail.com");
-		joeyProp1Unit12Tenant.setPassword("My");
+		joeyProp1Unit12Tenant.setPassword(DbFunctions.hashPassword("My", joeyProp1Unit12Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit12TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit12TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit12TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit12TenantCellPhone =new PhoneNumber( true , "Cell" , "201-431-2989");
+		PhoneNumber joeyProp1Unit12TenantWorkPhone =new PhoneNumber( false , "Work" , "303-521-9860");
+		PhoneNumber joeyProp1Unit12TenantHomePhone =new PhoneNumber( false , "Home" , "512-693-8345");
 
 		joeyProp1Unit12Tenant.getPhoneNumbers().add(joeyProp1Unit12TenantCellPhone);
 		joeyProp1Unit12Tenant.getPhoneNumbers().add(joeyProp1Unit12TenantWorkPhone);
@@ -1938,10 +2053,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit12Tenant2 = new Tenant ( joeyProp1Unit12, "Tresa", "Graciela" , "Birkner" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit12Tenant2.setUserId("Tresa.Birkner@gmail.com");
 		joeyProp1Unit12Tenant2.setPassword("Graciela");
+		joeyProp1Unit12Tenant2.setPassword(DbFunctions.hashPassword("Graciela", joeyProp1Unit12Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit12Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit12Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit12Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit12Tenant2CellPhone =new PhoneNumber( true , "Cell" , "631-258-6558");
+		PhoneNumber joeyProp1Unit12Tenant2WorkPhone =new PhoneNumber( false , "Work" , "785-253-7049");
+		PhoneNumber joeyProp1Unit12Tenant2HomePhone =new PhoneNumber( false , "Home" , "509-595-6485");
 
 		joeyProp1Unit12Tenant2.getPhoneNumbers().add(joeyProp1Unit12Tenant2CellPhone);
 		joeyProp1Unit12Tenant2.getPhoneNumbers().add(joeyProp1Unit12Tenant2WorkPhone);
@@ -1962,15 +2078,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit12Tenanats.add(joeyProp1Unit12Tenant);
 		joeyProp1Unit12Tenanats.add(joeyProp1Unit12Tenant2);
 		joeyProp1Unit12.setTenants(joeyProp1Unit12Tenanats);
+		DbFunctions.update(joeyProp1Unit12);
+
+
 
 
 		Tenant joeyProp1Unit14Tenant = new Tenant ( joeyProp1Unit14, "Jerry", "Lawrence" , "Degonia" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit14Tenant.setUserId("Jerry.Degonia@gmail.com");
-		joeyProp1Unit14Tenant.setPassword("Lawrence");
+		joeyProp1Unit14Tenant.setPassword(DbFunctions.hashPassword("Lawrence", joeyProp1Unit14Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit14TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit14TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit14TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit14TenantCellPhone =new PhoneNumber( true , "Cell" , "414-748-1374");
+		PhoneNumber joeyProp1Unit14TenantWorkPhone =new PhoneNumber( false , "Work" , "574-405-1983");
+		PhoneNumber joeyProp1Unit14TenantHomePhone =new PhoneNumber( false , "Home" , "714-698-2170");
 
 		joeyProp1Unit14Tenant.getPhoneNumbers().add(joeyProp1Unit14TenantCellPhone);
 		joeyProp1Unit14Tenant.getPhoneNumbers().add(joeyProp1Unit14TenantWorkPhone);
@@ -1987,10 +2106,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit14Tenant2 = new Tenant ( joeyProp1Unit14, "Maryann", "Alishia" , "Waycott" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit14Tenant2.setUserId("Maryann.Waycott@gmail.com");
 		joeyProp1Unit14Tenant2.setPassword("Alishia");
+		joeyProp1Unit14Tenant2.setPassword(DbFunctions.hashPassword("Alishia", joeyProp1Unit14Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit14Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit14Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit14Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit14Tenant2CellPhone =new PhoneNumber( true , "Cell" , "337-515-1438");
+		PhoneNumber joeyProp1Unit14Tenant2WorkPhone =new PhoneNumber( false , "Work" , "207-297-5029");
+		PhoneNumber joeyProp1Unit14Tenant2HomePhone =new PhoneNumber( false , "Home" , "775-578-1214");
 
 		joeyProp1Unit14Tenant2.getPhoneNumbers().add(joeyProp1Unit14Tenant2CellPhone);
 		joeyProp1Unit14Tenant2.getPhoneNumbers().add(joeyProp1Unit14Tenant2WorkPhone);
@@ -2011,15 +2131,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit14Tenanats.add(joeyProp1Unit14Tenant);
 		joeyProp1Unit14Tenanats.add(joeyProp1Unit14Tenant2);
 		joeyProp1Unit14.setTenants(joeyProp1Unit14Tenanats);
+		DbFunctions.update(joeyProp1Unit14);
+
+
 
 
 		Tenant joeyProp1Unit15Tenant = new Tenant ( joeyProp1Unit15, "Yvonne", "Alaine" , "Koppinger" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeyProp1Unit15Tenant.setUserId("Yvonne.Koppinger@gmail.com");
-		joeyProp1Unit15Tenant.setPassword("Alaine");
+		joeyProp1Unit15Tenant.setPassword(DbFunctions.hashPassword("Alaine", joeyProp1Unit15Tenant.getSalt() ));
 
-		PhoneNumber joeyProp1Unit15TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit15TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit15TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit15TenantCellPhone =new PhoneNumber( true , "Cell" , "516-212-1915");
+		PhoneNumber joeyProp1Unit15TenantWorkPhone =new PhoneNumber( false , "Work" , "209-242-7022");
+		PhoneNumber joeyProp1Unit15TenantHomePhone =new PhoneNumber( false , "Home" , "410-951-2667");
 
 		joeyProp1Unit15Tenant.getPhoneNumbers().add(joeyProp1Unit15TenantCellPhone);
 		joeyProp1Unit15Tenant.getPhoneNumbers().add(joeyProp1Unit15TenantWorkPhone);
@@ -2036,10 +2159,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeyProp1Unit15Tenant2 = new Tenant ( joeyProp1Unit15, "Carmen", "Jesusa" , "Vocelka" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeyProp1Unit15Tenant2.setUserId("Carmen.Vocelka@gmail.com");
 		joeyProp1Unit15Tenant2.setPassword("Jesusa");
+		joeyProp1Unit15Tenant2.setPassword(DbFunctions.hashPassword("Jesusa", joeyProp1Unit15Tenant2.getSalt() ));
 
-		PhoneNumber joeyProp1Unit15Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeyProp1Unit15Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeyProp1Unit15Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeyProp1Unit15Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-213-8574");
+		PhoneNumber joeyProp1Unit15Tenant2WorkPhone =new PhoneNumber( false , "Work" , "513-418-1566");
+		PhoneNumber joeyProp1Unit15Tenant2HomePhone =new PhoneNumber( false , "Home" , "212-428-9538");
 
 		joeyProp1Unit15Tenant2.getPhoneNumbers().add(joeyProp1Unit15Tenant2CellPhone);
 		joeyProp1Unit15Tenant2.getPhoneNumbers().add(joeyProp1Unit15Tenant2WorkPhone);
@@ -2060,15 +2184,18 @@ public class CreateDatabase extends HttpServlet {
 		joeyProp1Unit15Tenanats.add(joeyProp1Unit15Tenant);
 		joeyProp1Unit15Tenanats.add(joeyProp1Unit15Tenant2);
 		joeyProp1Unit15.setTenants(joeyProp1Unit15Tenanats);
+		DbFunctions.update(joeyProp1Unit15);
+
+
 
 
 		Tenant joeProp1Unit1Tenant = new Tenant ( joeProp1Unit1, "Nu", "Francine" , "Fortino" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeProp1Unit1Tenant.setUserId("Nu.Fortino@gmail.com");
-		joeProp1Unit1Tenant.setPassword("Francine");
+		joeProp1Unit1Tenant.setPassword(DbFunctions.hashPassword("Francine", joeProp1Unit1Tenant.getSalt() ));
 
-		PhoneNumber joeProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeProp1Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeProp1Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "562-579-6900");
+		PhoneNumber joeProp1Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "701-421-7080");
+		PhoneNumber joeProp1Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "973-563-9502");
 
 		joeProp1Unit1Tenant.getPhoneNumbers().add(joeProp1Unit1TenantCellPhone);
 		joeProp1Unit1Tenant.getPhoneNumbers().add(joeProp1Unit1TenantWorkPhone);
@@ -2085,10 +2212,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeProp1Unit1Tenant2 = new Tenant ( joeProp1Unit1, "Rozella", "Leonida" , "Lorens" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeProp1Unit1Tenant2.setUserId("Rozella.Lorens@gmail.com");
 		joeProp1Unit1Tenant2.setPassword("Leonida");
+		joeProp1Unit1Tenant2.setPassword(DbFunctions.hashPassword("Leonida", joeProp1Unit1Tenant2.getSalt() ));
 
-		PhoneNumber joeProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeProp1Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeProp1Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "773-225-9985");
+		PhoneNumber joeProp1Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "770-531-2842");
+		PhoneNumber joeProp1Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "760-465-4762");
 
 		joeProp1Unit1Tenant2.getPhoneNumbers().add(joeProp1Unit1Tenant2CellPhone);
 		joeProp1Unit1Tenant2.getPhoneNumbers().add(joeProp1Unit1Tenant2WorkPhone);
@@ -2109,15 +2237,18 @@ public class CreateDatabase extends HttpServlet {
 		joeProp1Unit1Tenanats.add(joeProp1Unit1Tenant);
 		joeProp1Unit1Tenanats.add(joeProp1Unit1Tenant2);
 		joeProp1Unit1.setTenants(joeProp1Unit1Tenanats);
+		DbFunctions.update(joeProp1Unit1);
+
+
 
 
 		Tenant joeProp2Unit1Tenant = new Tenant ( joeProp2Unit1, "Nieves", "Jenelle" , "Colla" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeProp2Unit1Tenant.setUserId("Nieves.Colla@gmail.com");
-		joeProp2Unit1Tenant.setPassword("Jenelle");
+		joeProp2Unit1Tenant.setPassword(DbFunctions.hashPassword("Jenelle", joeProp2Unit1Tenant.getSalt() ));
 
-		PhoneNumber joeProp2Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeProp2Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeProp2Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeProp2Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "305-385-9695");
+		PhoneNumber joeProp2Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "850-330-8079");
+		PhoneNumber joeProp2Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "847-556-2909");
 
 		joeProp2Unit1Tenant.getPhoneNumbers().add(joeProp2Unit1TenantCellPhone);
 		joeProp2Unit1Tenant.getPhoneNumbers().add(joeProp2Unit1TenantWorkPhone);
@@ -2134,10 +2265,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeProp2Unit1Tenant2 = new Tenant ( joeProp2Unit1, "Adelina", "Audra" , "Hagele" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeProp2Unit1Tenant2.setUserId("Adelina.Hagele@gmail.com");
 		joeProp2Unit1Tenant2.setPassword("Audra");
+		joeProp2Unit1Tenant2.setPassword(DbFunctions.hashPassword("Audra", joeProp2Unit1Tenant2.getSalt() ));
 
-		PhoneNumber joeProp2Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeProp2Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeProp2Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeProp2Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "810-292-9388");
+		PhoneNumber joeProp2Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "307-453-7589");
+		PhoneNumber joeProp2Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "907-921-2010");
 
 		joeProp2Unit1Tenant2.getPhoneNumbers().add(joeProp2Unit1Tenant2CellPhone);
 		joeProp2Unit1Tenant2.getPhoneNumbers().add(joeProp2Unit1Tenant2WorkPhone);
@@ -2158,15 +2290,18 @@ public class CreateDatabase extends HttpServlet {
 		joeProp2Unit1Tenanats.add(joeProp2Unit1Tenant);
 		joeProp2Unit1Tenanats.add(joeProp2Unit1Tenant2);
 		joeProp2Unit1.setTenants(joeProp2Unit1Tenanats);
+		DbFunctions.update(joeProp2Unit1);
+
+
 
 
 		Tenant joeProp3Unit1Tenant = new Tenant ( joeProp3Unit1, "Helene", "Joseph" , "Myricks" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeProp3Unit1Tenant.setUserId("Helene.Myricks@gmail.com");
-		joeProp3Unit1Tenant.setPassword("Joseph");
+		joeProp3Unit1Tenant.setPassword(DbFunctions.hashPassword("Joseph", joeProp3Unit1Tenant.getSalt() ));
 
-		PhoneNumber joeProp3Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeProp3Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeProp3Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeProp3Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "305-968-9487");
+		PhoneNumber joeProp3Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "775-578-1214");
+		PhoneNumber joeProp3Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "212-880-8865");
 
 		joeProp3Unit1Tenant.getPhoneNumbers().add(joeProp3Unit1TenantCellPhone);
 		joeProp3Unit1Tenant.getPhoneNumbers().add(joeProp3Unit1TenantWorkPhone);
@@ -2183,10 +2318,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeProp3Unit1Tenant2 = new Tenant ( joeProp3Unit1, "Herman", "Annabelle" , "Sayaphon" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeProp3Unit1Tenant2.setUserId("Herman.Sayaphon@gmail.com");
 		joeProp3Unit1Tenant2.setPassword("Annabelle");
+		joeProp3Unit1Tenant2.setPassword(DbFunctions.hashPassword("Annabelle", joeProp3Unit1Tenant2.getSalt() ));
 
-		PhoneNumber joeProp3Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeProp3Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeProp3Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeProp3Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "410-669-1642");
+		PhoneNumber joeProp3Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "856-702-3676");
+		PhoneNumber joeProp3Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "734-851-8571");
 
 		joeProp3Unit1Tenant2.getPhoneNumbers().add(joeProp3Unit1Tenant2CellPhone);
 		joeProp3Unit1Tenant2.getPhoneNumbers().add(joeProp3Unit1Tenant2WorkPhone);
@@ -2207,15 +2343,18 @@ public class CreateDatabase extends HttpServlet {
 		joeProp3Unit1Tenanats.add(joeProp3Unit1Tenant);
 		joeProp3Unit1Tenanats.add(joeProp3Unit1Tenant2);
 		joeProp3Unit1.setTenants(joeProp3Unit1Tenanats);
+		DbFunctions.update(joeProp3Unit1);
+
+
 
 
 		Tenant joeProp4Unit1Tenant = new Tenant ( joeProp4Unit1, "Deonna", "Myra" , "Sarao" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		joeProp4Unit1Tenant.setUserId("Deonna.Sarao@gmail.com");
-		joeProp4Unit1Tenant.setPassword("Myra");
+		joeProp4Unit1Tenant.setPassword(DbFunctions.hashPassword("Myra", joeProp4Unit1Tenant.getSalt() ));
 
-		PhoneNumber joeProp4Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeProp4Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeProp4Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeProp4Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "325-631-1560");
+		PhoneNumber joeProp4Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "856-828-6021");
+		PhoneNumber joeProp4Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "419-399-1744");
 
 		joeProp4Unit1Tenant.getPhoneNumbers().add(joeProp4Unit1TenantCellPhone);
 		joeProp4Unit1Tenant.getPhoneNumbers().add(joeProp4Unit1TenantWorkPhone);
@@ -2232,10 +2371,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant joeProp4Unit1Tenant2 = new Tenant ( joeProp4Unit1, "Tonette", "Claribel" , "Vocelka" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		joeProp4Unit1Tenant2.setUserId("Tonette.Vocelka@gmail.com");
 		joeProp4Unit1Tenant2.setPassword("Claribel");
+		joeProp4Unit1Tenant2.setPassword(DbFunctions.hashPassword("Claribel", joeProp4Unit1Tenant2.getSalt() ));
 
-		PhoneNumber joeProp4Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber joeProp4Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber joeProp4Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber joeProp4Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "972-419-7946");
+		PhoneNumber joeProp4Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "907-873-2882");
+		PhoneNumber joeProp4Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "401-885-7681");
 
 		joeProp4Unit1Tenant2.getPhoneNumbers().add(joeProp4Unit1Tenant2CellPhone);
 		joeProp4Unit1Tenant2.getPhoneNumbers().add(joeProp4Unit1Tenant2WorkPhone);
@@ -2256,15 +2396,18 @@ public class CreateDatabase extends HttpServlet {
 		joeProp4Unit1Tenanats.add(joeProp4Unit1Tenant);
 		joeProp4Unit1Tenanats.add(joeProp4Unit1Tenant2);
 		joeProp4Unit1.setTenants(joeProp4Unit1Tenanats);
+		DbFunctions.update(joeProp4Unit1);
+
+
 
 
 		Tenant janeProp1Unit1Tenant = new Tenant ( janeProp1Unit1, "Laurel", "Ahmed" , "Jacobos" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit1Tenant.setUserId("Laurel.Jacobos@gmail.com");
-		janeProp1Unit1Tenant.setPassword("Ahmed");
+		janeProp1Unit1Tenant.setPassword(DbFunctions.hashPassword("Ahmed", janeProp1Unit1Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "310-510-9713");
+		PhoneNumber janeProp1Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "215-829-4221");
+		PhoneNumber janeProp1Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "707-821-8037");
 
 		janeProp1Unit1Tenant.getPhoneNumbers().add(janeProp1Unit1TenantCellPhone);
 		janeProp1Unit1Tenant.getPhoneNumbers().add(janeProp1Unit1TenantWorkPhone);
@@ -2281,10 +2424,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit1Tenant2 = new Tenant ( janeProp1Unit1, "Cristal", "Terrilyn" , "Zurcher" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit1Tenant2.setUserId("Cristal.Zurcher@gmail.com");
 		janeProp1Unit1Tenant2.setPassword("Terrilyn");
+		janeProp1Unit1Tenant2.setPassword(DbFunctions.hashPassword("Terrilyn", janeProp1Unit1Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "916-591-3277");
+		PhoneNumber janeProp1Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "408-813-1105");
+		PhoneNumber janeProp1Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "619-695-8086");
 
 		janeProp1Unit1Tenant2.getPhoneNumbers().add(janeProp1Unit1Tenant2CellPhone);
 		janeProp1Unit1Tenant2.getPhoneNumbers().add(janeProp1Unit1Tenant2WorkPhone);
@@ -2305,15 +2449,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit1Tenanats.add(janeProp1Unit1Tenant);
 		janeProp1Unit1Tenanats.add(janeProp1Unit1Tenant2);
 		janeProp1Unit1.setTenants(janeProp1Unit1Tenanats);
+		DbFunctions.update(janeProp1Unit1);
+
+
 
 
 		Tenant janeProp1Unit2Tenant = new Tenant ( janeProp1Unit2, "Brock", "Erick" , "Honeywell" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit2Tenant.setUserId("Brock.Honeywell@gmail.com");
-		janeProp1Unit2Tenant.setPassword("Erick");
+		janeProp1Unit2Tenant.setPassword(DbFunctions.hashPassword("Erick", janeProp1Unit2Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit2TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit2TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "952-768-2416");
+		PhoneNumber janeProp1Unit2TenantWorkPhone =new PhoneNumber( false , "Work" , "919-885-2453");
+		PhoneNumber janeProp1Unit2TenantHomePhone =new PhoneNumber( false , "Home" , "212-753-2740");
 
 		janeProp1Unit2Tenant.getPhoneNumbers().add(janeProp1Unit2TenantCellPhone);
 		janeProp1Unit2Tenant.getPhoneNumbers().add(janeProp1Unit2TenantWorkPhone);
@@ -2330,10 +2477,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit2Tenant2 = new Tenant ( janeProp1Unit2, "Sage", "Eun" , "Kownacki" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit2Tenant2.setUserId("Sage.Kownacki@gmail.com");
 		janeProp1Unit2Tenant2.setPassword("Eun");
+		janeProp1Unit2Tenant2.setPassword(DbFunctions.hashPassword("Eun", janeProp1Unit2Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit2Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit2Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "315-818-2638");
+		PhoneNumber janeProp1Unit2Tenant2WorkPhone =new PhoneNumber( false , "Work" , "808-526-5863");
+		PhoneNumber janeProp1Unit2Tenant2HomePhone =new PhoneNumber( false , "Home" , "336-564-1492");
 
 		janeProp1Unit2Tenant2.getPhoneNumbers().add(janeProp1Unit2Tenant2CellPhone);
 		janeProp1Unit2Tenant2.getPhoneNumbers().add(janeProp1Unit2Tenant2WorkPhone);
@@ -2354,15 +2502,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit2Tenanats.add(janeProp1Unit2Tenant);
 		janeProp1Unit2Tenanats.add(janeProp1Unit2Tenant2);
 		janeProp1Unit2.setTenants(janeProp1Unit2Tenanats);
+		DbFunctions.update(janeProp1Unit2);
+
+
 
 
 		Tenant janeProp1Unit4Tenant = new Tenant ( janeProp1Unit4, "Lili", "Roosevelt" , "Pinilla" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit4Tenant.setUserId("Lili.Pinilla@gmail.com");
-		janeProp1Unit4Tenant.setPassword("Roosevelt");
+		janeProp1Unit4Tenant.setPassword(DbFunctions.hashPassword("Roosevelt", janeProp1Unit4Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit4TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit4TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit4TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit4TenantCellPhone =new PhoneNumber( true , "Cell" , "208-709-1235");
+		PhoneNumber janeProp1Unit4TenantWorkPhone =new PhoneNumber( false , "Work" , "908-448-1209");
+		PhoneNumber janeProp1Unit4TenantHomePhone =new PhoneNumber( false , "Home" , "951-248-6822");
 
 		janeProp1Unit4Tenant.getPhoneNumbers().add(janeProp1Unit4TenantCellPhone);
 		janeProp1Unit4Tenant.getPhoneNumbers().add(janeProp1Unit4TenantWorkPhone);
@@ -2379,10 +2530,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit4Tenant2 = new Tenant ( janeProp1Unit4, "Noah", "Lisha" , "Paulas" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit4Tenant2.setUserId("Noah.Paulas@gmail.com");
 		janeProp1Unit4Tenant2.setPassword("Lisha");
+		janeProp1Unit4Tenant2.setPassword(DbFunctions.hashPassword("Lisha", janeProp1Unit4Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit4Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit4Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit4Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit4Tenant2CellPhone =new PhoneNumber( true , "Cell" , "215-268-1275");
+		PhoneNumber janeProp1Unit4Tenant2WorkPhone =new PhoneNumber( false , "Work" , "570-469-8401");
+		PhoneNumber janeProp1Unit4Tenant2HomePhone =new PhoneNumber( false , "Home" , "254-205-1422");
 
 		janeProp1Unit4Tenant2.getPhoneNumbers().add(janeProp1Unit4Tenant2CellPhone);
 		janeProp1Unit4Tenant2.getPhoneNumbers().add(janeProp1Unit4Tenant2WorkPhone);
@@ -2403,15 +2555,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit4Tenanats.add(janeProp1Unit4Tenant);
 		janeProp1Unit4Tenanats.add(janeProp1Unit4Tenant2);
 		janeProp1Unit4.setTenants(janeProp1Unit4Tenanats);
+		DbFunctions.update(janeProp1Unit4);
+
+
 
 
 		Tenant janeProp1Unit6Tenant = new Tenant ( janeProp1Unit6, "Izetta", "Melissa" , "Isenhower" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit6Tenant.setUserId("Izetta.Isenhower@gmail.com");
-		janeProp1Unit6Tenant.setPassword("Melissa");
+		janeProp1Unit6Tenant.setPassword(DbFunctions.hashPassword("Melissa", janeProp1Unit6Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit6TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit6TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit6TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit6TenantCellPhone =new PhoneNumber( true , "Cell" , "512-213-8574");
+		PhoneNumber janeProp1Unit6TenantWorkPhone =new PhoneNumber( false , "Work" , "201-478-8540");
+		PhoneNumber janeProp1Unit6TenantHomePhone =new PhoneNumber( false , "Home" , "718-478-8568");
 
 		janeProp1Unit6Tenant.getPhoneNumbers().add(janeProp1Unit6TenantCellPhone);
 		janeProp1Unit6Tenant.getPhoneNumbers().add(janeProp1Unit6TenantWorkPhone);
@@ -2428,10 +2583,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit6Tenant2 = new Tenant ( janeProp1Unit6, "Tammara", "Blondell" , "Calvaresi" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit6Tenant2.setUserId("Tammara.Calvaresi@gmail.com");
 		janeProp1Unit6Tenant2.setPassword("Blondell");
+		janeProp1Unit6Tenant2.setPassword(DbFunctions.hashPassword("Blondell", janeProp1Unit6Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit6Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit6Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit6Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit6Tenant2CellPhone =new PhoneNumber( true , "Cell" , "619-509-5282");
+		PhoneNumber janeProp1Unit6Tenant2WorkPhone =new PhoneNumber( false , "Work" , "908-448-1209");
+		PhoneNumber janeProp1Unit6Tenant2HomePhone =new PhoneNumber( false , "Home" , "936-937-2334");
 
 		janeProp1Unit6Tenant2.getPhoneNumbers().add(janeProp1Unit6Tenant2CellPhone);
 		janeProp1Unit6Tenant2.getPhoneNumbers().add(janeProp1Unit6Tenant2WorkPhone);
@@ -2452,15 +2608,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit6Tenanats.add(janeProp1Unit6Tenant);
 		janeProp1Unit6Tenanats.add(janeProp1Unit6Tenant2);
 		janeProp1Unit6.setTenants(janeProp1Unit6Tenanats);
+		DbFunctions.update(janeProp1Unit6);
+
+
 
 
 		Tenant janeProp1Unit7Tenant = new Tenant ( janeProp1Unit7, "Buddy", "Layla" , "Candlish" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit7Tenant.setUserId("Buddy.Candlish@gmail.com");
-		janeProp1Unit7Tenant.setPassword("Layla");
+		janeProp1Unit7Tenant.setPassword(DbFunctions.hashPassword("Layla", janeProp1Unit7Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit7TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit7TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit7TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit7TenantCellPhone =new PhoneNumber( true , "Cell" , "740-343-8575");
+		PhoneNumber janeProp1Unit7TenantWorkPhone =new PhoneNumber( false , "Work" , "210-300-6244");
+		PhoneNumber janeProp1Unit7TenantHomePhone =new PhoneNumber( false , "Home" , "847-957-4614");
 
 		janeProp1Unit7Tenant.getPhoneNumbers().add(janeProp1Unit7TenantCellPhone);
 		janeProp1Unit7Tenant.getPhoneNumbers().add(janeProp1Unit7TenantWorkPhone);
@@ -2477,10 +2636,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit7Tenant2 = new Tenant ( janeProp1Unit7, "Haydee", "Janine" , "Aquas" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit7Tenant2.setUserId("Haydee.Aquas@gmail.com");
 		janeProp1Unit7Tenant2.setPassword("Janine");
+		janeProp1Unit7Tenant2.setPassword(DbFunctions.hashPassword("Janine", janeProp1Unit7Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit7Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit7Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit7Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit7Tenant2CellPhone =new PhoneNumber( true , "Cell" , "530-986-9272");
+		PhoneNumber janeProp1Unit7Tenant2WorkPhone =new PhoneNumber( false , "Work" , "440-579-7763");
+		PhoneNumber janeProp1Unit7Tenant2HomePhone =new PhoneNumber( false , "Home" , "808-526-5863");
 
 		janeProp1Unit7Tenant2.getPhoneNumbers().add(janeProp1Unit7Tenant2CellPhone);
 		janeProp1Unit7Tenant2.getPhoneNumbers().add(janeProp1Unit7Tenant2WorkPhone);
@@ -2501,15 +2661,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit7Tenanats.add(janeProp1Unit7Tenant);
 		janeProp1Unit7Tenanats.add(janeProp1Unit7Tenant2);
 		janeProp1Unit7.setTenants(janeProp1Unit7Tenanats);
+		DbFunctions.update(janeProp1Unit7);
+
+
 
 
 		Tenant janeProp1Unit8Tenant = new Tenant ( janeProp1Unit8, "Norah", "Evangelina" , "Hagele" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit8Tenant.setUserId("Norah.Hagele@gmail.com");
-		janeProp1Unit8Tenant.setPassword("Evangelina");
+		janeProp1Unit8Tenant.setPassword(DbFunctions.hashPassword("Evangelina", janeProp1Unit8Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit8TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit8TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit8TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit8TenantCellPhone =new PhoneNumber( true , "Cell" , "310-560-8022");
+		PhoneNumber janeProp1Unit8TenantWorkPhone =new PhoneNumber( false , "Work" , "504-265-8174");
+		PhoneNumber janeProp1Unit8TenantHomePhone =new PhoneNumber( false , "Home" , "949-903-3898");
 
 		janeProp1Unit8Tenant.getPhoneNumbers().add(janeProp1Unit8TenantCellPhone);
 		janeProp1Unit8Tenant.getPhoneNumbers().add(janeProp1Unit8TenantWorkPhone);
@@ -2526,10 +2689,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit8Tenant2 = new Tenant ( janeProp1Unit8, "Christiane", "Ezekiel" , "Klusman" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit8Tenant2.setUserId("Christiane.Klusman@gmail.com");
 		janeProp1Unit8Tenant2.setPassword("Ezekiel");
+		janeProp1Unit8Tenant2.setPassword(DbFunctions.hashPassword("Ezekiel", janeProp1Unit8Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit8Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit8Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit8Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit8Tenant2CellPhone =new PhoneNumber( true , "Cell" , "212-860-1579");
+		PhoneNumber janeProp1Unit8Tenant2WorkPhone =new PhoneNumber( false , "Work" , "323-842-8226");
+		PhoneNumber janeProp1Unit8Tenant2HomePhone =new PhoneNumber( false , "Home" , "336-564-1492");
 
 		janeProp1Unit8Tenant2.getPhoneNumbers().add(janeProp1Unit8Tenant2CellPhone);
 		janeProp1Unit8Tenant2.getPhoneNumbers().add(janeProp1Unit8Tenant2WorkPhone);
@@ -2550,15 +2714,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit8Tenanats.add(janeProp1Unit8Tenant);
 		janeProp1Unit8Tenanats.add(janeProp1Unit8Tenant2);
 		janeProp1Unit8.setTenants(janeProp1Unit8Tenanats);
+		DbFunctions.update(janeProp1Unit8);
+
+
 
 
 		Tenant janeProp1Unit9Tenant = new Tenant ( janeProp1Unit9, "Leonida", "Loreta" , "Scriven" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit9Tenant.setUserId("Leonida.Scriven@gmail.com");
-		janeProp1Unit9Tenant.setPassword("Loreta");
+		janeProp1Unit9Tenant.setPassword(DbFunctions.hashPassword("Loreta", janeProp1Unit9Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit9TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit9TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit9TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit9TenantCellPhone =new PhoneNumber( true , "Cell" , "206-711-6498");
+		PhoneNumber janeProp1Unit9TenantWorkPhone =new PhoneNumber( false , "Work" , "321-597-2159");
+		PhoneNumber janeProp1Unit9TenantHomePhone =new PhoneNumber( false , "Home" , "610-378-7332");
 
 		janeProp1Unit9Tenant.getPhoneNumbers().add(janeProp1Unit9TenantCellPhone);
 		janeProp1Unit9Tenant.getPhoneNumbers().add(janeProp1Unit9TenantWorkPhone);
@@ -2575,10 +2742,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit9Tenant2 = new Tenant ( janeProp1Unit9, "Fannie", "Nana" , "Paskin" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit9Tenant2.setUserId("Fannie.Paskin@gmail.com");
 		janeProp1Unit9Tenant2.setPassword("Nana");
+		janeProp1Unit9Tenant2.setPassword(DbFunctions.hashPassword("Nana", janeProp1Unit9Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit9Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit9Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit9Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit9Tenant2CellPhone =new PhoneNumber( true , "Cell" , "650-473-1262");
+		PhoneNumber janeProp1Unit9Tenant2WorkPhone =new PhoneNumber( false , "Work" , "303-997-7760");
+		PhoneNumber janeProp1Unit9Tenant2HomePhone =new PhoneNumber( false , "Home" , "415-926-6089");
 
 		janeProp1Unit9Tenant2.getPhoneNumbers().add(janeProp1Unit9Tenant2CellPhone);
 		janeProp1Unit9Tenant2.getPhoneNumbers().add(janeProp1Unit9Tenant2WorkPhone);
@@ -2599,15 +2767,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit9Tenanats.add(janeProp1Unit9Tenant);
 		janeProp1Unit9Tenanats.add(janeProp1Unit9Tenant2);
 		janeProp1Unit9.setTenants(janeProp1Unit9Tenanats);
+		DbFunctions.update(janeProp1Unit9);
+
+
 
 
 		Tenant janeProp1Unit10Tenant = new Tenant ( janeProp1Unit10, "Loreta", "Fatima" , "Scipione" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit10Tenant.setUserId("Loreta.Scipione@gmail.com");
-		janeProp1Unit10Tenant.setPassword("Fatima");
+		janeProp1Unit10Tenant.setPassword(DbFunctions.hashPassword("Fatima", janeProp1Unit10Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit10TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit10TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit10TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit10TenantCellPhone =new PhoneNumber( true , "Cell" , "623-461-8551");
+		PhoneNumber janeProp1Unit10TenantWorkPhone =new PhoneNumber( false , "Work" , "419-573-2033");
+		PhoneNumber janeProp1Unit10TenantHomePhone =new PhoneNumber( false , "Home" , "773-297-9391");
 
 		janeProp1Unit10Tenant.getPhoneNumbers().add(janeProp1Unit10TenantCellPhone);
 		janeProp1Unit10Tenant.getPhoneNumbers().add(janeProp1Unit10TenantWorkPhone);
@@ -2624,10 +2795,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit10Tenant2 = new Tenant ( janeProp1Unit10, "Blondell", "Alpha" , "Coyier" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit10Tenant2.setUserId("Blondell.Coyier@gmail.com");
 		janeProp1Unit10Tenant2.setPassword("Alpha");
+		janeProp1Unit10Tenant2.setPassword(DbFunctions.hashPassword("Alpha", janeProp1Unit10Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit10Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit10Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit10Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit10Tenant2CellPhone =new PhoneNumber( true , "Cell" , "516-948-5768");
+		PhoneNumber janeProp1Unit10Tenant2WorkPhone =new PhoneNumber( false , "Work" , "510-452-4835");
+		PhoneNumber janeProp1Unit10Tenant2HomePhone =new PhoneNumber( false , "Home" , "904-627-4341");
 
 		janeProp1Unit10Tenant2.getPhoneNumbers().add(janeProp1Unit10Tenant2CellPhone);
 		janeProp1Unit10Tenant2.getPhoneNumbers().add(janeProp1Unit10Tenant2WorkPhone);
@@ -2648,15 +2820,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit10Tenanats.add(janeProp1Unit10Tenant);
 		janeProp1Unit10Tenanats.add(janeProp1Unit10Tenant2);
 		janeProp1Unit10.setTenants(janeProp1Unit10Tenanats);
+		DbFunctions.update(janeProp1Unit10);
+
+
 
 
 		Tenant janeProp1Unit11Tenant = new Tenant ( janeProp1Unit11, "Pamella", "Jerry" , "Schemmer" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit11Tenant.setUserId("Pamella.Schemmer@gmail.com");
-		janeProp1Unit11Tenant.setPassword("Jerry");
+		janeProp1Unit11Tenant.setPassword(DbFunctions.hashPassword("Jerry", janeProp1Unit11Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit11TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit11TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit11TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit11TenantCellPhone =new PhoneNumber( true , "Cell" , "913-413-4604");
+		PhoneNumber janeProp1Unit11TenantWorkPhone =new PhoneNumber( false , "Work" , "973-868-8660");
+		PhoneNumber janeProp1Unit11TenantHomePhone =new PhoneNumber( false , "Home" , "201-995-3149");
 
 		janeProp1Unit11Tenant.getPhoneNumbers().add(janeProp1Unit11TenantCellPhone);
 		janeProp1Unit11Tenant.getPhoneNumbers().add(janeProp1Unit11TenantWorkPhone);
@@ -2673,10 +2848,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit11Tenant2 = new Tenant ( janeProp1Unit11, "Dick", "Rosio" , "Schirpke" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit11Tenant2.setUserId("Dick.Schirpke@gmail.com");
 		janeProp1Unit11Tenant2.setPassword("Rosio");
+		janeProp1Unit11Tenant2.setPassword(DbFunctions.hashPassword("Rosio", janeProp1Unit11Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit11Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit11Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit11Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit11Tenant2CellPhone =new PhoneNumber( true , "Cell" , "313-288-7937");
+		PhoneNumber janeProp1Unit11Tenant2WorkPhone =new PhoneNumber( false , "Work" , "601-637-5479");
+		PhoneNumber janeProp1Unit11Tenant2HomePhone =new PhoneNumber( false , "Home" , "207-233-6185");
 
 		janeProp1Unit11Tenant2.getPhoneNumbers().add(janeProp1Unit11Tenant2CellPhone);
 		janeProp1Unit11Tenant2.getPhoneNumbers().add(janeProp1Unit11Tenant2WorkPhone);
@@ -2697,15 +2873,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit11Tenanats.add(janeProp1Unit11Tenant);
 		janeProp1Unit11Tenanats.add(janeProp1Unit11Tenant2);
 		janeProp1Unit11.setTenants(janeProp1Unit11Tenanats);
+		DbFunctions.update(janeProp1Unit11);
+
+
 
 
 		Tenant janeProp1Unit12Tenant = new Tenant ( janeProp1Unit12, "Felicidad", "Casie" , "Vonasek" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit12Tenant.setUserId("Felicidad.Vonasek@gmail.com");
-		janeProp1Unit12Tenant.setPassword("Casie");
+		janeProp1Unit12Tenant.setPassword(DbFunctions.hashPassword("Casie", janeProp1Unit12Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit12TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit12TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit12TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit12TenantCellPhone =new PhoneNumber( true , "Cell" , "209-317-1801");
+		PhoneNumber janeProp1Unit12TenantWorkPhone =new PhoneNumber( false , "Work" , "914-396-2615");
+		PhoneNumber janeProp1Unit12TenantHomePhone =new PhoneNumber( false , "Home" , "321-632-4668");
 
 		janeProp1Unit12Tenant.getPhoneNumbers().add(janeProp1Unit12TenantCellPhone);
 		janeProp1Unit12Tenant.getPhoneNumbers().add(janeProp1Unit12TenantWorkPhone);
@@ -2722,10 +2901,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit12Tenant2 = new Tenant ( janeProp1Unit12, "Alline", "Jenelle" , "Wolfgramm" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit12Tenant2.setUserId("Alline.Wolfgramm@gmail.com");
 		janeProp1Unit12Tenant2.setPassword("Jenelle");
+		janeProp1Unit12Tenant2.setPassword(DbFunctions.hashPassword("Jenelle", janeProp1Unit12Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit12Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit12Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit12Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit12Tenant2CellPhone =new PhoneNumber( true , "Cell" , "706-221-4243");
+		PhoneNumber janeProp1Unit12Tenant2WorkPhone =new PhoneNumber( false , "Work" , "401-885-7681");
+		PhoneNumber janeProp1Unit12Tenant2HomePhone =new PhoneNumber( false , "Home" , "949-903-3898");
 
 		janeProp1Unit12Tenant2.getPhoneNumbers().add(janeProp1Unit12Tenant2CellPhone);
 		janeProp1Unit12Tenant2.getPhoneNumbers().add(janeProp1Unit12Tenant2WorkPhone);
@@ -2746,15 +2926,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit12Tenanats.add(janeProp1Unit12Tenant);
 		janeProp1Unit12Tenanats.add(janeProp1Unit12Tenant2);
 		janeProp1Unit12.setTenants(janeProp1Unit12Tenanats);
+		DbFunctions.update(janeProp1Unit12);
+
+
 
 
 		Tenant janeProp1Unit14Tenant = new Tenant ( janeProp1Unit14, "Pete", "Paris" , "Liukko" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit14Tenant.setUserId("Pete.Liukko@gmail.com");
-		janeProp1Unit14Tenant.setPassword("Paris");
+		janeProp1Unit14Tenant.setPassword(DbFunctions.hashPassword("Paris", janeProp1Unit14Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit14TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit14TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit14TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit14TenantCellPhone =new PhoneNumber( true , "Cell" , "916-591-3277");
+		PhoneNumber janeProp1Unit14TenantWorkPhone =new PhoneNumber( false , "Work" , "610-379-7125");
+		PhoneNumber janeProp1Unit14TenantHomePhone =new PhoneNumber( false , "Home" , "406-374-7752");
 
 		janeProp1Unit14Tenant.getPhoneNumbers().add(janeProp1Unit14TenantCellPhone);
 		janeProp1Unit14Tenant.getPhoneNumbers().add(janeProp1Unit14TenantWorkPhone);
@@ -2771,10 +2954,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit14Tenant2 = new Tenant ( janeProp1Unit14, "Ciara", "An" , "Cookey" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit14Tenant2.setUserId("Ciara.Cookey@gmail.com");
 		janeProp1Unit14Tenant2.setPassword("An");
+		janeProp1Unit14Tenant2.setPassword(DbFunctions.hashPassword("An", janeProp1Unit14Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit14Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit14Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit14Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit14Tenant2CellPhone =new PhoneNumber( true , "Cell" , "216-657-7668");
+		PhoneNumber janeProp1Unit14Tenant2WorkPhone =new PhoneNumber( false , "Work" , "931-303-6041");
+		PhoneNumber janeProp1Unit14Tenant2HomePhone =new PhoneNumber( false , "Home" , "308-250-6987");
 
 		janeProp1Unit14Tenant2.getPhoneNumbers().add(janeProp1Unit14Tenant2CellPhone);
 		janeProp1Unit14Tenant2.getPhoneNumbers().add(janeProp1Unit14Tenant2WorkPhone);
@@ -2795,15 +2979,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit14Tenanats.add(janeProp1Unit14Tenant);
 		janeProp1Unit14Tenanats.add(janeProp1Unit14Tenant2);
 		janeProp1Unit14.setTenants(janeProp1Unit14Tenanats);
+		DbFunctions.update(janeProp1Unit14);
+
+
 
 
 		Tenant janeProp1Unit15Tenant = new Tenant ( janeProp1Unit15, "Marguerita", "Stevie" , "Bourbon" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		janeProp1Unit15Tenant.setUserId("Marguerita.Bourbon@gmail.com");
-		janeProp1Unit15Tenant.setPassword("Stevie");
+		janeProp1Unit15Tenant.setPassword(DbFunctions.hashPassword("Stevie", janeProp1Unit15Tenant.getSalt() ));
 
-		PhoneNumber janeProp1Unit15TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit15TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit15TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit15TenantCellPhone =new PhoneNumber( true , "Cell" , "610-545-3615");
+		PhoneNumber janeProp1Unit15TenantWorkPhone =new PhoneNumber( false , "Work" , "650-216-5075");
+		PhoneNumber janeProp1Unit15TenantHomePhone =new PhoneNumber( false , "Home" , "864-594-4578");
 
 		janeProp1Unit15Tenant.getPhoneNumbers().add(janeProp1Unit15TenantCellPhone);
 		janeProp1Unit15Tenant.getPhoneNumbers().add(janeProp1Unit15TenantWorkPhone);
@@ -2820,10 +3007,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant janeProp1Unit15Tenant2 = new Tenant ( janeProp1Unit15, "Dalene", "Elly" , "Paulas" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		janeProp1Unit15Tenant2.setUserId("Dalene.Paulas@gmail.com");
 		janeProp1Unit15Tenant2.setPassword("Elly");
+		janeProp1Unit15Tenant2.setPassword(DbFunctions.hashPassword("Elly", janeProp1Unit15Tenant2.getSalt() ));
 
-		PhoneNumber janeProp1Unit15Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber janeProp1Unit15Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber janeProp1Unit15Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber janeProp1Unit15Tenant2CellPhone =new PhoneNumber( true , "Cell" , "216-923-3715");
+		PhoneNumber janeProp1Unit15Tenant2WorkPhone =new PhoneNumber( false , "Work" , "386-599-7296");
+		PhoneNumber janeProp1Unit15Tenant2HomePhone =new PhoneNumber( false , "Home" , "801-892-8781");
 
 		janeProp1Unit15Tenant2.getPhoneNumbers().add(janeProp1Unit15Tenant2CellPhone);
 		janeProp1Unit15Tenant2.getPhoneNumbers().add(janeProp1Unit15Tenant2WorkPhone);
@@ -2844,15 +3032,18 @@ public class CreateDatabase extends HttpServlet {
 		janeProp1Unit15Tenanats.add(janeProp1Unit15Tenant);
 		janeProp1Unit15Tenanats.add(janeProp1Unit15Tenant2);
 		janeProp1Unit15.setTenants(janeProp1Unit15Tenanats);
+		DbFunctions.update(janeProp1Unit15);
+
+
 
 
 		Tenant robertProp1Unit1Tenant = new Tenant ( robertProp1Unit1, "Lettie", "Shalon" , "Onofrio" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		robertProp1Unit1Tenant.setUserId("Lettie.Onofrio@gmail.com");
-		robertProp1Unit1Tenant.setPassword("Shalon");
+		robertProp1Unit1Tenant.setPassword(DbFunctions.hashPassword("Shalon", robertProp1Unit1Tenant.getSalt() ));
 
-		PhoneNumber robertProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp1Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp1Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp1Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "215-211-9589");
+		PhoneNumber robertProp1Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "856-702-3676");
+		PhoneNumber robertProp1Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "336-364-6037");
 
 		robertProp1Unit1Tenant.getPhoneNumbers().add(robertProp1Unit1TenantCellPhone);
 		robertProp1Unit1Tenant.getPhoneNumbers().add(robertProp1Unit1TenantWorkPhone);
@@ -2869,10 +3060,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant robertProp1Unit1Tenant2 = new Tenant ( robertProp1Unit1, "Jutta", "Jovita" , "Hiatt" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		robertProp1Unit1Tenant2.setUserId("Jutta.Hiatt@gmail.com");
 		robertProp1Unit1Tenant2.setPassword("Jovita");
+		robertProp1Unit1Tenant2.setPassword(DbFunctions.hashPassword("Jovita", robertProp1Unit1Tenant2.getSalt() ));
 
-		PhoneNumber robertProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp1Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp1Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp1Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "330-903-1345");
+		PhoneNumber robertProp1Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "305-302-1135");
+		PhoneNumber robertProp1Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "972-742-4000");
 
 		robertProp1Unit1Tenant2.getPhoneNumbers().add(robertProp1Unit1Tenant2CellPhone);
 		robertProp1Unit1Tenant2.getPhoneNumbers().add(robertProp1Unit1Tenant2WorkPhone);
@@ -2893,15 +3085,18 @@ public class CreateDatabase extends HttpServlet {
 		robertProp1Unit1Tenanats.add(robertProp1Unit1Tenant);
 		robertProp1Unit1Tenanats.add(robertProp1Unit1Tenant2);
 		robertProp1Unit1.setTenants(robertProp1Unit1Tenanats);
+		DbFunctions.update(robertProp1Unit1);
+
+
 
 
 		Tenant robertProp1Unit2Tenant = new Tenant ( robertProp1Unit2, "Linn", "Barbra" , "Rhymes" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		robertProp1Unit2Tenant.setUserId("Linn.Rhymes@gmail.com");
-		robertProp1Unit2Tenant.setPassword("Barbra");
+		robertProp1Unit2Tenant.setPassword(DbFunctions.hashPassword("Barbra", robertProp1Unit2Tenant.getSalt() ));
 
-		PhoneNumber robertProp1Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp1Unit2TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp1Unit2TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp1Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "718-332-6527");
+		PhoneNumber robertProp1Unit2TenantWorkPhone =new PhoneNumber( false , "Work" , "336-467-3095");
+		PhoneNumber robertProp1Unit2TenantHomePhone =new PhoneNumber( false , "Home" , "740-526-5410");
 
 		robertProp1Unit2Tenant.getPhoneNumbers().add(robertProp1Unit2TenantCellPhone);
 		robertProp1Unit2Tenant.getPhoneNumbers().add(robertProp1Unit2TenantWorkPhone);
@@ -2918,10 +3113,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant robertProp1Unit2Tenant2 = new Tenant ( robertProp1Unit2, "Gilma", "Keneth" , "Boord" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		robertProp1Unit2Tenant2.setUserId("Gilma.Boord@gmail.com");
 		robertProp1Unit2Tenant2.setPassword("Keneth");
+		robertProp1Unit2Tenant2.setPassword(DbFunctions.hashPassword("Keneth", robertProp1Unit2Tenant2.getSalt() ));
 
-		PhoneNumber robertProp1Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp1Unit2Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp1Unit2Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp1Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "716-752-4114");
+		PhoneNumber robertProp1Unit2Tenant2WorkPhone =new PhoneNumber( false , "Work" , "901-573-9024");
+		PhoneNumber robertProp1Unit2Tenant2HomePhone =new PhoneNumber( false , "Home" , "908-470-4661");
 
 		robertProp1Unit2Tenant2.getPhoneNumbers().add(robertProp1Unit2Tenant2CellPhone);
 		robertProp1Unit2Tenant2.getPhoneNumbers().add(robertProp1Unit2Tenant2WorkPhone);
@@ -2942,15 +3138,18 @@ public class CreateDatabase extends HttpServlet {
 		robertProp1Unit2Tenanats.add(robertProp1Unit2Tenant);
 		robertProp1Unit2Tenanats.add(robertProp1Unit2Tenant2);
 		robertProp1Unit2.setTenants(robertProp1Unit2Tenanats);
+		DbFunctions.update(robertProp1Unit2);
+
+
 
 
 		Tenant robertProp2Unit1Tenant = new Tenant ( robertProp2Unit1, "Zona", "Annmarie" , "Wardrip" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		robertProp2Unit1Tenant.setUserId("Zona.Wardrip@gmail.com");
-		robertProp2Unit1Tenant.setPassword("Annmarie");
+		robertProp2Unit1Tenant.setPassword(DbFunctions.hashPassword("Annmarie", robertProp2Unit1Tenant.getSalt() ));
 
-		PhoneNumber robertProp2Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp2Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp2Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp2Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "215-491-5633");
+		PhoneNumber robertProp2Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "570-469-8401");
+		PhoneNumber robertProp2Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "703-938-7939");
 
 		robertProp2Unit1Tenant.getPhoneNumbers().add(robertProp2Unit1TenantCellPhone);
 		robertProp2Unit1Tenant.getPhoneNumbers().add(robertProp2Unit1TenantWorkPhone);
@@ -2967,10 +3166,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant robertProp2Unit1Tenant2 = new Tenant ( robertProp2Unit1, "Alline", "Gracia" , "Campain" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		robertProp2Unit1Tenant2.setUserId("Alline.Campain@gmail.com");
 		robertProp2Unit1Tenant2.setPassword("Gracia");
+		robertProp2Unit1Tenant2.setPassword(DbFunctions.hashPassword("Gracia", robertProp2Unit1Tenant2.getSalt() ));
 
-		PhoneNumber robertProp2Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp2Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp2Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp2Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "301-696-6420");
+		PhoneNumber robertProp2Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "920-355-1610");
+		PhoneNumber robertProp2Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "847-755-9041");
 
 		robertProp2Unit1Tenant2.getPhoneNumbers().add(robertProp2Unit1Tenant2CellPhone);
 		robertProp2Unit1Tenant2.getPhoneNumbers().add(robertProp2Unit1Tenant2WorkPhone);
@@ -2991,15 +3191,18 @@ public class CreateDatabase extends HttpServlet {
 		robertProp2Unit1Tenanats.add(robertProp2Unit1Tenant);
 		robertProp2Unit1Tenanats.add(robertProp2Unit1Tenant2);
 		robertProp2Unit1.setTenants(robertProp2Unit1Tenanats);
+		DbFunctions.update(robertProp2Unit1);
+
+
 
 
 		Tenant robertProp2Unit2Tenant = new Tenant ( robertProp2Unit2, "Lai", "Lauran" , "Ketelsen" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		robertProp2Unit2Tenant.setUserId("Lai.Ketelsen@gmail.com");
-		robertProp2Unit2Tenant.setPassword("Lauran");
+		robertProp2Unit2Tenant.setPassword(DbFunctions.hashPassword("Lauran", robertProp2Unit2Tenant.getSalt() ));
 
-		PhoneNumber robertProp2Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp2Unit2TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp2Unit2TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp2Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "740-343-8575");
+		PhoneNumber robertProp2Unit2TenantWorkPhone =new PhoneNumber( false , "Work" , "907-873-2882");
+		PhoneNumber robertProp2Unit2TenantHomePhone =new PhoneNumber( false , "Home" , "201-969-7063");
 
 		robertProp2Unit2Tenant.getPhoneNumbers().add(robertProp2Unit2TenantCellPhone);
 		robertProp2Unit2Tenant.getPhoneNumbers().add(robertProp2Unit2TenantWorkPhone);
@@ -3016,10 +3219,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant robertProp2Unit2Tenant2 = new Tenant ( robertProp2Unit2, "Leatha", "Cecily" , "Albares" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		robertProp2Unit2Tenant2.setUserId("Leatha.Albares@gmail.com");
 		robertProp2Unit2Tenant2.setPassword("Cecily");
+		robertProp2Unit2Tenant2.setPassword(DbFunctions.hashPassword("Cecily", robertProp2Unit2Tenant2.getSalt() ));
 
-		PhoneNumber robertProp2Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp2Unit2Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp2Unit2Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp2Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "210-856-4979");
+		PhoneNumber robertProp2Unit2Tenant2WorkPhone =new PhoneNumber( false , "Work" , "215-417-9563");
+		PhoneNumber robertProp2Unit2Tenant2HomePhone =new PhoneNumber( false , "Home" , "716-854-9845");
 
 		robertProp2Unit2Tenant2.getPhoneNumbers().add(robertProp2Unit2Tenant2CellPhone);
 		robertProp2Unit2Tenant2.getPhoneNumbers().add(robertProp2Unit2Tenant2WorkPhone);
@@ -3040,15 +3244,18 @@ public class CreateDatabase extends HttpServlet {
 		robertProp2Unit2Tenanats.add(robertProp2Unit2Tenant);
 		robertProp2Unit2Tenanats.add(robertProp2Unit2Tenant2);
 		robertProp2Unit2.setTenants(robertProp2Unit2Tenanats);
+		DbFunctions.update(robertProp2Unit2);
+
+
 
 
 		Tenant robertProp3Unit1Tenant = new Tenant ( robertProp3Unit1, "Alisha", "Ligia" , "Heimann" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		robertProp3Unit1Tenant.setUserId("Alisha.Heimann@gmail.com");
-		robertProp3Unit1Tenant.setPassword("Ligia");
+		robertProp3Unit1Tenant.setPassword(DbFunctions.hashPassword("Ligia", robertProp3Unit1Tenant.getSalt() ));
 
-		PhoneNumber robertProp3Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp3Unit1TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp3Unit1TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp3Unit1TenantCellPhone =new PhoneNumber( true , "Cell" , "972-934-6914");
+		PhoneNumber robertProp3Unit1TenantWorkPhone =new PhoneNumber( false , "Work" , "770-584-4119");
+		PhoneNumber robertProp3Unit1TenantHomePhone =new PhoneNumber( false , "Home" , "415-419-1597");
 
 		robertProp3Unit1Tenant.getPhoneNumbers().add(robertProp3Unit1TenantCellPhone);
 		robertProp3Unit1Tenant.getPhoneNumbers().add(robertProp3Unit1TenantWorkPhone);
@@ -3065,10 +3272,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant robertProp3Unit1Tenant2 = new Tenant ( robertProp3Unit1, "Glory", "Zona" , "Toyama" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		robertProp3Unit1Tenant2.setUserId("Glory.Toyama@gmail.com");
 		robertProp3Unit1Tenant2.setPassword("Zona");
+		robertProp3Unit1Tenant2.setPassword(DbFunctions.hashPassword("Zona", robertProp3Unit1Tenant2.getSalt() ));
 
-		PhoneNumber robertProp3Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp3Unit1Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp3Unit1Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp3Unit1Tenant2CellPhone =new PhoneNumber( true , "Cell" , "650-947-1215");
+		PhoneNumber robertProp3Unit1Tenant2WorkPhone =new PhoneNumber( false , "Work" , "815-426-5657");
+		PhoneNumber robertProp3Unit1Tenant2HomePhone =new PhoneNumber( false , "Home" , "509-847-3352");
 
 		robertProp3Unit1Tenant2.getPhoneNumbers().add(robertProp3Unit1Tenant2CellPhone);
 		robertProp3Unit1Tenant2.getPhoneNumbers().add(robertProp3Unit1Tenant2WorkPhone);
@@ -3089,15 +3297,18 @@ public class CreateDatabase extends HttpServlet {
 		robertProp3Unit1Tenanats.add(robertProp3Unit1Tenant);
 		robertProp3Unit1Tenanats.add(robertProp3Unit1Tenant2);
 		robertProp3Unit1.setTenants(robertProp3Unit1Tenanats);
+		DbFunctions.update(robertProp3Unit1);
+
+
 
 
 		Tenant robertProp3Unit2Tenant = new Tenant ( robertProp3Unit2, "Sharika", "Clorinda" , "Marrier" , "06/22/1995", "12/01/2016", 12345678, "Texas", true);
 		robertProp3Unit2Tenant.setUserId("Sharika.Marrier@gmail.com");
-		robertProp3Unit2Tenant.setPassword("Clorinda");
+		robertProp3Unit2Tenant.setPassword(DbFunctions.hashPassword("Clorinda", robertProp3Unit2Tenant.getSalt() ));
 
-		PhoneNumber robertProp3Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp3Unit2TenantWorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp3Unit2TenantHomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp3Unit2TenantCellPhone =new PhoneNumber( true , "Cell" , "404-505-4445");
+		PhoneNumber robertProp3Unit2TenantWorkPhone =new PhoneNumber( false , "Work" , "201-387-9093");
+		PhoneNumber robertProp3Unit2TenantHomePhone =new PhoneNumber( false , "Home" , "512-528-9933");
 
 		robertProp3Unit2Tenant.getPhoneNumbers().add(robertProp3Unit2TenantCellPhone);
 		robertProp3Unit2Tenant.getPhoneNumbers().add(robertProp3Unit2TenantWorkPhone);
@@ -3114,10 +3325,11 @@ public class CreateDatabase extends HttpServlet {
 		Tenant robertProp3Unit2Tenant2 = new Tenant ( robertProp3Unit2, "Yolando", "Leonida" , "Whobrey" , "06/22/1995", "12/01/2016", 12345678, "Texas", false);
 		robertProp3Unit2Tenant2.setUserId("Yolando.Whobrey@gmail.com");
 		robertProp3Unit2Tenant2.setPassword("Leonida");
+		robertProp3Unit2Tenant2.setPassword(DbFunctions.hashPassword("Leonida", robertProp3Unit2Tenant2.getSalt() ));
 
-		PhoneNumber robertProp3Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "512-447-1234");
-		PhoneNumber robertProp3Unit2Tenant2WorkPhone =new PhoneNumber( true , "Work" , "512-463-1234");
-		PhoneNumber robertProp3Unit2Tenant2HomePhone =new PhoneNumber( true , "Home" , "512-400-1234");
+		PhoneNumber robertProp3Unit2Tenant2CellPhone =new PhoneNumber( true , "Cell" , "516-948-5768");
+		PhoneNumber robertProp3Unit2Tenant2WorkPhone =new PhoneNumber( false , "Work" , "812-442-8544");
+		PhoneNumber robertProp3Unit2Tenant2HomePhone =new PhoneNumber( false , "Home" , "215-417-9563");
 
 		robertProp3Unit2Tenant2.getPhoneNumbers().add(robertProp3Unit2Tenant2CellPhone);
 		robertProp3Unit2Tenant2.getPhoneNumbers().add(robertProp3Unit2Tenant2WorkPhone);
@@ -3138,11 +3350,36 @@ public class CreateDatabase extends HttpServlet {
 		robertProp3Unit2Tenanats.add(robertProp3Unit2Tenant);
 		robertProp3Unit2Tenanats.add(robertProp3Unit2Tenant2);
 		robertProp3Unit2.setTenants(robertProp3Unit2Tenanats);
+		DbFunctions.update(robertProp3Unit2);
 
+
+
+
+
+
+
+
+
+//		Create Vendors
+//
+
+		System.out.println("Working dir:  " + System.getProperty("user.dir"));
 		Vendor vendor1 = new Vendor("Robert", "" , "Reyes", "Reyes HVAC", "HVAC",true);
 		vendor1.setUserId("ReyesHVAC");
-		vendor1.setPassword("password");
+		vendor1.setPassword(DbFunctions.hashPassword("password", vendor1.getSalt() ));
 		
+		
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		InputStream vendor1Input = classLoader.getResourceAsStream("images/one.jpg");
+		byte[] vendor1ImageFile = IOUtils.toByteArray(vendor1Input);
+		Picture vendor1pic = new Picture();
+		vendor1pic.setImageFile(vendor1ImageFile);
+		vendor1.setPicture(vendor1pic);
+		
+		
+		
+		vendor1.setPicture(vendor1pic);
+		DbFunctions.insert(vendor1pic);
 		DbFunctions.insert(vendor1);
 
 		Vendor vendor2 = new Vendor( "Lashawnda", "Moon", "Cryer", "Austin HVAC", "HVAC", true);
@@ -3166,8 +3403,18 @@ public class CreateDatabase extends HttpServlet {
 		vendor2.getEmailAddresses().add(vendor2WorkEmail);
 
 		vendor2.setUserId("Lashawnda.Cryer@AustinHVAC.com");
-		vendor2.setPassword("Moon");
+		vendor2.setPassword(DbFunctions.hashPassword("Moon", vendor2.getSalt() ));
 
+		ClassLoader classLoader2 = Thread.currentThread().getContextClassLoader();	
+		InputStream vendor2Input = classLoader2.getResourceAsStream("images/woman2.jpg");
+		byte[] vendor2ImageFile = IOUtils.toByteArray(vendor2Input);
+		Picture vendor2pic = new Picture();
+		vendor2pic.setImageFile(vendor2ImageFile);
+		vendor2.setPicture(vendor2pic);
+		DbFunctions.insert(vendor2pic);
+
+		
+		
 		DbFunctions.insert(vendor2);
 
 		Vendor vendor3 = new Vendor( "Chaya", "Mollie", "Bergesen", "Austin Handy Man", "General Repair", true);
@@ -3191,8 +3438,15 @@ public class CreateDatabase extends HttpServlet {
 		vendor3.getEmailAddresses().add(vendor3WorkEmail);
 
 		vendor3.setUserId("Chaya.Bergesen@AustinHandyMan.com");
-		vendor3.setPassword("Mollie");
-
+		vendor3.setPassword(DbFunctions.hashPassword("Mollie", vendor3.getSalt() ));
+		
+		ClassLoader classLoader3 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor3Input = classLoader3.getResourceAsStream("images/woman3.jpg");
+		byte[] vendor3ImageFile = IOUtils.toByteArray(vendor3Input);
+		Picture vendor3pic = new Picture();
+		vendor3pic.setImageFile(vendor3ImageFile);
+		vendor2.setPicture(vendor3pic);
+		DbFunctions.insert(vendor3pic);
 		DbFunctions.insert(vendor3);
 
 		Vendor vendor4 = new Vendor( "Ciara", "Cathrine", "Padilla", "Joe's landscaping", "Landscaping", true);
@@ -3216,11 +3470,18 @@ public class CreateDatabase extends HttpServlet {
 		vendor4.getEmailAddresses().add(vendor4WorkEmail);
 
 		vendor4.setUserId("Ciara.Padilla@Joeslandscaping.com");
-		vendor4.setPassword("Cathrine");
-
+		vendor4.setPassword(DbFunctions.hashPassword("Cathrine", vendor4.getSalt() ));
+		
+		ClassLoader classLoader4 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor4Input = classLoader4.getResourceAsStream("images/woman4.jpg");
+		byte[] vendor4ImageFile = IOUtils.toByteArray(vendor4Input);
+		Picture vendor4pic = new Picture();
+		vendor4pic.setImageFile(vendor4ImageFile);
+		vendor4.setPicture(vendor4pic);
+		DbFunctions.insert(vendor4pic);
 		DbFunctions.insert(vendor4);
 
-		Vendor vendor5 = new Vendor( "Peggie", "Ma", "Paulas", "John's Plumbing", "Plumbing", true);
+		Vendor vendor5 = new Vendor( "John", "Ma", "Paulas", "John's Plumbing", "Plumbing", true);
 
 		PhoneNumber vendor5CellPhone =new PhoneNumber( true , "Cell" , "215-255-1641");
 		PhoneNumber vendor5HomePhone =new PhoneNumber( false , "Home" , "973-662-8988");
@@ -3234,15 +3495,24 @@ public class CreateDatabase extends HttpServlet {
 		vendor5.getPhoneNumbers().add(vendor5HomePhone);
 		vendor5.getPhoneNumbers().add(vendor5WorkPhone);
 
-		EmailAddress vendor5OtherEmail= new EmailAddress(false, "Other", "Peggie.Paulas@gmail.com");
-		EmailAddress vendor5WorkEmail= new EmailAddress(true, "Work", "Peggie.Paulas@JohnsPlumbing.com");
+		EmailAddress vendor5OtherEmail= new EmailAddress(false, "Other", "John.Paulas@gmail.com");
+		EmailAddress vendor5WorkEmail= new EmailAddress(true, "Work", "John.Paulas@JohnsPlumbing.com");
 
 		vendor5.getEmailAddresses().add(vendor5OtherEmail);
 		vendor5.getEmailAddresses().add(vendor5WorkEmail);
 
 		vendor5.setUserId("Peggie.Paulas@JohnsPlumbing.com");
-		vendor5.setPassword("Ma");
-
+		vendor5.setPassword(DbFunctions.hashPassword("Ma", vendor5.getSalt() ));
+		
+		
+		ClassLoader classLoader5 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor5Input = classLoader5.getResourceAsStream("images/two.jpg");
+		byte[] vendor5ImageFile = IOUtils.toByteArray(vendor5Input);
+		Picture vendor5pic = new Picture();
+		vendor5pic.setImageFile(vendor5ImageFile);
+		vendor5.setPicture(vendor5pic);
+		DbFunctions.insert(vendor5pic);
+		
 		DbFunctions.insert(vendor5);
 
 		Vendor vendor6 = new Vendor( "Avery", "Vallie", "Eschberger", "Debbie's Cleaning", "Cleaning", true);
@@ -3266,8 +3536,16 @@ public class CreateDatabase extends HttpServlet {
 		vendor6.getEmailAddresses().add(vendor6WorkEmail);
 
 		vendor6.setUserId("Avery.Eschberger@DebbiesCleaning.com");
-		vendor6.setPassword("Vallie");
-
+		vendor6.setPassword(DbFunctions.hashPassword("Vallie", vendor6.getSalt() ));
+		
+		ClassLoader classLoader6 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor6Input = classLoader6.getResourceAsStream("images/three.jpg");
+		byte[] vendor6ImageFile = IOUtils.toByteArray(vendor6Input);
+		Picture vendor6pic = new Picture();
+		vendor6pic.setImageFile(vendor6ImageFile);
+		vendor6.setPicture(vendor6pic);
+		DbFunctions.insert(vendor6pic);
+		
 		DbFunctions.insert(vendor6);
 
 		Vendor vendor7 = new Vendor( "Cherry", "Joni", "Oldroyd", "Molly Maids", "Cleaning", true);
@@ -3291,8 +3569,15 @@ public class CreateDatabase extends HttpServlet {
 		vendor7.getEmailAddresses().add(vendor7WorkEmail);
 
 		vendor7.setUserId("Cherry.Oldroyd@MollyMaids.com");
-		vendor7.setPassword("Joni");
-
+		vendor7.setPassword(DbFunctions.hashPassword("Joni", vendor7.getSalt() ));
+		
+		ClassLoader classLoader7 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor7Input = classLoader7.getResourceAsStream("images/woman5.jpg");
+		byte[] vendor7ImageFile = IOUtils.toByteArray(vendor7Input);
+		Picture vendor7pic = new Picture();
+		vendor7pic.setImageFile(vendor7ImageFile);
+		vendor7.setPicture(vendor7pic);
+		DbFunctions.insert(vendor7pic);
 		DbFunctions.insert(vendor7);
 
 		Vendor vendor8 = new Vendor( "Jerry", "Jacqueline", "Semidey", "South Austin Electric", "Electrician", true);
@@ -3316,8 +3601,16 @@ public class CreateDatabase extends HttpServlet {
 		vendor8.getEmailAddresses().add(vendor8WorkEmail);
 
 		vendor8.setUserId("Jerry.Semidey@SouthAustinElectric.com");
-		vendor8.setPassword("Jacqueline");
-
+		vendor8.setPassword(DbFunctions.hashPassword("Jacqueline", vendor8.getSalt() ));
+		
+		ClassLoader classLoader8 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor8Input = classLoader8.getResourceAsStream("images/four.jpg");
+		byte[] vendor8ImageFile = IOUtils.toByteArray(vendor8Input);
+		Picture vendor8pic = new Picture();
+		vendor8pic.setImageFile(vendor8ImageFile);
+		vendor8.setPicture(vendor8pic);
+		DbFunctions.insert(vendor8pic);
+		
 		DbFunctions.insert(vendor8);
 
 		Vendor vendor9 = new Vendor( "Jose", "Helaine", "Good", "North Austin Plumbing", "Plumbing", true);
@@ -3341,8 +3634,16 @@ public class CreateDatabase extends HttpServlet {
 		vendor9.getEmailAddresses().add(vendor9WorkEmail);
 
 		vendor9.setUserId("Jose.Good@NorthAustinPlumbing.com");
-		vendor9.setPassword("Helaine");
-
+		vendor9.setPassword(DbFunctions.hashPassword("Helaine", vendor9.getSalt() ));
+		
+		ClassLoader classLoader9 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor9Input = classLoader9.getResourceAsStream("images/five.jpg");
+		byte[] vendor9ImageFile = IOUtils.toByteArray(vendor9Input);
+		Picture vendor9pic = new Picture();
+		vendor9pic.setImageFile(vendor9ImageFile);
+		vendor9.setPicture(vendor9pic);
+		DbFunctions.insert(vendor9pic);
+		
 		DbFunctions.insert(vendor9);
 
 		Vendor vendor10 = new Vendor( "Kallie", "Britt", "Bubash", "Buda Handy Man", "General Repair", true);
@@ -3366,8 +3667,16 @@ public class CreateDatabase extends HttpServlet {
 		vendor10.getEmailAddresses().add(vendor10WorkEmail);
 
 		vendor10.setUserId("Kallie.Bubash@BudaHandyMan.com");
-		vendor10.setPassword("Britt");
+		vendor10.setPassword(DbFunctions.hashPassword("Britt", vendor10.getSalt() ));
 
+		ClassLoader classLoader10 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor10Input = classLoader10.getResourceAsStream("images/six.jpg");
+		byte[] vendor10ImageFile = IOUtils.toByteArray(vendor10Input);
+		Picture vendor10pic = new Picture();
+		vendor10pic.setImageFile(vendor10ImageFile);
+		vendor10.setPicture(vendor10pic);
+		DbFunctions.insert(vendor10pic);
+		
 		DbFunctions.insert(vendor10);
 
 		Vendor vendor11 = new Vendor( "Bok", "Xuan", "Perin", "BokBok Cleaning", "Cleaning", true);
@@ -3391,8 +3700,16 @@ public class CreateDatabase extends HttpServlet {
 		vendor11.getEmailAddresses().add(vendor11WorkEmail);
 
 		vendor11.setUserId("Bok.Perin@BokBokCleaning.com");
-		vendor11.setPassword("Xuan");
-
+		vendor11.setPassword(DbFunctions.hashPassword("Xuan", vendor11.getSalt() ));
+		
+		ClassLoader classLoader11 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor11Input = classLoader11.getResourceAsStream("images/seven.jpg");
+		byte[] vendor11ImageFile = IOUtils.toByteArray(vendor11Input);
+		Picture vendor11pic = new Picture();
+		vendor11pic.setImageFile(vendor11ImageFile);
+		vendor11.setPicture(vendor11pic);
+		DbFunctions.insert(vendor11pic);
+		
 		DbFunctions.insert(vendor11);
 
 		Vendor vendor12 = new Vendor( "Lonna", "Amber", "Duenas", "Amber Green", "Landscaping", true);
@@ -3416,22 +3733,68 @@ public class CreateDatabase extends HttpServlet {
 		vendor12.getEmailAddresses().add(vendor12WorkEmail);
 
 		vendor12.setUserId("Lonna.Duenas@AmberGreen.com");
-		vendor12.setPassword("Amber");
+		vendor12.setPassword(DbFunctions.hashPassword("Amber", vendor12.getSalt() ));
 
+		ClassLoader classLoader12 = Thread.currentThread().getContextClassLoader();
+		InputStream vendor12Input = classLoader12.getResourceAsStream("images/eight.jpg");
+		byte[] vendor12ImageFile = IOUtils.toByteArray(vendor12Input);
+		Picture vendor12pic = new Picture();
+		vendor12pic.setImageFile(vendor12ImageFile);
+		vendor11.setPicture(vendor12pic);
+		DbFunctions.insert(vendor12pic);
+		
 		DbFunctions.insert(vendor12);
 
+
+
+
 		
-		ServiceCall serviceCall1 = new ServiceCall(jackProp1Unit1, "General Repair", "Broken garbage Disposal", "In Progress" , "0" , "30");
-		Set<Vendor>serviceCall1Vendors = new HashSet<Vendor>();
-		
-		serviceCall1Vendors.add(vendor1);
-		serviceCall1.setVendors(serviceCall1Vendors);
+		ServiceCall serviceCall1 = new ServiceCall(jackProp1Unit1, "General Repair", "Broken garbage Disposal", "Open" , "0" , "30");
+		serviceCall1.setReportedBy(jackProp1Unit1Tenant);
 		DbFunctions.insert(serviceCall1);
+		Set<ServiceCall> jackProp1Unit1SC = new HashSet<>();
+		jackProp1Unit1SC.add(serviceCall1);
+		jackProp1Unit1.setServiceCalls(jackProp1Unit1SC);
+		DbFunctions.update(jackProp1Unit1);
 		
-		Set<ServiceCall> vendor1ServiceCalls= new HashSet<>();
-		vendor1ServiceCalls.add(serviceCall1);
-		vendor1.setServiceCalls(vendor1ServiceCalls);
-		DbFunctions.update(vendor1);
+		ServiceCall serviceCall2 = new ServiceCall(joeyProp1Unit15, "General Repair", "Door does not close properly", "Open" , "0" , "50");
+		serviceCall2.setReportedBy(joeyProp1Unit15Tenant);
+		DbFunctions.insert(serviceCall2);
+		Set<ServiceCall> joeyProp1Unit15SC = new HashSet<>();
+		joeyProp1Unit15SC.add(serviceCall2);
+		jackProp1Unit1.setServiceCalls(joeyProp1Unit15SC);
+		DbFunctions.update(joeyProp1Unit15);
+		
+		ServiceCall serviceCall3 = new ServiceCall(jackProp2Unit20, "HVAC", "AC not working", "Open" , "0" , "30");
+		serviceCall3.setReportedBy(jackProp2Unit20Tenant);
+		DbFunctions.insert(serviceCall3);
+		Set<ServiceCall> jackProp2Unit20SC = new HashSet<>();
+		jackProp2Unit20SC.add(serviceCall3);
+		jackProp2Unit20.setServiceCalls(jackProp2Unit20SC);
+		DbFunctions.update(jackProp2Unit20);
+		
+		ServiceCall serviceCall4 = new ServiceCall(joeyProp1Unit8, "Plumbing", "Leaking Pipe", "Open" , "0" , "30");
+		serviceCall4.setReportedBy(joeyProp1Unit8Tenant2);
+		DbFunctions.insert(serviceCall4);
+		Set<ServiceCall> joeyProp1Unit8SC = new HashSet<>();
+		joeyProp1Unit8SC.add(serviceCall4);
+		joeyProp1Unit8.setServiceCalls(joeyProp1Unit8SC);
+		DbFunctions.update(joeyProp1Unit8);
+		
+		ServiceCall serviceCall5 = new ServiceCall(robertProp3Unit2, "Plumbing", "Leaking Pipe", "Complete" , "0" , "30");
+		serviceCall5.setReportedBy(robertProp3Unit2Tenant2);
+		serviceCall5.setActive(false);
+		DbFunctions.insert(serviceCall5);
+		Set<ServiceCall> robertProp3Unit2SC = new HashSet<>();
+		robertProp3Unit2SC.add(serviceCall5);
+		robertProp3Unit2.setServiceCalls(robertProp3Unit2SC);
+		DbFunctions.update(robertProp3Unit2);
+		
+
+		
+		
+		
+		
 		LedgerEntry ledger1 = new LedgerEntry( jackProp2Unit1 ,"01/01/2016", "Rent", 
 				"Monthly Rent Charge", "750.00", "0");
 		DbFunctions.insert(ledger1);

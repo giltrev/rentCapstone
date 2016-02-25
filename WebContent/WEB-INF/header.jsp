@@ -1,2 +1,11 @@
-<div class="header"><a href="Home"><img src="images/austinSky.jpg" alt="Austin" name="Austin" width="960" height="300" id="Austin" style="background-color: #C6D580; display:block;" /></a> 
-<!-- end .header --></div>  
+
+<header class = "bgimage">
+	<div class = "container" id= "bgText">
+		<h1>Trevino Property Management</h1>
+	</div>
+</header>
+
+
+
+
+ 

@@ -9,7 +9,7 @@
 					Enter User Name <br />
 					<input type="text" name="userId" value="<c:out value="${userId}"></c:out>"><br />
 					Enter Password <br />
-					<input type="password" name="password" maxlength="10"><br />
+					<input type="password" name="password" maxlength="15"><br />
 					<input type="submit" value="Submit">
 				</form>
 				

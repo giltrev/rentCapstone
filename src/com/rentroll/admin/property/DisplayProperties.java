@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.rentroll.business.Owner;
+import com.rentroll.business.RentProperty;
 import com.rentroll.data.DbFunctions;
 
 /**
@@ -31,9 +32,9 @@ public class DisplayProperties extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Owner> allOwners = DbFunctions.selectAllOwners();
+		List<RentProperty> properties = DbFunctions.SelectAllProperties();
 		
-		request.setAttribute("allOwners", allOwners);
+		request.setAttribute("properties", properties);
 		
 		getServletContext().getRequestDispatcher("/WEB-INF/displayProperties.jsp")
 		.forward(request, response);

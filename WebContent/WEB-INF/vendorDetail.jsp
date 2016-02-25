@@ -7,11 +7,11 @@
 			<p>
 				<a href='EditVendor?personId=<c:out value="${vendor.personId}" />'>Edit Vendor</a>
 			</p>
-			<h2><c:out value="${vendor.firstName}" /> <c:out value="${vendor.middleName}" /> <c:out value="${vendor.lastName}" /></h2>
+			<h4><c:out value="${vendor.firstName}" /> <c:out value="${vendor.middleName}" /> <c:out value="${vendor.lastName}" /></h4>
 			<c:out value="${vendor.companyName}" /> <br />
 			<c:out value="${vendor.vendorType}" /> 
 			 
-			<h2>Addresses</h2>  
+			<h4>Addresses</h4>  
 			<c:forEach var="address" items="${vendor.addresses}">
 				<p>
 					<c:if test="${address.primaryAddress==true}">
@@ -26,12 +26,12 @@
 				</p>
 			</c:forEach>
 			 
-			<h2>Email Addresses</h2>
+			<h4>Email Addresses</h4>
 			<c:forEach var="email" items="${vendor.emailAddresses}">
 				<c:out value="${email.emailAddressType}" /> <c:out value="${email.emailAddress}" /><br />
 			</c:forEach>
 			
-			<h2>Phone Numbers</h2>
+			<h4>Phone Numbers</h4>
 			<c:forEach var="pNumber" items="${vendor.phoneNumbers}">
 				<c:out value="${pNumber.phoneType}" /> <c:out value="${pNumber.phoneNumber}" /><br />
 			</c:forEach>

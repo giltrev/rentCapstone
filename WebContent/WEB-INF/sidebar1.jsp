@@ -1,11 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<div class="sidebar1">
-    <ul class="nav">
-      <li><a href="#">Contact Us</a></li>
-      <li><a href="#">View Available Properties</a></li>
-      <li><a href="login">User Login</a></li>
-      <li><a href="LogOut">Log Out</a></li>
-      
-      
-    </ul>
-<!-- end .sidebar1 --></div>
+<section class="col-md-2">
+     <div class="list-group">
+     	<a href="Home" class="list-group-item">Home</a>
+	     <a href="ContactUs" class="list-group-item">Contact Us</a>
+	     <a href="login" class="list-group-item">User Login</a>
+    </div>
+</section>
+<!-- end .sidebar1 --> 
+
+

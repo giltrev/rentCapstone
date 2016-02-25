@@ -33,8 +33,8 @@ public class LedgerEntry implements Serializable{
 	
 	private String accountName;
 	private String reference;
-	private BigDecimal debit;
-	private BigDecimal credit;
+	private BigDecimal debit =  BigDecimal.ZERO;
+	private BigDecimal credit= BigDecimal.ZERO;;
 	@ManyToOne
 	Unit unit;
 	

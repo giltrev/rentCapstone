@@ -4,9 +4,37 @@
 <my:propManager>
 	<jsp:attribute name="body">
 		<div class="content">
-		<h3><c:out value="${propManager.firstName}" /></h3>
-		    <h1>Property Manager View</h1>
-		    <c:out value="${propManagerMessage}"></c:out>
+		<h4>Logged in as <c:out value="${propManager.firstName}" /> <c:out value="${propManager.lastName}" /></h4>
+		   
+		    
+		    
+		   <c:if test="${not empty contacts}">  
+		    <h3>Current Messages</h3>
+		    
+		    	<table class="table table-hover">
+				  <tr>
+				    <th>ID</th>
+				    <th>Full Name</th> 
+				    <th>Email</th>
+				    <th>Phone</th>
+				    <th>City</th>
+				    <th>State</th>
+				    <th>Message</th>
+				  </tr>
+				  <c:forEach var="contact" items="${contacts}">
+				  <tr class='clickable-row' data-href='EditContact?contactId=<c:out value="${contact.contactId}" />'>
+				    <td><c:out value="${contact.contactId}" /></td>
+				    <td><c:out value="${contact.fullName}" /></td> 
+				    <td><c:out value="${contact.email}" /></td>
+				    <td><c:out value="${contact.phone}" /></td>
+				    <td><c:out value="${contact.city}" /></td>
+				    <td><c:out value="${contact.state}" /></td>
+				    <td><c:out value="${contact.comments}" /></td>
+				  </tr>
+				</c:forEach>
+				</table>
+
+			</c:if>
 		    
 		<!-- end .content --></div>
 	

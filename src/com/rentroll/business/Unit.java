@@ -2,7 +2,6 @@ package com.rentroll.business;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -44,17 +43,17 @@ public class Unit implements Serializable{
 	private String floorplan;
 	
 	@OneToMany(targetEntity = ServiceCall.class, mappedBy="unit", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<ServiceCall> serviceCalls;
+	private Set<ServiceCall> serviceCalls;
 	
 	@OneToMany(targetEntity = Amenity.class, mappedBy="unit", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<Amenity> amenities;
+	private Set<Amenity> amenities;
 	
 	@OneToMany(targetEntity = Picture.class, fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private List<Picture> pictures;
+	private Set<Picture> pictures;
 	private String status = "Vacant";
 	
 	@OneToMany(targetEntity = LedgerEntry.class,mappedBy="unit", fetch=FetchType.EAGER, cascade=CascadeType.PERSIST)
-	private List<LedgerEntry> ledgerEntries;
+	private Set<LedgerEntry> ledgerEntries;
 	
 	
 	public RentProperty getProperty() {
@@ -100,16 +99,16 @@ public class Unit implements Serializable{
 	public void setFloorplan(String floorplan) {
 		this.floorplan = floorplan;
 	}
-	public List<Amenity> getAmenities() {
+	public Set<Amenity> getAmenities() {
 		return amenities;
 	}
-	public void setAmenities(List<Amenity> amenities) {
+	public void setAmenities(Set<Amenity> amenities) {
 		this.amenities = amenities;
 	}
-	public List<Picture> getPictures() {
+	public Set<Picture> getPictures() {
 		return pictures;
 	}
-	public void setPictures(List<Picture> pictures) {
+	public void setPictures(Set<Picture> pictures) {
 		this.pictures = pictures;
 	}
 	public String getStatus() {
@@ -140,16 +139,16 @@ public class Unit implements Serializable{
 
 		
 	}
-	public List<ServiceCall> getServiceCalls() {
+	public Set<ServiceCall> getServiceCalls() {
 		return serviceCalls;
 	}
-	public void setServiceCalls(List<ServiceCall> serviceCalls) {
+	public void setServiceCalls(Set<ServiceCall> serviceCalls) {
 		this.serviceCalls = serviceCalls;
 	}
-	public List<LedgerEntry> getLedgerEntries() {
+	public Set<LedgerEntry> getLedgerEntries() {
 		return ledgerEntries;
 	}
-	public void setLedgerEntries(List<LedgerEntry> ledgerEntries) {
+	public void setLedgerEntries(Set<LedgerEntry> ledgerEntries) {
 		this.ledgerEntries = ledgerEntries;
 	}
 	public Set<Tenant> getTenants() {

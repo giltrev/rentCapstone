@@ -21,7 +21,7 @@ import com.rentroll.data.DbFunctions;
 /**
  * Servlet implementation class AddVenor
  */
-@WebServlet("/AddVenor")
+@WebServlet("/AddVendor")
 public class AddVenor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

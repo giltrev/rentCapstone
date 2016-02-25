@@ -2,7 +2,9 @@ package com.rentroll.data;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.rentroll.business.LedgerEntry;
 import com.rentroll.business.Tenant;
@@ -31,7 +33,10 @@ public class AddRent {
 			
 			Unit unit = tenant.getUnit();
 			
-			List<LedgerEntry> unitledgerEntries = unit.getLedgerEntries();
+			Set <LedgerEntry> unitledgerEntries = new HashSet<>();
+			
+			
+			unitledgerEntries.addAll(unit.getLedgerEntries());
 			
 			System.out.println(" Ledger Entry QTY size "+ unitledgerEntries.size());
 			int counter = 0;	
@@ -40,9 +45,9 @@ public class AddRent {
 					Calendar calendar = Calendar.getInstance();
 					calendar.setTime(ledgerEntry.getDate());
 					
-					if (calendar.YEAR==firstOfMonthCal.YEAR &&
-							calendar.MONTH==firstOfMonthCal.MONTH &&
-							calendar.DAY_OF_MONTH==firstOfMonthCal.DAY_OF_MONTH){
+					if (Calendar.YEAR==firstOfMonthCal.YEAR &&
+							Calendar.MONTH==firstOfMonthCal.MONTH &&
+							Calendar.DAY_OF_MONTH==firstOfMonthCal.DAY_OF_MONTH){
 						counter++;
 						System.out.println("ledgerEntry counter "+counter);
 					}	

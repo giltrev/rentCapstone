@@ -25,14 +25,14 @@
 			    <th width="133" align="left" scope="col">Address Type</th>
 			    <th width="467" align="left" scope="col">Address</th>
 		  	</tr>
-		  </table>
-	<table id="addressTable" width="696" border="0" cellspacing="10" cellpadding="4"> 
+<!-- 		  </table>
+	<table id="addressTable" width="696" border="0" cellspacing="10" cellpadding="4">  -->
 		<c:forEach var="address" varStatus="status" items="${person.addresses}">
 	    	<input type="hidden" name ="addressId"  value='<c:out value="${address.addressId}"/>' />
 	  		<tr<c:if test="${address.primaryAddress==true}"> class="primary"</c:if>>
 	    		<td align="center" valign="top">
 	    			
-	    			<c:out value="${status.index}" /> <input type="radio" name="primaryAddress" value="<c:out value="${status.index}" />" <c:if test="${address.primaryAddress==true}"> checked</c:if> />
+	    			<input type="radio" name="primaryAddress" value="<c:out value="${status.index}" />" <c:if test="${address.primaryAddress==true}"> checked</c:if> />
 	    		</td>
 				  <td valign="top">
 					  	<select name="addressType">
@@ -70,8 +70,7 @@
 			    <th width="120" align="left" scope="col">Email Type</th>
 			    <th width="385" align="left" scope="col">email Address</th>
 		  </tr>
-	</table>  
-	<table id="emailTable" class= "tableContext">  
+
 		 <c:forEach var="email" varStatus="status" items="${person.emailAddresses}">
 		 	<c:if test="${email.emailAddressId != null}">
 		   		<input type="hidden" name ="emailAddressId"  value='<c:out value="${email.emailAddressId}"/>' />
@@ -82,7 +81,7 @@
 			<tr<c:if test="${email.primaryEmail==true}"> class="primary"</c:if>>
 		  	    <td>
 			  	    
-			  	    <c:out value="${status.index}" /> <input type="radio" name="primaryEmail"  value="<c:out value="${status.index}" />" <c:if test="${email.primaryEmail==true}"> checked</c:if> />
+			  	  <input type="radio" name="primaryEmail"  value="<c:out value="${status.index}" />" <c:if test="${email.primaryEmail==true}"> checked</c:if> />
 				</td>
 			    <td>
 					<select name="emailAddressType">
@@ -105,13 +104,12 @@
 			    <th width="123" align="left" scope="col">Phone Type</th>
 			    <th width="382" align="left" scope="col">Phone Number</th>
 		  </tr>
-	</table>
-	<table id="phoneTable" width="600" border="0" cellspacing="1" cellpadding="1">
+
 		  	<c:forEach var="phoneNumber" varStatus="status" items="${person.phoneNumbers}">
 				  <input type="hidden" name ="phoneNumberId"  value='<c:out value="${phoneNumber.phoneNumberId}"/>' />
 				  <tr<c:if test="${phoneNumber.primaryNumber==true}"> class="primary"</c:if>>
 				    	<td>
-					 	   	<c:out value="${status.index}" /> <input type="radio" name="primaryNumber" value="<c:out value="${status.index}" />" <c:if test="${phoneNumber.primaryNumber==true}"> checked</c:if> />
+					 	<input type="radio" name="primaryNumber" value="<c:out value="${status.index}" />" <c:if test="${phoneNumber.primaryNumber==true}"> checked</c:if> />
 					    </td>
 					    <td>
 							<select name="phoneType">
